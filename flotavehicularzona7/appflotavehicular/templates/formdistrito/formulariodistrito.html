@@ -1,0 +1,111 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Registro de Distritos</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{%url 'creardistrito'%}">
+                  <span class="badge bg-danger">Distrito</span>
+                  <i class="fas fa-edit"></i> Crear 
+                  </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        <th>Codigo Distrito</th>
+                        <th>Nombre de Distrito</th>
+                        <th>Numero de Distrito</th>
+                        <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for distrito in distritos%}
+                    <tr>
+                        <td>{{distrito.cod_distrito}}</td>
+                        <td>{{distrito.nombre_distrito}}</td>
+                        <td>{{distrito.numero_distrito}}</td>
+                        
+                        <td>
+                            <a name="" id="" class="btn btn-warning"
+                                href="{%url 'editardistrito' distrito.cod_distrito %}" title="Editar"
+                                role="button"><i class="fa fa-edit"></i></a>
+                            
+                                <a href="#" class="btn btn-danger" title="Eliminar" role="button" onclick="confirmarEliminacion('{{ distrito.cod_distrito }}')">
+                                  <i class="fa fa-trash"></i>
+                              </a>
+                              
+                              <script>
+                                  function confirmarEliminacion(cod_distrito) {
+                                      var confirmacion = confirm('¿Está seguro de que desea eliminar este distrito?');
+                                      
+                                      if (confirmacion) {
+                                          // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                          var urlEliminacion = "{% url 'eliminardistrito' cod_distrito='__cod_distrito__' %}".replace('__cod_distrito__', cod_distrito);
+                                          window.location.href = urlEliminacion;
+                                      } else {
+                                          // Si el usuario elige 'Cancelar', no hagas nada
+                                          // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                                      }
+                                  }
+                              </script>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <style>
+    /* Estilos para el botón azul (aprobado) */
+    .boton-azul {
+        background-color: green;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+
+    /* Estilos para el botón rojo (reprobado) */
+    .boton-rojo {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+</style>
+
+{% endblock %}

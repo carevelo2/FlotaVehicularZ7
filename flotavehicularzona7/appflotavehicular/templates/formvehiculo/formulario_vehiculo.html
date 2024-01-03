@@ -1,0 +1,162 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Vehiculos</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{%url 'crearvehiculo'%}">
+                  <span class="badge bg-danger">Vehiculo</span>
+                  <i class="fas fa-edit"></i> Crear 
+                  </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        <th>Placa</th> 
+                        <th>Chasis</th>
+                        <th>Marca </th>
+                        <th>Modelo</th>
+                        <th>Color </th>
+                        <th>Motor </th>
+                        <th>Kilometraje</th>
+                        <th>Cilindraje </th>
+                        <th>Capacidad Carga </th>
+                        <th>Capacidad Pasajeros </th>
+                        <th>Tipo vehiculo </th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for vehiculo in vehiculos%}
+                    <tr>
+                        <td>{{vehiculo.placa}}</td>
+                        <td>{{vehiculo.chasis}}</td>
+                        <td>{{vehiculo.marca }}</td>
+                        <td>{{vehiculo.modelo}}</td>
+                        <td>{{vehiculo.color }}</td>
+                        <td>{{vehiculo.motor }}</td>
+                        <td>{{vehiculo.kilometraje}}</td>
+                        <td>{{vehiculo.cilindraje }}</td>
+                        <td>{{vehiculo.capacidad_carga }}</td>
+                        <td>{{vehiculo.capacidad_pasajeros }}</td>
+                        <td>{{vehiculo.tipovehiculo }}</td>
+                        <td>
+                          {% if vehiculo.estado %}
+                            <button class="estado-btn activo">Activo</button>
+                          {% elif vehiculo.estado is null or vehiculo.estado == "" %}
+                            <button class="estado-btn mantenimiento">Mantenimiento</button>
+                          {% else %}
+                            <button class="estado-btn inactivo">Estropeado</button>
+                          {% endif %}
+                        </td>
+                        
+                        
+                        
+                        <td>
+                            <a name="" id="" class="btn btn-warning"
+                                href="{%url 'editarvehiculo' vehiculo.placa %}" title="Editar"
+                                role="button"><i class="fa fa-edit"></i></a>
+                            <a name="" id="" class="btn btn-danger"
+                                title="Eliminar"
+                                role="button"
+                                onclick="confirmarEliminacion({{ vehiculo.placa }})">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            <script>
+                              function confirmarEliminacion(id) {
+                                  var confirmacion = confirm('¿Está seguro de que desea eliminar este vehiculo?');
+                                  
+                                  if (confirmacion) {
+                                      // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                      window.location.href = "{% url 'eliminarvehiculo' placa=vehiculo.placa %}";
+                                  } else {
+                                      // Si el usuario elige 'Cancelar', no hagas nada
+                                      // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                                  }
+                              }
+                            </script>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <style>
+    /* Estilos para el botón azul (aprobado) */
+    .boton-azul {
+        background-color: green;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+
+    /* Estilos para el botón rojo (reprobado) */
+    .boton-rojo {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+    .estado-btn {
+      border: none;
+      border-radius: 10px; /* Ajusta el radio para hacer esquinas redondeadas */
+      padding: 10px 20px;
+      cursor: pointer;
+      display: inline-block; /* Hace que el botón sea rectangular */
+    }
+    
+    .activo {
+      background-color: green;
+      color: white;
+    }
+    
+    .mantenimiento {
+      background-color: red;
+      color: white;
+    }
+    
+    .inactivo {
+      background-color: yellow;
+      color: black;
+    }
+    
+</style>
+
+{% endblock %}

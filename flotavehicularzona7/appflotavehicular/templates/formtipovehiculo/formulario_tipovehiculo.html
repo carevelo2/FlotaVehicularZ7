@@ -1,0 +1,112 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Tipos de Vehiculos</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{%url 'creartipovehiculo'%}">
+                  <span class="badge bg-danger">Tipo</span>
+                  <i class="fas fa-edit"></i> Crear 
+                  </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        <th>Identificador</th>
+                        <th>Tipo de Vehiculo</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for tipovehiculo in tipovehiculos%}
+                    <tr>
+                        <td>{{tipovehiculo.id}}</td>
+                        <td>{{tipovehiculo.tipovehiculo}}</td>
+                        <td>{{tipovehiculo.descripcion}}</td>
+                        
+                        <td>
+                            <a name="" id="" class="btn btn-warning"
+                                href="{%url 'editartipovehiculo' tipovehiculo.id %}" title="Editar"
+                                role="button"><i class="fa fa-edit"></i></a>
+                            
+                            <a name="" id="" class="btn btn-danger"
+                                title="Eliminar"
+                                role="button"
+                                onclick="confirmarEliminacion({{ tipovehiculo.id }})">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            <script>
+                              function confirmarEliminacion(id) {
+                                  var confirmacion = confirm('¿Está seguro de que desea eliminar este tipo de vehiculo?');
+                                  
+                                  if (confirmacion) {
+                                      // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                      window.location.href = "{% url 'eliminartipovehiculo' id=tipovehiculo.id %}";
+                                  } else {
+                                      // Si el usuario elige 'Cancelar', no hagas nada
+                                      // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                                  }
+                              }
+                            </script>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <style>
+    /* Estilos para el botón azul (aprobado) */
+    .boton-azul {
+        background-color: green;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+
+    /* Estilos para el botón rojo (reprobado) */
+    .boton-rojo {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+</style>
+
+{% endblock %}

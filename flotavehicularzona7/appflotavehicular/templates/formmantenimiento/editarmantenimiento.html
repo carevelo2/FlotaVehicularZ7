@@ -1,0 +1,153 @@
+{% extends 'formplantilla/index_master.html' %} 
+{% block content %}
+
+<div class="wrapper">
+  
+ 
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Editar Mantenimiento</h3>
+              </div>
+              <div class="card-body">
+                <form action="" method="POST">
+                  {% csrf_token %}
+                    <!-- Fecha -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input 
+                                type="date" 
+                                class="form-control has-feedback-left" 
+                                name="fecha"
+                                id="fecha" 
+                                class="form-control" 
+                                placeholder="Fecha" 
+                                value="{{ my_mantenimiento.fecha }}" 
+                                required="" />
+                        </div>
+                    </div>
+                    <!-- Kilometraje -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-tachometer-alt"></i></span>
+                            </div>
+                            <input 
+                                type="text" 
+                                class="form-control has-feedback-left" 
+                                name="km"
+                                id="km" 
+                                class="form-control" 
+                                placeholder="Kilometraje" 
+                                value="{{ my_mantenimiento.km }}" 
+                                required="" />
+                        </div>
+                    </div>
+                    
+                    <!-- Observaciones -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-comment"></i></span>
+                            </div>
+                            <textarea 
+                                class="form-control has-feedback-left" 
+                                name="observaciones"
+                                id="observaciones" 
+                                placeholder="Observaciones" 
+                                value="{{ my_mantenimiento.observaciones }}" 
+                                required=""></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Persona -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <select 
+                            name="persona" 
+                            id="persona" 
+                            class="form-control" 
+                            required="">
+                            {% for persona in personas %}
+                                <option value="{{ persona.identificacion}}" {% if persona.identificacion == my_mantenimiento.persona.identificacion %} selected {% endif %}>{{ persona.nombres }} {{ persona.apellidos }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Vehículo -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-car"></i></span>
+                            </div>
+                            <select 
+                                name="vehiculo" 
+                                id="vehiculo" 
+                                class="form-control" 
+                                required="">
+                                {% for vehiculo in vehiculos %}
+                                <option value="{{ vehiculo.placa }}" {% if vehiculo.placa == my_mantenimiento.vehiculo.placa %} selected {% endif %}>{{ vehiculo.placa }}</option>
+                                
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                     <!-- Tipo de Mantenimiento -->
+                     <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-tools"></i></span>
+                            </div>
+                            <select 
+                                name="tipodemantenimiento" 
+                                id="tipodemantenimiento" 
+                                class="form-control" 
+                                required="">
+                                {% for tipo_mantenimiento in tipomantenimientos %}
+                                    <option value="{{ tipo_mantenimiento.id }}" {% if tipo_mantenimiento.id == my_mantenimiento.tipo_mantenimiento.id %} selected {% endif %}>{{ tipo_mantenimiento.tipo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-success">Crear Mantenimiento</button>
+                            <a href="{% url 'formulariomantenimiento' %}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <!-- /.col (right) -->
+        </div>
+       
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'formplantilla/index_master.html' %} 
+{% block content %}
+
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Editar Circuito</h3>
+              </div>
+              <div class="card-body">
+                <form action="" method="POST">
+                  {% csrf_token %}
+                    
+                  <!-- Código del Circuito -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-user"></i></span>
+                      </div>
+                      <input type="text" class="form-control has-feedback-left" name="cod_circuito" id="cod_circuito" class="form-control" placeholder="Código del Circuito" value="{{ my_circuito.cod_circuito }}" required="" />
+                    </div>
+                  </div>
+                    
+                  <!-- Nombre del Circuito -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-file"></i></span>
+                      </div>
+                      <input type="text" class="form-control has-feedback-left" name="nombre_circuito" id="nombre_circuito" class="form-control" placeholder="Nombre del Circuito" value="{{ my_circuito.nombre_circuito }}" required="" />
+                    </div>
+                  </div>
+                  
+                  <!-- Número del Circuito -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-file"></i></span>
+                      </div>
+                      <input type="text" class="form-control has-feedback-left" name="numero_circuito" id="numero_circuito" class="form-control" placeholder="Número del Circuito" value="{{ my_circuito.numero_circuito }}" required="" />
+                    </div>
+                  </div>
+                  
+                  <!-- Selección de Subcircuito -->
+                  <div class="form-group">
+                    <select name="cod_subcircuito" id="cod_subcircuito" class="form-control" required="">
+                      {% for subcircuito in subcircuitos %}
+                        <option value="{{ subcircuito.cod_subcircuito }}" {% if subcircuito.cod_subcircuito == my_circuito.cod_subcircuito %}selected{% endif %}>{{ subcircuito.nombre_subcircuito }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  
+                  <div class="form-group">
+                    <div class="input-group">
+                      <button type="submit" class="btn btn-success">Editar Circuito</button>
+                      <a href="{% url 'formulariocircuito' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col (right) -->
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+</div>
+
+{% endblock %}

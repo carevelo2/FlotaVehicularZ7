@@ -1,0 +1,257 @@
+{% extends 'formplantilla/index_master.html' %} 
+{% block content %}
+
+<div class="wrapper">
+  
+ 
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Crear Mantenimiento</h3>
+              </div>
+              <div class="card-body">
+                <form action="" method="POST">
+                  {% csrf_token %}
+                    <!-- Fecha -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                            </div>
+                            <input 
+                                type="date" 
+                                class="form-control has-feedback-left" 
+                                name="fecha"
+                                id="fecha" 
+                                class="form-control" 
+                                placeholder="Fecha" 
+                                required="" />
+                        </div>
+                    </div>
+                    <!-- Kilometraje -->
+                    <!-- Kilometraje Actual -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-tachometer-alt"></i></span>
+                            </div>
+                            <input 
+                                type="text" 
+                                class="form-control has-feedback-left" 
+                                name="kmvehiculoactual"
+                                id="kmvehiculoactual" 
+                                placeholder="Kilometraje Actual" 
+                                required="" 
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Vehiculos Kilometrajes -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-car"></i></span>
+                            </div>
+                            <select 
+                                name="kmvehiculo" 
+                                id="kmvehiculo" 
+                                class="form-control" 
+                                required=""
+                            >
+                            <option>Seleciona el vehiculo</option>
+                                {% for vehiculo in vehiculos %}
+                                    <option value="{{ vehiculo.kilometraje }}">{{ vehiculo.placa }} {{ vehiculo.kilometraje }}<br> </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+
+                    
+                    <!-- Resultado del Cálculo de Kilometraje -->
+                    <div id="resultado-kilometraje"></div>
+
+                    <!-- Kilometraje -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-tachometer-alt"></i></span>
+                            </div>
+                            <input 
+                                type="text" 
+                                class="form-control has-feedback-left" 
+                                name="km"
+                                id="km" 
+                                placeholder="Kilometraje de mantenimiento" 
+                                required="" 
+                            />
+                        </div>
+                    </div>
+                    <!-- Script JavaScript -->
+                    <script>
+                        // Función para verificar el mantenimiento al cambiar el valor de kmvehiculoactual o kmvehiculo
+                        function calcularDiferencia() {
+                            // Obtener valores de los elementos
+                            var kmActual = parseInt(document.getElementById('kmvehiculoactual').value);
+                            var selectedOption = document.getElementById('kmvehiculo');
+                            var kmSeleccionado = parseInt(selectedOption.options[selectedOption.selectedIndex].value);
+
+                            // Calcular la diferencia y mostrar el resultado
+                            var diferencia = kmActual - kmSeleccionado;
+                            var resultadoElement = document.getElementById('resultado-kilometraje');
+                            resultadoElement.innerHTML = 'Diferencia de Kilometraje: ' + diferencia;
+
+                            // Verificar si la diferencia es igual al valor ingresado en km
+                            var kmMantenimiento = parseInt(document.getElementById('km').value);
+                            var mensajeElement = document.getElementById('mensaje-vehiculos-mantenimiento');
+                            var vehiculoSelect = document.getElementById('vehiculo');
+
+                            if (diferencia === kmMantenimiento) {
+                                // Mostrar el mensaje indicando que hay vehículos para mantenimiento.
+                                mensajeElement.innerHTML = 'Hay vehículos para mantenimiento.';
+                                
+                                // Limpiar y llenar automáticamente el select de vehículos con la placa del vehículo seleccionado
+                                vehiculoSelect.innerHTML = ''; // Limpiar opciones existentes
+
+                                // Obtener la opción seleccionada en el select de kmvehiculo
+                    var selectedOption = document.getElementById('kmvehiculo').options[document.getElementById('kmvehiculo').selectedIndex];
+
+                    // Verificar si la opción seleccionada existe
+                    if (selectedOption) {
+                        // Obtener la placa y el kilómetro del vehículo seleccionado
+                        var vehiculoInfo = selectedOption.text.trim().split(' ');
+                        var placa = vehiculoInfo[0];  // Tomar la placa de la opción
+
+                        // Agregar una opción para la placa del vehículo
+                        var option = document.createElement('option');
+                        option.value = placa;
+                        option.text = placa;
+                        vehiculoSelect.add(option);
+
+                        // Seleccionar automáticamente la opción agregada
+                        vehiculoSelect.value = placa;
+                    }
+                            } else {
+                                // Ocultar el mensaje
+                                mensajeElement.innerHTML = '';
+                            }
+                        }
+
+                        // Escuchar cambios en kmvehiculoactual y kmvehiculo
+                        document.getElementById('kmvehiculoactual').addEventListener('input', calcularDiferencia);
+                        document.getElementById('kmvehiculo').addEventListener('change', calcularDiferencia);
+
+                        // Escuchar cambios en el campo de Kilometraje de mantenimiento
+                        document.getElementById('km').addEventListener('input', calcularDiferencia);
+                    </script>
+
+                    <!-- Mensaje de Vehículos para Mantenimiento -->
+                    <div id="mensaje-vehiculos-mantenimiento"></div>
+
+                    <!-- Vehículo -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-car"></i></span>
+                            </div>
+                            <select 
+                                name="vehiculo" 
+                                id="vehiculo" 
+                                class="form-control" 
+                                required=""
+                            >
+                                <option>Placa</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    
+                    <!-- Observaciones -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-comment"></i></span>
+                            </div>
+                            <textarea 
+                                class="form-control has-feedback-left" 
+                                name="observaciones"
+                                id="observaciones" 
+                                placeholder="Observaciones" 
+                                required=""></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Persona -->
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            </div>
+                            <select 
+                            name="persona" 
+                            id="persona" 
+                            class="form-control" 
+                            required="">
+                            <option>Selecione la persona a cargo</option>
+                            {% for persona in personas %}
+                                <option value="{{ persona.identificacion }}">{{ persona.nombres }} {{ persona.apellidos }}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                     <!-- Tipo de Mantenimiento -->
+                     <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fas fa-tools"></i></span>
+                            </div>
+                            <select 
+                                name="tipodemantenimiento" 
+                                id="tipodemantenimiento" 
+                                class="form-control" 
+                                required="">
+                                <option>Selecione el tipo de mantenimiento</option>
+                                {% for tipo_mantenimiento in tipomantenimientos %}
+                                    <option value="{{ tipo_mantenimiento.id }}">{{ tipo_mantenimiento.tipo }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-success">Crear Mantenimiento</button>
+                            <a href="{% url 'formulariomantenimiento' %}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <!-- /.col (right) -->
+        </div>
+       
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+{% endblock %}

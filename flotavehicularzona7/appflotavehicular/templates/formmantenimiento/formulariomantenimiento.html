@@ -1,0 +1,154 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Mantenimientos</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{%url 'crearmantenimiento'%}">
+                  <span class="badge bg-danger">Mantenimiento</span>
+                  <i class="fas fa-edit"></i> Generar 
+                  </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        {% comment %} <th>Identificador</th> {% endcomment %}
+                        <th>Fecha Mantenimiento</th>
+                        <th>Kilometraje para Mantenimiento</th>
+                        <th>Observaciones</th>
+                        <th>Persona Asiganada</th>
+                        <th>Vehiculo</th>
+                        <th>Tipode Mantenimiento</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for mantenimiento in mantenimientos%}
+                    <tr>
+                        {% comment %} <td>{{mantenimiento.id}}</td> {% endcomment %}
+                        <td>{{mantenimiento.fecha}}</td>
+                        <td>{{mantenimiento.km}}</td>
+                        <td>{{mantenimiento.observaciones}}</td>
+                        <td>{{mantenimiento.persona.nombres}} {{mantenimiento.persona.apellidos}}</br></td>
+                        <td>{{mantenimiento.vehiculo}}</td>
+                        <td>{{mantenimiento.tipodemantenimiento.tipo}}</td>
+                        <td>
+                          {% if mantenimiento.estado %}
+                              <span class="estado-btn activo">Reparado</span>
+                          {% else %}
+                              <span class="estado-btn inactivo">Estropeado</span>
+                          {% endif %}
+                        </td>
+                        <td>
+                            <a name="" id="" class="btn btn-warning"
+                                href="{%url 'editarmantenimiento' mantenimiento.id %}" title="Editar"
+                                role="button"><i class="fa fa-edit"></i></a>
+                            
+                            <a name="" id="" class="btn btn-danger"
+                                title="Eliminar"
+                                role="button"
+                                onclick="confirmarEliminacion({{ mantenimiento.id }})">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            <script>
+                              function confirmarEliminacion(id) {
+                                  var confirmacion = confirm('¿Está seguro de que desea eliminar este tipo de vehiculo?');
+                                  
+                                  if (confirmacion) {
+                                      // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                      window.location.href = "{% url 'eliminarmantenimiento' id=mantenimiento.id %}";
+                                  } else {
+                                      // Si el usuario elige 'Cancelar', no hagas nada
+                                      // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                                  }
+                              }
+                            </script>
+                            <a name="" id="" class="btn bg-gradient-secondary"
+                                href="{%url 'salidamantenimiento' mantenimiento.id %}" title="Salida a mantenimiento"
+                                role="button"><i class="fa fa-sign-out-alt"></i>
+                            </a>
+                            <a name="" id="" class="btn bg-gradient-primary"
+                                href="{%url 'entradamantenimiento' mantenimiento.id %}" title="Entrada a mantenimiento"
+                                role="button"><i class="fa fa-sign-in-alt"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <style>
+    /* Estilos para el botón azul (aprobado) */
+    .boton-azul {
+        background-color: green;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+
+    /* Estilos para el botón rojo (reprobado) */
+    .boton-rojo {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+    /* Estilo para el estado activo */
+  .activo {
+    background: green;  /* Cambia el color a verde o el que prefieras */
+    border: 2px solid green;  /* Añade un borde sólido verde */
+    border-radius: 10px;  /* Hace que las esquinas sean redondas */
+    padding: 8px 16px;  /* Añade relleno para mejorar el aspecto */
+    cursor: pointer;  /* Cambia el cursor al pasar sobre el botón */
+    display: inline-block;  /* Permite ajustar el ancho según el contenido */
+  }
+
+  /* Estilo para el estado inactivo */
+  .inactivo {
+    background: red;  /* Cambia el color a rojo o el que prefieras */
+    border: 2px solid red;  /* Añade un borde sólido rojo */
+    border-radius: 10px;  /* Hace que las esquinas sean redondas */
+    padding: 8px 16px;  /* Añade relleno para mejorar el aspecto */
+    cursor: pointer;  /* Cambia el cursor al pasar sobre el botón */
+    display: inline-block;  /* Permite ajustar el ancho según el contenido */
+  }
+</style>
+
+{% endblock %}

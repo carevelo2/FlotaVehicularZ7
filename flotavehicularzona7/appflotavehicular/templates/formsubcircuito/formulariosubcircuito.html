@@ -1,0 +1,111 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Registro de Subcircuitos</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{%url 'crearsubcircuito'%}">
+                  <span class="badge bg-danger">Subcircuito</span>
+                  <i class="fas fa-edit"></i> Crear 
+                  </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        <th>Codigo Subcircuito</th>
+                        <th>Nombre de Subcircuito</th>
+                        <th>Numero de Subcircuito</th>
+                        <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for subcircuito in subcircuitos%}
+                    <tr>
+                        <td>{{subcircuito.cod_subcircuito}}</td>
+                        <td>{{subcircuito.nombre_subcircuito}}</td>
+                        <td>{{subcircuito.numero_subcircuito}}</td>
+                        
+                        <td>
+                            <a name="" id="" class="btn btn-warning"
+                                href="{%url 'editarsubcircuito' subcircuito.cod_subcircuito %}" title="Editar"
+                                role="button"><i class="fa fa-edit"></i></a>
+                            
+                                <a href="#" class="btn btn-danger" title="Eliminar" role="button" onclick="confirmarEliminacion('{{ subcircuito.cod_subcircuito }}')">
+                                  <i class="fa fa-trash"></i>
+                              </a>
+                              
+                              <script>
+                                  function confirmarEliminacion(cod_subcircuito) {
+                                      var confirmacion = confirm('¿Está seguro de que desea eliminar este distrito?');
+                                      
+                                      if (confirmacion) {
+                                          // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                          var urlEliminacion = "{% url 'eliminarsubcircuito' cod_subcircuito='__cod_subcircuito__' %}".replace('__cod_subcircuito__', cod_subcircuito);
+                                          window.location.href = urlEliminacion;
+                                      } else {
+                                          // Si el usuario elige 'Cancelar', no hagas nada
+                                          // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                                      }
+                                  }
+                              </script>
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <style>
+    /* Estilos para el botón azul (aprobado) */
+    .boton-azul {
+        background-color: green;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+
+    /* Estilos para el botón rojo (reprobado) */
+    .boton-rojo {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+</style>
+
+{% endblock %}

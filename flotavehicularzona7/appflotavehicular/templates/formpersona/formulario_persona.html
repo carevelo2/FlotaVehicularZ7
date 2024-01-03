@@ -1,0 +1,146 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Listado de Personas</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{% url 'crearpersona' %}">
+                  <span class="badge bg-danger">Persona</span>
+                  <i class="fas fa-edit"></i> Crear 
+                </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Identificación</th>
+                      <th>Nombres</th>
+                      <th>Apellidos</th>
+                      <th>Usuario</th>
+                      <th>Contraseña</th>
+                      <th>Estado</th>
+                      <th>Rol</th>
+                      <th>Direccion</th>
+                      <th>Fecha de Nacimiento</th>
+                      <th>Tipo de Sangre</th>
+                      <th>Ciudad de Nacimiento</th>
+                      <th>Número de Celular</th>
+                      <th>Rango</th>
+                      <th>Dependencia</th>
+                      
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for persona in personas %}
+                    <tr>
+                        <td>{{ persona.identificacion }}</td>
+                        <td>{{ persona.nombres }}</td>
+                        <td>{{ persona.apellidos }}</td>
+                        <td>{{ persona.codigoempleado.username }}</td>
+                        <td>{{ persona.codigoempleado.password }}</td>
+                        <td>
+                          {% if persona.codigoempleado.is_active %}
+                              <button style="background-color: lightgreen;">Activo</button>
+                          {% else %}
+                              <button style="background-color: lightcoral;">Inactivo</button>
+                          {% endif %}
+                        </td>
+                        <td>
+                          {% for group in persona.codigoempleado.groups.all %}
+                              {{ group.name }}{% if not forloop.last %}, {% endif %}
+                          {% endfor %}
+                        </td>
+                        <td>{{ persona.direccion }}</td>
+                        <td>{{ persona.fecha_nacimiento }}</td>
+                        <td>{{ persona.tipo_sangre }}</td>
+                        <td>{{ persona.ciudad_nacimiento }}</td>
+                        <td>{{ persona.numero_celular }}</td>
+                        <td>{{ persona.id_rango.rangopersona }}</td>
+                        <td>{{ persona.dependencia }}</td>
+                        
+                        
+                        <td>
+                          <a name="" id="" class="btn btn-warning"
+                          href="{%url 'editarpersona' persona.identificacion %}" title="Editar"
+                          role="button"><i class="fa fa-edit"></i></a>
+                      
+                      <a name="" id="" class="btn btn-danger"
+                          title="Eliminar"
+                          role="button"
+                          onclick="confirmarEliminacion({{ persona.identificacion }})">
+                          <i class="fa fa-trash"></i>
+                      </a>
+                      <script>
+                        function confirmarEliminacion(identificacion) {
+                            var confirmacion = confirm('¿Está seguro de que desea eliminar este rango?');
+                            
+                            if (confirmacion) {
+                                // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                window.location.href = "{% url 'eliminarpersona' identificacion=persona.identificacion %}";
+                            } else {
+                                // Si el usuario elige 'Cancelar', no hagas nada
+                                // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                            }
+                        }
+                      </script>    
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <style>
+    /* Estilos para el botón azul (aprobado) */
+    .boton-azul {
+        background-color: green;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+
+    /* Estilos para el botón rojo (reprobado) */
+    .boton-rojo {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+</style>
+
+{% endblock %}

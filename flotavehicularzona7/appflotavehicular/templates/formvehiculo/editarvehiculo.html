@@ -1,0 +1,242 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+
+<div class="wrapper">
+  
+ 
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Editar Vehiculo</h3>
+              </div>
+              <div class="card-body">
+                <form action="" method="POST">
+                  {% csrf_token %}
+                  
+                  <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="placa"
+                        id="placa" 
+                        class="form-control" 
+                        placeholder="Placa Vehiculo" 
+                        value="{{ my_vehiculo.placa }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="motor"
+                        id="motor" 
+                        class="form-control" 
+                        placeholder="Escribe el nro de motor del vehiculo" 
+                        value="{{ my_vehiculo.motor }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="chasis"
+                        id="chasis" 
+                        class="form-control" 
+                        placeholder="Escribe el nro del Chasis" 
+                        value="{{ my_vehiculo.chasis }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="marca"
+                        id="marca" 
+                        class="form-control" 
+                        placeholder="Escribe marca del vehiculo" 
+                        value="{{ my_vehiculo.marca }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="modelo"
+                        id="modelo" 
+                        class="form-control" 
+                        placeholder="Escribe el modelo del vehiculo" 
+                        value="{{ my_vehiculo.modelo }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="color"
+                        id="color" 
+                        class="form-control" 
+                        placeholder="Escribe el color del vehiculo" 
+                        value="{{ my_vehiculo.color }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="kilometraje"
+                        id="kilometraje" 
+                        class="form-control" 
+                        placeholder="Escribe el nro de kilometraje del vehiculo" 
+                        value="{{ my_vehiculo.kilometraje }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="cilindraje"
+                        id="cilindraje" 
+                        class="form-control" 
+                        placeholder="Escribe el cilindraje del vehiculo"
+                        value="{{ my_vehiculo.cilindraje }}"  
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="capacidad_carga"
+                        id="capacidad_carga" 
+                        class="form-control" 
+                        placeholder="Escribe el capacidad de carga del vehiculo" 
+                        value="{{ my_vehiculo.capacidad_carga }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="capacidad_pasajeros"
+                        id="capacidad_pasajeros" 
+                        class="form-control" 
+                        placeholder="Escribe el capacidad de pasajeros del vehiculo" 
+                        value="{{ my_vehiculo.capacidad_pasajeros }}" 
+                        required="" />
+                    </div>
+                <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                        </div>
+                        <select
+                            class="form-control"
+                            name="tipovehiculo"
+                            id="tipovehiculo"
+                            required
+                            >
+                            <option value="" disabled selected>
+                                Seleccione un Tipo de vehiculo
+                            </option>
+                            {% for tipovehiculo in tipovehiculos %}
+                            <option value="{{ tipovehiculo.id }}" {% if tipovehiculo.id == my_vehiculo.tipovehiculo.id %} selected {% endif %}>{{ tipovehiculo.tipovehiculo }}</option>
+                               
+                            {% endfor %}
+                            </select>
+                    </div>
+                <!-- /.input group -->
+                </div>
+                    
+                    <div class="form-group">
+                        
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-success">Guardar cambios</button>
+                            <a href="{% url 'formulario_vehiculo' %}" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    <!-- /.input group -->
+                    </div>
+                    <!-- /.form group -->
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+
+          </div>
+          <!-- /.col (right) -->
+        </div>
+       
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+
+
+{% endblock %}
