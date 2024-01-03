@@ -3,7 +3,7 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 # Aqui las url de tu app
-urlpatterns = [
+urlpatterns = [ 
     # Pagina de inicio
     path('inicio/', views.index, name="index"),
     path('flotavehicularzona7/', views.index2, name="index2"),
