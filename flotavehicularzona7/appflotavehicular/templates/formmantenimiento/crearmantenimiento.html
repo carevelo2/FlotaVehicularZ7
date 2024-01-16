@@ -103,47 +103,56 @@
                             var kmActual = parseInt(document.getElementById('kmvehiculoactual').value);
                             var selectedOption = document.getElementById('kmvehiculo');
                             var kmSeleccionado = parseInt(selectedOption.options[selectedOption.selectedIndex].value);
-
+                        
                             // Calcular la diferencia y mostrar el resultado
                             var diferencia = kmActual - kmSeleccionado;
                             var resultadoElement = document.getElementById('resultado-kilometraje');
                             resultadoElement.innerHTML = 'Diferencia de Kilometraje: ' + diferencia;
-
+                        
                             // Verificar si la diferencia es igual al valor ingresado en km
                             var kmMantenimiento = parseInt(document.getElementById('km').value);
                             var mensajeElement = document.getElementById('mensaje-vehiculos-mantenimiento');
                             var vehiculoSelect = document.getElementById('vehiculo');
-
-                            if (diferencia === kmMantenimiento) {
+                        
+                            // Limpiar y llenar automáticamente el select de vehículos
+                            vehiculoSelect.innerHTML = ''; // Limpiar opciones existentes
+                        
+                            if (diferencia >= kmMantenimiento && kmMantenimiento>=3000) {
                                 // Mostrar el mensaje indicando que hay vehículos para mantenimiento.
                                 mensajeElement.innerHTML = 'Hay vehículos para mantenimiento.';
-                                
-                                // Limpiar y llenar automáticamente el select de vehículos con la placa del vehículo seleccionado
-                                vehiculoSelect.innerHTML = ''; // Limpiar opciones existentes
-
+                        
                                 // Obtener la opción seleccionada en el select de kmvehiculo
-                    var selectedOption = document.getElementById('kmvehiculo').options[document.getElementById('kmvehiculo').selectedIndex];
-
-                    // Verificar si la opción seleccionada existe
-                    if (selectedOption) {
-                        // Obtener la placa y el kilómetro del vehículo seleccionado
-                        var vehiculoInfo = selectedOption.text.trim().split(' ');
-                        var placa = vehiculoInfo[0];  // Tomar la placa de la opción
-
-                        // Agregar una opción para la placa del vehículo
-                        var option = document.createElement('option');
-                        option.value = placa;
-                        option.text = placa;
-                        vehiculoSelect.add(option);
-
-                        // Seleccionar automáticamente la opción agregada
-                        vehiculoSelect.value = placa;
-                    }
+                                var selectedOption = document.getElementById('kmvehiculo').options[document.getElementById('kmvehiculo').selectedIndex];
+                        
+                                // Verificar si la opción seleccionada existe
+                                if (selectedOption) {
+                                    // Obtener la placa y el kilómetro del vehículo seleccionado
+                                    var vehiculoInfo = selectedOption.text.trim().split(' ');
+                                    var placa = vehiculoInfo[0];  // Tomar la placa de la opción
+                        
+                                    // Agregar una opción para la placa del vehículo
+                                    var option = document.createElement('option');
+                                    option.value = placa;
+                                    option.text = placa;
+                                    vehiculoSelect.add(option);
+                        
+                                    // Seleccionar automáticamente la opción agregada
+                                    vehiculoSelect.value = placa;
+                                }
                             } else {
-                                // Ocultar el mensaje
-                                mensajeElement.innerHTML = '';
+                                // Si la diferencia no es suficiente, mostrar un mensaje indicando que no hay vehículos para mantenimiento.
+                                mensajeElement.innerHTML = 'No hay vehículos para mantenimiento.';
+                        
+                                // Agregar una opción para la placa del vehículo
+                                var option = document.createElement('option');
+                                option.text = 'Placa';
+                                vehiculoSelect.add(option);
+                        
+                                // Seleccionar automáticamente la opción agregada
+                                vehiculoSelect.text = 'placa';
                             }
                         }
+                        
 
                         // Escuchar cambios en kmvehiculoactual y kmvehiculo
                         document.getElementById('kmvehiculoactual').addEventListener('input', calcularDiferencia);

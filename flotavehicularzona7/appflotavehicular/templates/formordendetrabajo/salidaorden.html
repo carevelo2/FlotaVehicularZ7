@@ -1,0 +1,81 @@
+{% extends 'formplantilla/index_master.html' %}
+
+{% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Lista de Ordenes de Trabajo de Salida</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        <th>Identificador</th>
+                        <th>Documento de salida</th>
+                        
+                        
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for salida in salidaordenes%}
+                    <tr>
+                        <td>{{salida.id}}</td>
+
+                        <td style="text-align: center;">
+                          {% if salida.docsalidaorden %}
+                              {% if "pdf" in salida.docsalidaorden.url %}
+                                  <a href="{{ salida.docsalidaorden.url }}" target="_blank"><i class="fas fa-file-pdf" style="font-size: 2em; display: block; margin: 0 auto;"></i>
+                                  </a>
+                              {% else %}
+                                  El documento no es un archivo PDF
+                              {% endif %}
+                          {% else %}
+                              Sin Documento
+                          {% endif %}
+                      </td>
+                        
+                        
+                        
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+ 
+<!-- Agrega estas líneas en la sección head de tu plantilla HTML -->
+<script src="https://mozilla.github.io/pdf.js/build/pdf.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+{% endblock %}

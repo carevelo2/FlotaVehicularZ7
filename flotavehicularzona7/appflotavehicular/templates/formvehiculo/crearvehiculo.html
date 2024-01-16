@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                            <span class="input-group-text"><i class="fas fa-motorcycle"></i></span>
                             </div>
                             <input 
                             type="text" 
@@ -55,7 +55,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                            <span class="input-group-text"><i class="fas fas fa-cogs"></i></span>
                             </div>
                             <input 
                             type="text" 
@@ -103,7 +103,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                            <span class="input-group-text"><i class="fas fa-paint-brush"></i></span>
                             </div>
                             <input 
                             type="text" 
@@ -119,14 +119,15 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                            <span class="input-group-text"><i class="fas fa-tachometer-alt"></i></span>
                             </div>
                             <input 
-                            type="text" 
+                            type="number" 
                             class="form-control has-feedback-left" 
                             name="kilometraje"
                             id="kilometraje" 
                             class="form-control" 
+                            min='0'
                             placeholder="Escribe el nro de kilometraje del vehiculo" 
                             required="" />
                         </div>
@@ -135,14 +136,16 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                            <span class="input-group-text"><i class="fas fa-cogs"></i></span>
                             </div>
                             <input 
-                            type="text" 
+                            type="number" 
                             class="form-control has-feedback-left" 
                             name="cilindraje"
                             id="cilindraje" 
                             class="form-control" 
+                            min='0'
+                            step="0.01"
                             placeholder="Escribe el cilindraje del vehiculo" 
                             required="" />
                         </div>
@@ -151,14 +154,16 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                            <span class="input-group-text"><i class="fas fa-box"></i></span>
                             </div>
                             <input 
-                            type="text" 
+                            type="number" 
                             class="form-control has-feedback-left" 
                             name="capacidad_carga"
                             id="capacidad_carga" 
                             class="form-control" 
+                            min='0'
+                            step="0.01"
                             placeholder="Escribe el capacidad de carga del vehiculo" 
                             required="" />
                         </div>
@@ -167,14 +172,16 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
+                            <span class="input-group-text"><i class="fas  fa-user-friends"></i></span>
                             </div>
                             <input 
-                            type="text" 
+                            type="number" 
                             class="form-control has-feedback-left" 
                             name="capacidad_pasajeros"
                             id="capacidad_pasajeros" 
                             class="form-control" 
+                            min='0'
+                            max='4'
                             placeholder="Escribe el capacidad de pasajeros del vehiculo" 
                             required="" />
                         </div>

@@ -27,8 +27,9 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-id-card"></i></span>
                             </div>
-                            <input type="text" class="form-control" name="identificacion" placeholder="Identificación" required />
+                            <input type="number" class="form-control" name="identificacion" id="identificacion" placeholder="Identificación" required min='0' max='9999999999' pattern="\d*" />
                         </div>
+                        <small id="feedback"></small>
                     </div>
 
                     <!-- Nombres -->
@@ -103,7 +104,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
                             </div>
-                            <input type="date" class="form-control" name="fecha_nacimiento" placeholder="Fecha de Nacimiento" required />
+                            <input type="date" class="form-control" name="fecha_nacimiento" title="Fecha de Nacimiento" placeholder="Fecha de Nacimiento" required />
                         </div>
                     </div>
                     
@@ -148,7 +149,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
                             </div>
-                            <input type="text" class="form-control" name="numero_celular" placeholder="Número de Celular" required />
+                            <input type="number" class="form-control" name="numero_celular" placeholder="Número de Celular" required />
                         </div>
                     </div>
                      <!-- Contraseña -->
@@ -170,16 +171,26 @@
                         </div>
                     </div>
                     <!-- Dependencia -->
+                    
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-building"></i></span>
                             </div>
-                            <input type="text" class="form-control" name="dependencia" placeholder="Dependencia" required />
+                            <select 
+                            name="dependencia" 
+                            id="dependencia" 
+                            class="form-control" 
+                            required="">
+                            <option >Dependencia</option>
+                            {% for dependencia in dependencias %}
+                                <option value="{{ dependencia.id }}">{{ dependencia.parroquia }}</option>
+                            {% endfor %}
+                        </select>
                         </div>
                     </div>
 
-                    <!-- Otros campos similares -->
+                    {% comment %} <!-- Otros campos similares -->
                     <!-- Subir documento para firma -->
                     <div class="form-group">
                         <label for="documentoFirma">Documento para Firma</label>
@@ -216,7 +227,7 @@
                                 passwordField.type = "password";
                             }
                         }
-                    </script>
+                    </script> {% endcomment %}
                     
                     <div class="form-group">
                         <div class="input-group">
@@ -239,5 +250,50 @@
     </section>
     <!-- /.content -->
   </div>
+  <script>
+    function verificarCedula(cedula) {
+        if (typeof(cedula) == 'string' && cedula.length == 10 && /^\d+$/.test(cedula)) {
+            var digitos = cedula.split('').map(Number);
+            var codigo_provincia = digitos[0] * 10 + digitos[1];
+
+            if (codigo_provincia >= 1 && (codigo_provincia <= 24 || codigo_provincia == 30)) {
+                var tercer_digito = digitos[2];
+
+                // Validar tercer dígito
+                if (tercer_digito < 6) {
+                    var digito_verificador = digitos.pop();
+
+                    var digito_calculado = digitos.reduce(
+                        function (valorPrevio, valorActual, indice) {
+                            return valorPrevio - (valorActual * (2 - indice % 2)) % 9 - (valorActual == 9) * 9;
+                        }, 1000) % 10;
+
+                    return digito_calculado === digito_verificador;
+                }
+            }
+        }
+        return false;
+    }
+
+    document.getElementById('identificacion').addEventListener('input', function () {
+        var inputCedula = this.value;
+        var feedback = document.getElementById('feedback');
+
+        if (verificarCedula(inputCedula)) {
+            feedback.textContent = 'La cédula es válida.';
+            feedback.style.color = 'green';
+        } else {
+            feedback.textContent = 'La cédula no es válida. Por favor, ingrese un número de cédula válido.';
+            feedback.style.color = 'red';
+        }
+    });
+
+    document.getElementById('identificacion').addEventListener('keypress', function (event) {
+        var charCode = event.which ? event.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            event.preventDefault();
+        }
+    });
+</script>
 
 {% endblock %}

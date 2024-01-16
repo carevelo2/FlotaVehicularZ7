@@ -1,0 +1,79 @@
+{% extends 'formplantilla/index_master.html' %}
+{% block content %}
+
+<div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card card-danger">
+                            <div class="card-header">
+                                <h3 class="card-title">Editar dependencia</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action=" " method="POST">
+                                    {% csrf_token %}
+                                    <!-- provincia -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                class="form-control has-feedback-left"
+                                                name="provincia"
+                                                id="provincia"
+                                                placeholder="Provincia"
+                                                required=""
+                                                value="{{ dependencia.provincia }}">
+                                        </div>
+                                    </div>
+                                    <!-- Parroquia -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                class="form-control has-feedback-left"
+                                                name="parroquia"
+                                                id="parroquia"
+                                                placeholder="Parroquia"
+                                                required=""
+                                                value="{{ dependencia.parroquia }}">
+                                        </div>
+                                    </div>
+                                    <!-- Selección de distrito -->
+                                    <!-- ... (resto del código igual) -->
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="submit" class="btn btn-success">Guardar cambios</button>
+                                            <a href="{% url 'formulariodependencia' %}" class="btn btn-secondary">Cancelar</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!-- /.col (right) -->
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+
+{% endblock %}

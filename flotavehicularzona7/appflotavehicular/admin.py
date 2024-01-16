@@ -12,5 +12,8 @@ admin.site.register(Mantenimiento)
 admin.site.register(Circuito)
 admin.site.register(Subcircuito)
 admin.site.register(Distrito)
+admin.site.register(Dependencia)
+admin.site.register(Denuncia)
+
 
        

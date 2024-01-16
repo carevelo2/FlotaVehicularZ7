@@ -9,7 +9,8 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>ogistic</title>
+      <link rel="icon" href="{% static '\lib\img\logo\logo.jpg'%}" type="image/ico" />
+      <title>Policia Nacional – Subzona 7 Loja</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -34,17 +35,18 @@
    <body class="main-layout">
       <!-- loader  -->
       <div class="loader_bg">
-         <div class="loader"><img src="{% static '/lib/paginatools/images/loading.gif'%}" alt="#" /></div>
+         <div class="loader"><img src="{% static '/lib/paginatools/images/loading.gif'%}" alt="#" /> </div>
       </div>
       <!-- end loader -->
       <div id="mySidepanel" class="sidepanel">
          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-         <a href="index.html">Home </a>
-         <a href="#about">About</a>
-         <a href="#service">Services  </a>
-         <a href="#vehicles">Our Vehicles</a>
-         <a href="#testimonial">Testimonial</a>
-         <a href="#contact">Contact</a>
+         <a href="index.html">Inicio</a>
+         <a href="#about">Acerca de</a>
+         <a href="#service">Servicios</a>
+         <a href="#vehicles">Nuestros Vehículos</a>
+         <a href="#testimonial">Testimonios</a>
+         <a href="#contact">Contacto</a>
+
       </div>
       <!-- header -->
       <header>
@@ -54,13 +56,13 @@
                <div class="row">
                   <div class="col-md-4 col-sm-4">
                      <div class="logo">
-                        <a href="index.html"><img src="{% static '/lib/paginatools/images/logo.png'%}" alt="#" /></a>
+                        <a href="{% url 'index2' %}"><img src="{% static '\lib\img\logo\logo.jpg'%}" width='100' height='150' alt="#" /></a>
                      </div>
                   </div>
                   <div class="col-md-8 col-sm-8">
                      <div class="right_bottun">
                         <ul class="conat_info d_none ">
-                           <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+                           <li><a href="{% url 'login' %}"><i class="fa fa-user" aria-hidden="true"></i></a></li>
                            <li><a href="#"><i class="fa fa-search" aria-hidden="true"></i></a></li>
                         </ul>
                         <button class="openbtn" onclick="openNav()"><img src="{% static '/lib/paginatools/images/menu_icon.png'%}" alt="#"/> </button> 
@@ -87,16 +89,16 @@
                         <div class="row">
                            <div class="col-md-7 col-lg-5">
                               <div class="text-bg">
-                                 <h1>Flota Vehicular Zona 7</h1>
+                                 <h1>Policia Nacional – Subzona 7 Loja</h1>
                                  <span>Policia Nacional del Ecuador</span>
-                                 <a class="read_more" href="#">Contact Us</a>
+                                 
                               </div>
                            </div>
                            <div class="col-md-12 col-lg-7">
                               <div class="row">
                                  <div class="col-md-6">
                                     <div class="ban_track">
-                                       <figure><img src="{% static '/lib/paginatools/images/track.png'%}" alt="#"/></figure>
+                                       <figure><img src= "{% static '/lib/paginatools/images/track.png'%}" alt="#"/></figure>
                                     </div>
                                  </div>
                                  <div class="col-md-6">
@@ -238,15 +240,15 @@
             <div class="row d_flex">
                <div class="col-md-6">
                   <div class="about_right">
-                     <figure><img src="{% static '/lib/paginatools/images/about.png'%}" alt="#"/></figure>
+                     <figure><img src="{% static '/lib/paginatools/images/poli4.jpg'%}" alt="#"/></figure>
                   </div>
                </div>
                <div class="col-md-6">
                   <div class="titlepage">
-                     <h2>About Us</h2>
-                     <p> There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, There 
+                     <h2>Sobre nosotros</h2>
+                     <p> La Policía Nacional del Ecuador es la entidad encargada de brindar seguridad pública a todos los habitantes del Ecuador. La Policía Nacional está regulada por el Ministerio de Gobierno del Ecuador.
                      </p>
-                     <a class="read_more" href="#">Read More</a>
+                     <a class="read_more" href="https://www.policia.gob.ec/">Leer más</a>
                   </div>
                </div>
             </div>
@@ -259,7 +261,7 @@
             <div class="row">
                <div class="col-md-10 offset-md-1">
                   <div class="titlepage">
-                     <h2>Our Services</h2>
+                     <h2>Nuestros Servicios</h2>
                      <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, There </p>
                   </div>
                </div>
@@ -302,8 +304,8 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
-                     <h2>Our Vehicles</h2>
-                     <p>nternet. It uses a dictionary of over 200 Latin words, combined with .</p>
+                     <h2>Nuestros Vehículos</h2>
+                     
                   </div>
                </div>
             </div>
@@ -321,42 +323,18 @@
                         <div class="row">
                            <div class="col-md-4">
                               <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc1.png'%}" alt="#"/></figure>
+                                 <figure><img src="{% static '/lib/paginatools/images/moto.jpeg'%}" alt="#"/></figure>
                               </div>
                            </div>
                            <div class="col-md-4">
                               <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc2.png'%}" alt="#"/></figure>
+                                 <figure><img src="{% static '/lib/paginatools/images/auto.jpg'%}" alt="#"/></figure>
                               </div>
-                              <h3 class="blac_co">Truck</h3>
+                              <h3 class="blac_co">Motos</h3>
                            </div>
                            <div class="col-md-4">
                               <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc3.png'%}" alt="#"/></figure>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item">
-                  <div class="container">
-                     <div class="carousel-caption">
-                        <div class="row">
-                           <div class="col-md-4">
-                              <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc1.png'%}" alt="#"/></figure>
-                              </div>
-                           </div>
-                           <div class="col-md-4">
-                              <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc2.png'%}" alt="#"/></figure>
-                              </div>
-                              <h3 class="blac_co">Truck</h3>
-                           </div>
-                           <div class="col-md-4">
-                              <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc3.png'%}" alt="#"/></figure>
+                                 <figure><img src="{% static '/lib/paginatools/images/camioneta.jpg'%}" alt="#"/></figure>
                               </div>
                            </div>
                         </div>
@@ -369,18 +347,42 @@
                         <div class="row">
                            <div class="col-md-4">
                               <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc1.png'%}" alt="#"/></figure>
+                                 <figure><img src="{% static '/lib/paginatools/images/moto.jpeg'%}" alt="#"/></figure>
                               </div>
                            </div>
                            <div class="col-md-4">
                               <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc2.png'%}" alt="#"/></figure>
+                                 <figure><img src="{% static '/lib/paginatools/images/auto.jpg'%}" alt="#"/></figure>
                               </div>
-                              <h3 class="blac_co">Truck</h3>
+                              <h3 class="blac_co">Automoviles</h3>
                            </div>
                            <div class="col-md-4">
                               <div class="vehicles_truck">
-                                 <figure><img src="{% static '/lib/paginatools/images/truc3.png'%}" alt="#"/></figure>
+                                 <figure><img src="{% static '/lib/paginatools/images/camioneta.jpg'%}" alt="#"/></figure>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="carousel-item">
+                  <div class="container">
+                     <div class="carousel-caption">
+                        <div class="row">
+                           <div class="col-md-4">
+                              <div class="vehicles_truck">
+                                 <figure><img src="{% static '/lib/paginatools/images/moto.jpeg'%}" alt="#"/></figure>
+                              </div>
+                           </div>
+                           <div class="col-md-4">
+                              <div class="vehicles_truck">
+                                 <figure><img src="{% static '/lib/paginatools/images/auto.jpg'%}" alt="#"/></figure>
+                              </div>
+                              <h3 class="blac_co">Camionetas</h3>
+                           </div>
+                           <div class="col-md-4">
+                              <div class="vehicles_truck">
+                                 <figure><img src="{% static '/lib/paginatools/images/camioneta.jpg'%}" alt="#"/></figure>
                               </div>
                            </div>
                         </div>
@@ -395,107 +397,16 @@
             <i class="fa fa-angle-right" aria-hidden="true"></i>
             </a>
          </div>
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <a class="read_more" href="#">Read More</a>
-               </div>
-            </div>
-         </div>
+         
       </section>
-      <!-- end vehicles section -->
-      <!-- testimonial section -->
-      <div id="testimonial" class="testimonial bottom_cross bottom_cross2">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="titlepage">
-                     <h2>Testimonials</h2>
-                     <p>nternet. It uses a dictionary of over 200 Latin words, combined with .</p>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  <div id="myCarousel" class="carousel slide testimonial_Carousel " data-ride="carousel">
-                     <ol class="carousel-indicators">
-                        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#myCarousel" data-slide-to="1"></li>
-                        <li data-target="#myCarousel" data-slide-to="2"></li>
-                     </ol>
-                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                           <div class="container">
-                              <div class="carousel-caption ">
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                       <div class="testimonial_box">
-                                          <figure><img src="{% static '/lib/paginatools/images/our.png'%}" alt="#"/></figure>
-                                          <h3>Luda Johnson <br><span class="kisu">( Ceo)</span></h3>
-                                          <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 year</p>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="carousel-item">
-                           <div class="container">
-                              <div class="carousel-caption">
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                       <div class="testimonial_box">
-                                          <figure><img src="{% static '/lib/paginatools/images/our.png'%}" alt="#"/></figure>
-                                          <h3>Luda Johnson <br><span class="kisu">( Ceo)</span></h3>
-                                          <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 year</p>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="carousel-item">
-                           <div class="container">
-                              <div class="carousel-caption">
-                                 <div class="row">
-                                    <div class="col-md-12">
-                                       <div class="full cross_layout">
-                                          <div class="testimonial_box">
-                                             <figure><img src="{% static '/lib/paginatools/images/our.png'%}" alt="#"/></figure>
-                                             <h3>Luda Johnson <br><span class="kisu">( Ceo)</span></h3>
-                                             <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 year</p>
-                                          </div>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                     <i class="fa fa-caret-left" aria-hidden="true"></i>
-                     </a>
-                     <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                     <i class="fa fa-caret-right" aria-hidden="true"></i>
-                     </a>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  <a class="read_more" href="#">Read More</a>
-               </div>
-            </div>
-         </div>
-      </div>
-      <!-- end testimonial section -->
+     
       <!-- choose section -->
       <div class="choose">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
-                     <h2>Why Choose Us</h2>
+                     <h2>Policia Nacional – Subzona 7 Loja</h2>
                   </div>
                </div>
             </div>
@@ -503,17 +414,24 @@
                <div class="col-md-5">
                   <div class="choose_box">
                      <i><img src="{% static '/lib/paginatools/images/why1.png'%}" alt="#"/></i>
-                     <h3>Our Vission</h3>
-                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,</p>
-                     <a class="read_more" href="#">Read More</a>
+                     <h3>Nuestra Visión</h3>
+                     <p>Al 2025 seremos la institución más confiable y tecnificada de la 
+                        región; efectiva, integra y transparente del sector público, 
+                        comprometidos al servicio de la sociedad, garantizando la 
+                        seguridad ciudadana y orden público.
+                        </p>
+                     
                   </div>
                </div>
                <div class="col-md-5 offset-md-2">
                   <div class="choose_box">
                      <i><img src="{% static '/lib/paginatools/images/why2.png'%}" alt="#"/></i>
-                     <h3>Estimate Shipping</h3>
-                     <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,</p>
-                     <a class="read_more" href="#">Read More</a>
+                     <h3>Nuestra Misión</h3>
+                     <p>Atender la seguridad ciudadana y el orden público, y proteger 
+                        el libre ejercicio de los derechos y la seguridad de las personas 
+                        dentro del territorio nacional.
+                        </p>
+                     
                   </div>
                </div>
             </div>
@@ -521,49 +439,187 @@
       </div>
       <!-- end choose section -->
       <!-- contact section -->
-      <div id="contact" class="contact">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="titlepage">
-                     <h2>Requst A call  for You</h2>
-                  </div>
+<div id="contact" class="contact">
+   <div class="container">
+       <div class="row">
+           <div class="col-md-5">
+               <div class="titlepage">
+                   <h2>Denuncias y Sugerencias</h2>
                </div>
-            </div>
-         </div>
-         <div class="con_bg">
-            <div class="container-fluid">
-               <div class="row">
-                  <div class="col-md-5">
-                     <form id="request" class="main_form">
-                        <div class="row">
-                           <div class="col-md-12 ">
-                              <input class="contactus" placeholder="Name" type="type" name="Name"> 
+               <div class="card-body">
+                   <form action="{% url 'creardenuncia' %} " method="POST">
+                       {% csrf_token %}
+
+                      <!-- Selección de Subcircuito -->
+                     <div class="form-group">
+                        <div class="input-group">
+                           <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="far fa-file"></i></span>
                            </div>
-                           <div class="col-md-12">
-                              <input class="contactus" placeholder="Email" type="type" name="Email"> 
-                           </div>
-                           <div class="col-md-12">
-                              <input class="contactus" placeholder="Phone Number" type="type" name="Phone Number">                          
-                           </div>
-                           <div class="col-md-12">
-                              <input class="contactusmess" placeholder="Message" type="type" Message="Name">
-                           </div>
-                           <div class="col-md-12">
-                              <button class="send_btn">Send</button>
-                           </div>
+                           <select name="id_subcircuito" id="id_subcircuito" class="form-control" required>
+                              {% for subcircuito in subcircuitos %}
+                                    <option value="{{ subcircuito.cod_subcircuito }}">
+                                       {{ subcircuito.nombre_subcircuito }}
+                                    </option>
+                              {% endfor %}
+                           </select>
                         </div>
-                     </form>
-                  </div>
-                  <div class="col-md-7">
-                     <div class="co_tru">
-                        <figure><img src="{% static '/lib/paginatools/images/truc4.png'%}" alt="#"/></figure>
                      </div>
-                  </div>
+
+                     <!-- Selección de Circuito -->
+                     <div class="form-group">
+                        <div class="input-group">
+                           <div class="input-group-prepend">
+                              <span class="input-group-text"><i class="far fa-file"></i></span>
+                           </div>
+                           <select name="id_circuito" id="id_circuito" class="form-control" required>
+                              <!-- Options will be dynamically populated by JavaScript -->
+                           </select>
+                        </div>
+                     </div>
+
+                     <script>
+                        // Obtener el objeto JavaScript con los circuitos asociados a cada subcircuito
+                        var circuitosPorSubcircuito = [
+                           {% for circuito in circuitos %}
+                              {
+                                    "cod_circuito": "{{ circuito.cod_circuito }}",
+                                    "nombre_circuito": "{{ circuito.nombre_circuito }}",
+                                    "id_subcircuito": "{{ circuito.id_subcircuito.cod_subcircuito }}"
+                              }{% if not forloop.last %},{% endif %}
+                           {% endfor %}
+                        ];
+
+                        // Función para cargar el subcircuito y circuitos asociados al subcircuito seleccionado
+                        function cargarSubcircuitoYCircuitos() {
+                           var subcircuitoSelect = document.getElementById("id_subcircuito");
+                           var circuitoSelect = document.getElementById("id_circuito");
+                           var subcircuitoSeleccionado = subcircuitoSelect.value;
+
+                           // Limpiar y actualizar el campo de selección de circuito
+                           circuitoSelect.innerHTML = "";
+
+                           // Filtrar circuitos por el subcircuito seleccionado
+                           var circuitosFiltrados = circuitosPorSubcircuito.filter(function(circuito) {
+                              return circuito.id_subcircuito === subcircuitoSeleccionado;
+                           });
+
+                           // Llenar el campo de selección de circuito
+                           circuitosFiltrados.forEach(function(circuito) {
+                              var option = document.createElement("option");
+                              option.value = circuito.cod_circuito;
+                              option.text = circuito.nombre_circuito;
+                              circuitoSelect.appendChild(option);
+                           });
+                        }
+
+                        // Asociar la función al evento de cambio en el campo de selección de subcircuito
+                        document.getElementById("id_subcircuito").addEventListener("change", cargarSubcircuitoYCircuitos);
+
+                        // Cargar el subcircuito y circuitos al iniciar la página
+                        cargarSubcircuitoYCircuitos();
+                     </script>
+
+                       <!-- Selección de tipo -->
+                       <div class="form-group">
+                           <div class="input-group">
+                               <div class="input-group-prepend">
+                                   <span class="input-group-text"><i class="far fa-file"></i></span>
+                               </div>
+                               <select 
+                                   class="form-control has-feedback-left" 
+                                   name="tipo"
+                                   id="tipo" 
+                                   required="">
+                                   <option value="" disabled selected>Tipo</option>
+                                   <option value="reclamos">Reclamos</option>
+                                   <option value="sugerencias">Sugerencias</option>
+                               </select>
+                           </div>
+                       </div>
+
+                       <!-- Campo de detalle -->
+                       <div class="form-group">
+                           <div class="input-group">
+                               <div class="input-group-prepend">
+                                   <span class="input-group-text"><i class="far fa-file"></i></span>
+                               </div>
+                               <input 
+                                   type="text" 
+                                   class="form-control has-feedback-left" 
+                                   name="detalle"
+                                   id="detalle" 
+                                   placeholder="Detalle" 
+                                   required="" />
+                           </div>
+                       </div>
+
+                       <!-- Campo de contacto -->
+                       <div class="form-group">
+                           <div class="input-group">
+                               <div class="input-group-prepend">
+                                   <span class="input-group-text"><i class="far fa-file"></i></span>
+                               </div>
+                               <input 
+                                   type="text" 
+                                   class="form-control has-feedback-left" 
+                                   name="contacto"
+                                   id="contacto" 
+                                   placeholder="Contacto" />
+                           </div>
+                       </div>
+
+                       <!-- Campo de apellidos -->
+                       <div class="form-group">
+                           <div class="input-group">
+                               <div class="input-group-prepend">
+                                   <span class="input-group-text"><i class="far fa-file"></i></span>
+                               </div>
+                               <input 
+                                   type="text" 
+                                   class="form-control has-feedback-left" 
+                                   name="apellidos"
+                                   id="apellidos" 
+                                   placeholder="Ingrese sus Apellidos" 
+                                   required="" />
+                           </div>
+                       </div>
+
+                       <!-- Campo de nombres -->
+                       <div class="form-group">
+                           <div class="input-group">
+                               <div class="input-group-prepend">
+                                   <span class="input-group-text"><i class="far fa-file"></i></span>
+                               </div>
+                               <input 
+                                   type="text" 
+                                   class="form-control has-feedback-left" 
+                                   name="nombres"
+                                   id="nombres" 
+                                   placeholder="Ingrese sus Nombres" 
+                                   required="" />
+                           </div>
+                       </div>
+
+                       <div class="form-group">
+                           <div class="input-group">
+                               <button type="submit" class="btn btn-success">Enviar</button>
+                           </div>
+                       </div>
+                   </form>
                </div>
-            </div>
-         </div>
-      </div>
+           </div>
+
+           <div class="col-md-7">
+               <div class="co_tru">
+                   <figure><img src="{% static '/lib/paginatools/images/camioneta.jpg'%}" alt="#"/></figure>
+               </div>
+           </div>
+       </div>
+   </div>
+</div>
+
+
       <!-- end contact section -->
       <!--  footer -->
       <footer>
@@ -572,16 +628,12 @@
                <div class="row">
                   <div class="col-md-4">
                      <ul class="location_icon">
-                        <li><a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i></a> Address : Lorem Ipsum <br> is simply dummy 
+                        <li><a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i></a> Dirección : Lorem Ipsum <br> is simply dummy 
                         </li>
-                        <li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i></a>Phone :  +(1234) 567 890</li>
-                        <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>Email : demo@gmail.com</li>
+                        <li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i></a>Telefono :  +(1234) 567 890</li>
+                        <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a>E-mail : demo@gmail.com</li>
                      </ul>
-                     <form class="bottom_form">
-                        <h3>Newsletter</h3>
-                        <input class="enter" placeholder="Enter your email" type="text" name="Enter your email">
-                        <button class="sub_btn">subscribe</button>
-                     </form>
+                     
                   </div>
                   <div class="col-md-8">
                      <div class="map">
@@ -594,7 +646,7 @@
                <div class="container">
                   <div class="row">
                      <div class="col-md-12">
-                        <p>© 2019 All Rights Reserved. Design by<a href="https://html.design/"> Free Html Templates</a></p>
+                        <p>© 2024 Todos los derechos reservados. Diseñado por: <a href="#">Cesar 2024</a></p>
                      </div>
                   </div>
                </div>
@@ -607,6 +659,7 @@
       <script src="{% static '/lib/paginatools/js/popper.min.js'%}"></script>
       <script src="{% static '/lib/paginatools/js/bootstrap.bundle.min.js'%}"></script>
       <script src="{% static '/lib/paginatools/js/jquery-3.0.0.min.js'%}"></script>
+      
       <!-- sidebar -->
       <script src="{% static '/lib/paginatools/js/jquery.mCustomScrollbar.concat.min.js'%}"></script>
       <script src="{% static '/lib/paginatools/js/custom.js'%}"></script>
@@ -619,6 +672,9 @@
            document.getElementById("mySidepanel").style.width = "0";
          }
       </script>
+      
+     
+     
    </body>
 </html>
 

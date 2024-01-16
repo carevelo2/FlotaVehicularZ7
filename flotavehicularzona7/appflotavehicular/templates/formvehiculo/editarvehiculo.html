@@ -128,13 +128,14 @@
                         <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
                         </div>
                         <input 
-                        type="text" 
+                        type="number" 
                         class="form-control has-feedback-left" 
                         name="kilometraje"
                         id="kilometraje" 
                         class="form-control" 
                         placeholder="Escribe el nro de kilometraje del vehiculo" 
                         value="{{ my_vehiculo.kilometraje }}" 
+                        min='0'
                         required="" />
                     </div>
                 <!-- /.input group -->
@@ -145,10 +146,12 @@
                         <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
                         </div>
                         <input 
-                        type="text" 
+                        type="number" 
                         class="form-control has-feedback-left" 
                         name="cilindraje"
                         id="cilindraje" 
+                        min='0'
+                        step="0.01"
                         class="form-control" 
                         placeholder="Escribe el cilindraje del vehiculo"
                         value="{{ my_vehiculo.cilindraje }}"  
@@ -162,10 +165,12 @@
                         <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
                         </div>
                         <input 
-                        type="text" 
+                        type="number" 
                         class="form-control has-feedback-left" 
                         name="capacidad_carga"
                         id="capacidad_carga" 
+                        min='0'
+                        step="0.01"
                         class="form-control" 
                         placeholder="Escribe el capacidad de carga del vehiculo" 
                         value="{{ my_vehiculo.capacidad_carga }}" 
@@ -179,10 +184,11 @@
                         <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
                         </div>
                         <input 
-                        type="text" 
+                        type="number" 
                         class="form-control has-feedback-left" 
                         name="capacidad_pasajeros"
                         id="capacidad_pasajeros" 
+                        min='0'
                         class="form-control" 
                         placeholder="Escribe el capacidad de pasajeros del vehiculo" 
                         value="{{ my_vehiculo.capacidad_pasajeros }}" 

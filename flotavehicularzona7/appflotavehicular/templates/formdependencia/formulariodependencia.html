@@ -8,7 +8,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Registro de Circuitos</h1>
+            <h1>Registro de Dependencias</h1>
           </div>
         </div>
       </div>
@@ -22,8 +22,8 @@
           <div class="col-12">
             <div class="card">
               <div class="card-body">
-                <a class="btn btn-app bg-info" href="{% url 'crearcircuito' %}">
-                  <span class="badge bg-danger">Circuito</span>
+                <a class="btn btn-app bg-info" href="{% url 'creardependencia' %}">
+                  <span class="badge bg-danger">Dependencia</span>
                   <i class="fas fa-edit"></i> Crear 
                 </a>
               </div>
@@ -31,39 +31,52 @@
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                     <tr>
+                        <th>provincia</th>
+                        <th>Numero de Distrito</th>
+                        <th>Parroquia</th>
+                        <th>Cod Distrito</th>
+                        <th>Nombre de Distrito</th>
+                        <th>Numero Circuito</th>
                         <th>Codigo Circuito</th>
-                        <th>Nombre de Circuito</th>
-                        <th>Numero de Circuito</th>
-                        <th>Subcircuito</th>
+                        <th>Nombre Circuito</th>
+                        <th>Numero Subcircuito</th>
+                        <th>Codigo subcircuito</th>
+                        <th>Nombre Subcircuito</th>
                         <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% for circuito in circuitos %}
+                    {% for dependencia in dependencias %}
                     <tr>
-                        <td>{{ circuito.cod_circuito }}</td>
-                        <td>{{ circuito.nombre_circuito }}</td>
-                        <td>{{ circuito.numero_circuito }}</td>
-                        <td>{{ circuito.id_subcircuito.nombre_subcircuito }}</td>
-                        
+                      <td>{{ dependencia.provincia }}</td>
+                      <td>{{ dependencia.id_distrito.numero_distrito }}</td>
+                      <td>{{ dependencia.parroquia }}</td>
+                      <td>{{ dependencia.id_distrito.cod_distrito }}</td>
+                      <td>{{ dependencia.id_distrito.nombre_distrito }}</td>
+                      <td>{{ dependencia.id_distrito.id_circuito.numero_circuito }}</td>
+                      <td>{{ dependencia.id_distrito.id_circuito.cod_circuito }}</td>
+                      <td>{{ dependencia.id_distrito.id_circuito.nombre_circuito }}</td>
+                      <td>{{ dependencia.id_distrito.id_circuito.id_subcircuito.numero_subcircuito }}</td>
+                      <td>{{ dependencia.id_distrito.id_circuito.id_subcircuito.cod_subcircuito }}</td>
+                      <td>{{ dependencia.id_distrito.id_circuito.id_subcircuito.nombre_subcircuito }}</td>
+
                         <td>
-                            <a name="" id="" class="btn btn-warning"
-                                href="{% url 'editarcircuito' circuito.cod_circuito %}" title="Editar"
-                                role="button"><i class="fa fa-edit"></i></a>
-                            
+                          <a name="" id="" class="btn btn-warning"
+                          href="{% url 'editardependencia' dependencia.id %}" title="Editar"
+                          role="button"><i class="fa fa-edit"></i></a>
                             <a name="" id="" class="btn btn-danger"
                                 title="Eliminar"
                                 role="button"
-                                onclick="confirmarEliminacion('{{ circuito.cod_circuito }}')">
+                                onclick="confirmarEliminacion('{{ dependencia.id }}')">
                                 <i class="fa fa-trash"></i>
                             </a>
                             <script>
-                              function confirmarEliminacion(cod_circuito) {
+                              function confirmarEliminacion(id) {
                                   var confirmacion = confirm('¿Está seguro de que desea eliminar este rango?');
                                   
                                   if (confirmacion) {
                                       // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
-                                      window.location.href = "{% url 'eliminarcircuito' cod_circuito=circuito.cod_circuito %}";
+                                      window.location.href = "#}";
                                   } else {
                                       // Si el usuario elige 'Cancelar', no hagas nada
                                       // Puedes agregar un mensaje o realizar otras acciones según sea necesario

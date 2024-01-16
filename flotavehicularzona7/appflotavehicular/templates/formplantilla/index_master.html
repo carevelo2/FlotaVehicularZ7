@@ -225,139 +225,224 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
-          {% if es_admin %} 
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Usuarios
-                <i class="right fas fa-angle-left"></i>
-              </p>
+          {% if es_admin or es_ger %} 
+          <li class="nav-item" id="usuarios_menu">
+            <a href="#" class="nav-link" onclick="seleccionarOpcion('usuarios')">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                    Usuarios
+                    <i class="right fas fa-angle-left"></i>
+                </p>
             </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'formulario_roles' %}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>Registro de Roles</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href= "{% url 'formulariorango' %}" class="nav-link">
-                  <i class="nav-icon fas fa-award"></i>
-                  <p>Registro de Rango</p>
-                </a>
-              </li>
+            <ul class="nav nav-treeview" id="usuarios_submenu">
+                <li class="nav-item" id="formulario_roles">
+                    <a href="{% url 'formulario_roles' %}" class="nav-link" onclick="seleccionarSubopcion('formulario_roles')">
+                        <i class="nav-icon fas fa-table"></i>
+                        <p>Registro de Roles</p>
+                    </a>
+                </li>
+                <li class="nav-item" id="formulariorango">
+                    <a href="{% url 'formulariorango' %}" class="nav-link" onclick="seleccionarSubopcion('formulariorango')">
+                        <i class="nav-icon fas fa-award"></i>
+                        <p>Registro de Rango</p>
+                    </a>
+                </li>
+                <li class="nav-item" id="formulario_persona">
+                    <a href="{% url 'formulario_persona' %}" class="nav-link" onclick="seleccionarSubopcion('formulario_persona')">
+                        <i class="nav-icon fas fa-edit"></i>
+                        <p>Registro de Persona</p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+          {% endif %} 
+          <li class="nav-item" id="vehiculos_menu">
+            <a href="#" class="nav-link " onclick="seleccionarOpcion('vehiculos')">
+                <i class="nav-icon fas fa-solid fa-car"></i>
+                <p>
+                    Vehiculos
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview" id="vehiculos_submenu" style="display: block;">
+                <li class="nav-item" id="formulario_tipovehiculo">
+                    <a href="/vehiculo/tipovehiculo" class="nav-link" onclick="seleccionarSubopcion('formulario_tipovehiculo')">
+                        <i class="fas fa-th"></i>
+                        <p>
+                            Registro Tipo Vehiculo
+                            <span class="right badge badge-danger"></span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item" id="formulario_vehiculo">
+                    <a href="/vehiculo/" class="nav-link" onclick="seleccionarSubopcion('formulario_vehiculo')">
+                        <i class="fas fa-solid fa-car"></i>
+                        <p>
+                            Registro Vehiculo
+                            <span class="right badge badge-danger"></span>
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        
+        
+        <li class="nav-item" id="dependencia_menu">
+          <a href="#" class="nav-link" onclick="seleccionarOpcion('dependencia')">
+              <i class="nav-icon fas fa-solid fa-map"></i>
+              <p>
+                  Dependencia
+                  <i class="right fas fa-angle-left"></i>
+              </p>
+          </a>
+          <ul class="nav nav-treeview" id="dependencia_submenu">
               
-              <li class="nav-item">
-                <a href= "{% url 'formulario_persona' %}" class="nav-link">
-                  <i class="nav-icon fas fa-edit"></i>
-                  <p>Registro de Persona</p>
-                </a>
+              <li class="nav-item" id="formulariosubcircuito">
+                  <a href="{% url 'formulariosubcircuito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariosubcircuito')">
+                      <i class="fas fa-car"></i>
+                      <p>
+                          Registro de Subcircuitos
+                          <span class="right badge badge-danger"></span>
+                      </p>
+                  </a>
               </li>
+              <li class="nav-item" id="formulariocircuito">
+                <a href="{% url 'formulariocircuito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariocircuito')">
+                    <i class="fas fa-car"></i>
+                    <p>
+                        Registro de Circuitos
+                        <span class="right badge badge-danger"></span>
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item" id="formulariodistrito">
+              <a href="{% url 'formulariodistrito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariodistrito')">
+                  <i class="fas fa-file"></i>
+                  <p>
+                      Registro de Distritos
+                      <span class="right badge badge-danger"></span>
+                  </p>
+              </a>
+          </li>
+          <li class="nav-item" id="registro_dependencia">
+            <a href="{% url 'formulariodependencia' %}" class="nav-link">
+                <i class="fas fa-file"></i>
+                <p>
+                    Registro de Dependencia
+                    <span class="right badge badge-danger"></span>
+                </p>
+            </a>
+        </li>
               
              
-              
-            </ul>
-          </li>
-          {% endif %} 
-          <li class="nav-item">
-            <a href="{% url 'formulario_tipovehiculo' %}" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Registro Tipo Vehiculo
-                <span class="right badge badge-danger"></span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'formulario_vehiculo' %}" class="nav-link">
-              <i class="fas fa-solid fa-car"></i>
-              <p>
-                Registro Vehiculo
-                <span class="right badge badge-danger"></span>
-              </p>
-            </a>
-          </li>
-          
-
-          <li class="nav-item">
-            <a href="{% url 'formulariocircuito' %}" class="nav-link">
-              <i class="fas fa-car"></i>
-              <p>
-                Registro de Circuitos
-                <span class="right badge badge-danger"></span>
-              </p>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="{% url 'formulariosubcircuito' %}" class="nav-link">
-              <i class="fas fa-car"></i>
-              <p>
-                Registro de Subcircuitos
-                <span class="right badge badge-danger"></span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a href="{% url 'formulariodistrito' %}" class="nav-link">
-              <i class="fas fa-file"></i>
-              <p>
-                Registro de Distritos
-                <span class="right badge badge-danger"></span>
-              </p>
-            </a>
-          </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
+          </ul>
+      </li>
+      
+      <li class="nav-item" id="mantenimiento_menu">
+        <a href="#" class="nav-link" onclick="seleccionarOpcion('mantenimiento')">
+            <i class="nav-icon fas fa-tachometer-alt"></i>
+            <p>
                 Mantenimiento
                 <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'formulariotipomantenimiento' %}" class="nav-link">
-                  <i class=" fas fa-solid fa-car-battery"></i>
-                  <p>
-                    Registro Tipo de Mantenimiento
-                    <span class="right badge badge-danger"></span>
-                  </p>
+            </p>
+        </a>
+        <ul class="nav nav-treeview" id="mantenimiento_submenu">
+            <li class="nav-item" id="formulariotipomantenimiento">
+                <a href="{% url 'formulariotipomantenimiento' %}" class="nav-link" onclick="seleccionarSubopcion('formulariotipomantenimiento')">
+                    <i class="fas fa-solid fa-car-battery"></i>
+                    <p>
+                        Registro Tipo de Mantenimiento
+                        <span class="right badge badge-danger"></span>
+                    </p>
                 </a>
-              </li>
-              
-              <li class="nav-item">
-                <a href="{% url 'formulariomantenimiento' %}" class="nav-link">
-                  <i class="fas fa-tools"></i>
-                  <p>
-                    Registro de Mantenimientos
-                    <span class="right badge badge-danger"></span>
-                  </p>
+            </li>
+            <li class="nav-item" id="formulariomantenimiento">
+                <a href="{% url 'formulariomantenimiento' %}" class="nav-link" onclick="seleccionarSubopcion('formulariomantenimiento')">
+                    <i class="fas fa-tools"></i>
+                    <p>
+                        Registro de Mantenimientos
+                        <span class="right badge badge-danger"></span>
+                    </p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'listarsalidas' %}" class="nav-link">
-                  <i class="fas fa-sign-out-alt"></i>
-                  <p>
-                    Salidas de Mantenimientos
-                    <span class="right badge badge-danger"></span>
-                  </p>
+            </li>
+            <li class="nav-item" id="listarsalidas">
+                <a href="{% url 'listarsalidas' %}" class="nav-link" onclick="seleccionarSubopcion('listarsalidas')">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <p>
+                        Salidas de Mantenimientos
+                        <span class="right badge badge-danger"></span>
+                    </p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'listarentradas' %}" class="nav-link">
-                  <i class="fas fa-sign-in-alt"></i>
-                  <p>
-                    Entradas de Mantenimientos
-                    <span class="right badge badge-danger"></span>
-                  </p>
+            </li>
+            <li class="nav-item" id="listarentradas">
+                <a href="{% url 'listarentradas' %}" class="nav-link" onclick="seleccionarSubopcion('listarentradas')">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <p>
+                        Entradas de Mantenimientos
+                        <span class="right badge badge-danger"></span>
+                    </p>
                 </a>
-              </li>
-              
-            </ul>
+            </li>
+        </ul>
+    </li>
+    <li class="nav-item" id="orden_menu">
+      <a href="#" class="nav-link" onclick="seleccionarOpcion('orden')">
+          <i class="nav-icon fas fa-tachometer-alt"></i>
+          <p>
+              Orden de Trabajo
+              <i class="right fas fa-angle-left"></i>
+          </p>
+      </a>
+      <ul class="nav nav-treeview" id="orden_submenu">
+          <li class="nav-item" id="formularioordendetrabajo">
+              <a href="{% url 'formularioordendetrabajo' %}" class="nav-link" onclick="seleccionarSubopcion('formularioordendetrabajo')">
+                  <i class="fas fa-solid fa-car-battery"></i>
+                  <p>
+                      Órdenes de Trabajo
+                      <span class="right badge badge-danger"></span>
+                  </p>
+              </a>
           </li>
-
+          <li class="nav-item" id="salidaorden">
+              <a href="{% url 'salidaorden' %}" class="nav-link" onclick="seleccionarSubopcion('salidaorden')">
+                  <i class="fas fa-solid fa-car-battery"></i>
+                  <p>
+                      Órdenes de Trabajo Salidas
+                      <span class="right badge badge-danger"></span>
+                  </p>
+              </a>
+          </li>
+          <li class="nav-item" id="entradaorden">
+              <a href="{% url 'entradaorden' %}" class="nav-link" onclick="seleccionarSubopcion('entradaorden')">
+                  <i class="fas fa-solid fa-car-battery"></i>
+                  <p>
+                      Órdenes de Trabajo Entradas
+                      <span class="right badge badge-danger"></span>
+                  </p>
+              </a>
+          </li>
+      </ul>
+  </li>
+  <li class="nav-item" id="denuncia_menu">
+    <a href="#" class="nav-link" onclick="seleccionarOpcion('denuncia')">
+        <i class="nav-icon fas fa-solid fa-map"></i>
+        <p>
+            Denuncias y Sugerencias
+            <i class="right fas fa-angle-left"></i>
+        </p>
+    </a>
+    <ul class="nav nav-treeview" id="denuncia_submenu">
+        
+        <li class="nav-item" id="formulariodenuncia">
+            <a href="{% url 'formulariodenuncia' %}" class="nav-link" onclick="seleccionarSubopcion('formulariodenuncia')">
+                <i class="fas fa-car"></i>
+                <p>
+                    Listado de Denuncias y Sugerencias
+                    <span class="right badge badge-danger"></span>
+                </p>
+            </a>
+        </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -453,7 +538,49 @@
     });
   });
   
-  
+ 
 </script>
+
+        <script>
+            // Espera a que el documento esté listo
+            $(document).ready(function() {
+                // Restaurar el estado seleccionado al cargar la página
+                var opcionSeleccionada = localStorage.getItem('opcionSeleccionada');
+                var subopcionSeleccionada = localStorage.getItem('subopcionSeleccionada');
+
+                if (opcionSeleccionada) {
+                    $('#' + opcionSeleccionada).addClass('menu-is-opening menu-open');
+                    $('#' + opcionSeleccionada + '_menu').addClass('menu-is-opening menu-open');
+                    $('#' + subopcionSeleccionada + ' a').addClass('active');
+                }
+            });
+
+            function seleccionarOpcion(opcion) {
+                // Desactivar active en la otra opción
+                $('.nav-item a.nav-link').removeClass('active');
+
+                // Activar active en la opción seleccionada
+                $('#' + opcion).addClass('active');
+
+                // Desactivar el otro submenu
+                $('#formulario_vehiculo').removeClass('menu-is-opening menu-open');
+
+                // Almacenar el estado seleccionado
+                localStorage.setItem('opcionSeleccionada', opcion);
+            }
+
+            function seleccionarSubopcion(subopcion) {
+                // Desactivar active en otras subopciones
+                $('.nav-item[id^="formulario_"]').removeClass('menu-is-opening menu-open');
+                $('.nav-item[id^="formulario_"] a.nav-link').removeClass('active');
+
+                // Activar active en la subopción seleccionada
+                $('#' + subopcion).addClass('menu-is-opening menu-open');
+                $('#' + subopcion + ' a.nav-link').addClass('active');
+
+                // Almacenar el estado seleccionado
+                localStorage.setItem('subopcionSeleccionada', subopcion);
+            }
+        </script>
 </body>
 </html>

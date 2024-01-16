@@ -1,0 +1,236 @@
+{% extends 'formplantilla/index_master.html' %}
+
+{% block content %}
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Listado de Denuncias y Sugerencias</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <form method="POST" action="">
+                  {% csrf_token %}
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="fecha_inicio">Fecha de Inicio:</label>
+                        <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" value="{{ fecha_inicio }}" class="form-control" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <label for="fecha_fin">Fecha de Fin:</label>
+                        <input type="datetime-local" id="fecha_fin" name="fecha_fin" class="form-control" required>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+                        <button type="button" class="btn btn-primary mt-4" onclick="filtrarDenuncias()">Filtrar</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Fecha Inicio</th>
+                      <th>Fecha Fin</th>
+                      <th>Numero</th>
+                      <th>Tipo</th>
+                      <th>Circuito</th>
+                      <th>Subcircuito</th>
+                      <!-- Puedes agregar más encabezados según tus necesidades -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if sums %}
+                      {% for sum in sums %}
+                        <tr>
+                          <td>{{ sum.fecha_inicio | date:'Y-m-d' }}</td>
+                          <td class="fechaFin">{{ sum.fecha_fin | date:'Y-m-d' }}</td>
+                          <td class="numero">{{ sum.total }}</td>
+                          <td>{{ sum.tipo }}</td>
+                          <td>{{ sum.id_circuito__nombre_circuito }}</td>
+                          <td>{{ sum.id_subcircuito__nombre_subcircuito }}</td>
+                          <!-- ... (other columns) -->
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>Fecha Inicio</th>
+                      <th>Fecha Fin</th>
+                      <th>Id</th>
+                      <th>Tipo</th>
+                      <th>Circuito</th>
+                      <th>Subcircuito</th>
+                      <!-- Puedes agregar más encabezados según tus necesidades -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if denuncias %}
+                      {% for denuncia in denuncias %}
+                        <tr>
+                          <td>{{ denuncia.fecha_ingreso | date:'Y-m-d' }}</td>
+                          <td class="fechaFin">{{ denuncia.fecha_fin | date:'Y-m-d' }}</td>
+                          <td class="numero">{{ denuncia.numero }}</td>
+                          <td>{{ denuncia.tipo }}</td>
+                          <td>{{ denuncia.id_circuito.nombre_circuito }}</td>
+                          <td>{{ denuncia.id_subcircuito.nombre_subcircuito }}</td>
+                          <!-- ... (other columns) -->
+                        </tr>
+                      {% endfor %}
+                    {% else %}
+                      <tr id="noRecordsRow">
+                        <td colspan="6" class="text-center">No hay registros</td>
+                      </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  
+  <!-- Tu script JavaScript para filtrarDenuncias -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var table1Initialized = false;
+      var table2Initialized = false;
+
+      function initializeTable1() {
+        if ($.fn.DataTable.isDataTable('#example1')) {
+          $('#example1').DataTable().destroy();
+        }
+        $('#example1').DataTable({
+          dom: 'Bfrtip',
+          buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis']
+        });
+        table1Initialized = true;
+      }
+
+      function initializeTable2() {
+        if ($.fn.DataTable.isDataTable('#example2')) {
+          $('#example2').DataTable().destroy();
+        }
+        $('#example2').DataTable({
+          dom: 'Bfrtip',
+          buttons: ['copy', 'csv', 'excel', 'pdf', 'print', 'colvis']
+        });
+        table2Initialized = true;
+      }
+
+      function filtrarDenuncias() {
+        initializeTable1();
+        initializeTable2();
+
+        var fechaInicio = moment(document.getElementById('fecha_inicio').value);
+        var fechaFin = moment(document.getElementById('fecha_fin').value);
+    
+        var table = $('#example1').DataTable();
+        var sumsTable = $('#example2').DataTable();
+        var rows = table.rows().nodes();
+    
+        var noRecordsRow = $('#noRecordsRow');
+        var fechaFinHeader = $('#fechaFinHeader');
+    
+        if (noRecordsRow) {
+          noRecordsRow.hide();
+        }
+    
+        var hasRecords = false;
+    
+        // Initialize countResults
+        var countResults = {};
+    
+        // Initialize fechaInicio and fechaFin for sumsTable
+        var sumsFechaInicio = fechaInicio.format('YYYY-MM-DD');
+        var sumsFechaFin = fechaFin.format('YYYY-MM-DD');
+    
+        // Calculate counts and display
+        table.rows().eq(0).each(function (index) {
+          var rowDate = moment(table.cell(index, 0).data(), 'YYYY-MM-DD');
+    
+          if (rowDate.isSameOrAfter(fechaInicio) && rowDate.isSameOrBefore(fechaFin)) {
+            var value = parseInt(table.cell(index, 2).data()) || 0;
+            var type = table.cell(index, 3).data();
+            var circuit = table.cell(index, 4).data();
+            var subcircuit = table.cell(index, 5).data();
+    
+            var key = type + '-' + circuit + '-' + subcircuit;
+    
+            if (!countResults[key]) {
+              countResults[key] = 0;
+            }
+    
+            countResults[key]++;
+    
+            // Display the count in the 'Numero' column for the main table
+            table.cell(index, 2).data(countResults[key]);
+    
+            rows[index].style.display = '';
+            hasRecords = true;
+    
+            table.cell(index, 1).data(fechaFin.format('YYYY-MM-DD'));
+          } else {
+            rows[index].style.display = 'none';
+          }
+        });
+    
+        // Populate sumsTable with counts
+        sumsTable.clear().draw();
+        for (var key in countResults) {
+          var [type, circuit, subcircuit] = key.split('-');
+          var countRow = [sumsFechaInicio, sumsFechaFin, countResults[key], type, circuit, subcircuit];
+          sumsTable.row.add(countRow).draw();
+        }
+    
+        if (!hasRecords && noRecordsRow) {
+          noRecordsRow.show();
+        }
+    
+        fechaFinHeader.text(fechaFin.format('YYYY-MM-DD'));
+      }
+
+      document.querySelector('.btn-primary').addEventListener('click', filtrarDenuncias);
+    });
+  </script>
+
+  <!-- Estilos de DataTables y botones -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
+  <!-- ... (código HTML posterior) -->
+
+{% endblock %}

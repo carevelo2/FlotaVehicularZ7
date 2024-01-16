@@ -19,15 +19,24 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 # Create your views here.
 @login_required(login_url='login')
-
 def index(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     numero_usuarios = obtener_numero_usuarios()
-    es_admin = es_administrador(request.user)
     return render(request, "formplantilla/index.html",{'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol,
                                                        'numero_usuarios':numero_usuarios})
 #Pantalla Inicio
 def index2(request):
-    return render(request, "formplantilla/pantalladeinicio.html")
+    circuitos = Circuito.objects.all()
+    subcircuitos = Subcircuito.objects.all()
+    return render(request, "formplantilla/pantalladeinicio.html",{'circuitos':circuitos, 'subcircuitos':subcircuitos})
 #Logueo
 def inicio_seccion(request):
     if request.method == 'POST':
@@ -74,17 +83,31 @@ def logoutpage(request):
     return redirect('login')
 #roles
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def formulario_roles(request):
     #imagen_empleado = obtener_imagen_empleado(request.user)
     grupos = Group.objects.all()
-    es_admin = es_administrador(request.user)
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     return render(request, 'formusuarios/formroles/formulario_roles.html', {'grupos': grupos,
-                                                                  'es_admin':es_admin          
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
                                                                  #'imagen_empleado': imagen_empleado
                                                                  })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def crearroles(request):
-    es_admin = es_administrador(request.user)
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     #imagen_empleado = obtener_imagen_empleado(request.user)
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -100,14 +123,23 @@ def crearroles(request):
                                                                         'es_admin':es_admin      
                                                                    #'imagen_empleado': imagen_empleado
                                                                    })
-    return render(request, "formusuarios/formroles/crearroles.html", {'es_admin':es_admin
+    return render(request, "formusuarios/formroles/crearroles.html", {'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol,
         #'imagen_empleado': imagen_empleadoç
         })       
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def editarroles(request, id):
     #imagen_empleado = obtener_imagen_empleado(request.user)
     try:
-        es_admin = es_administrador(request.user)
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
         my_groups = Group.objects.get(id=id)
     except Group.DoesNotExist:
         # Manejar el caso si el rol no existe
@@ -130,27 +162,47 @@ def editarroles(request, id):
             })
 
     return render(request, "formusuarios/formroles/editarroles.html", {'my_groups': my_groups,
-                                                            'es_admin':es_admin#'imagen_empleado': imagen_empleado
+                                                            'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol,#'imagen_empleado': imagen_empleado
                                                             })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def eliminarroles(request, id):
     rolid = Group.objects.get(id=id)
     rolid.delete()
     return redirect('formulario_roles')
 
 #Rangos
-@login_required(login_url="login")
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def formulariorango(request):
     #imagen_empleado = obtener_imagen_empleado(request.user)
     rangos = Rango.objects.all()
-    es_admin = es_administrador(request.user)
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     return render(request, 'formrango/formulariorango.html', {'rangos': rangos,
-                                                              'es_admin':es_admin
+                                                              'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol,
                                                                  #'imagen_empleado': imagen_empleado
                                                                  })
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def crearrango(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         rangopersona = request.POST.get('rangopersona')
         descripcion = request.POST.get('descripcion')
@@ -165,11 +217,21 @@ def crearrango(request):
             error_message = "Error al crear la persona."
             return render(request, "formrango/crearrango.html", {'error_message': error_message})
 
-    return render(request,'formrango/crearrango.html' )
+    return render(request,'formrango/crearrango.html',{'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol,} )
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def editarrango(request,id):
     try:
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
         my_rango = Rango.objects.get(id=id)
     except Rango.DoesNotExist:
         # Manejar el caso si el rol no existe
@@ -193,8 +255,14 @@ def editarrango(request,id):
             #'imagen_empleado': imagen_empleado
             })
     return render(request,'formrango/editarrango.html',{'my_rango':my_rango,
-                                                                      } )
+                                                         'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol
+                                                          } )
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def eliminarrango(request, id):
     rangoid = Rango.objects.get(id=id)
     rangoid.delete()
@@ -202,28 +270,38 @@ def eliminarrango(request, id):
 
 ###################Persona
 @login_required(login_url='login')
-@user_passes_test(es_administrador)
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def formulario_persona(request):
     #imagen_empleado = obtener_imagen_empleado(request.user)
     personas = Persona.objects.all()
-    #usuarios_desactivados = User.objects.filter(is_active=False)
-    #codigos_empleado = Persona.objects.values_list('codigoempleado', flat=True)
-    #usuarios = User.objects.filter(campo_codigo_empleado__in=codigos_empleado)
-    #personas = Persona.objects.filter(codigoempleado__in=codigos_empleado)
-    #rangos=Rango.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     es_admin = es_administrador(request.user)
     return render(request, 'formpersona/formulario_persona.html', {'personas': personas,
-                                                                   'es_admin':es_admin
-                                                                   
+                                                                   'es_admin':es_admin,
+                                                                    'es_encargado':es_encargado,
+                                                                    'es_aux' : es_aux,
+                                                                    'es_ger':es_ger,
+                                                                    'es_perpol':es_perpol,
                                                                  #'imagen_empleado': imagen_empleado
                                                                  })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def crearpersona(request):
     personas = Persona.objects.all()
     usuarios = User.objects.filter(is_active=False)
     #usuarios = User.objects.all()
     rangos=Rango.objects.all()
     groups = Group.objects.all()
+    dependencias=Dependencia.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         identificacion = request.POST.get('identificacion')
         nombres = request.POST.get('nombres')
@@ -236,28 +314,29 @@ def crearpersona(request):
         numero_celular = request.POST.get('numero_celular')
         id_rango = request.POST.get('rango')
         dependencia = request.POST.get('dependencia')
-        firma=request.FILES.get('firma')
-        contrasenia_firma= request.POST.get('contrasena_firma')
-        # Hashea la contraseña antes de guardarla en la base de datos
-        hashed_password = make_password(contrasenia_firma)
+        # firma=request.FILES.get('firma')
+        # contrasenia_firma= request.POST.get('contrasena_firma')
+        # # Hashea la contraseña antes de guardarla en la base de datos
+        # hashed_password = make_password(contrasenia_firma)
         my_user = User.objects.get(id=codigoempleado)
         rangoid = Rango.objects.get(id=id_rango)
-        if firma:
-            # Define el nuevo nombre de archivo como la cédula con la extensión de la foto
-            extension = os.path.splitext(firma.name)[1]
-            nuevo_nombre_archivo = f"{identificacion}{extension}"
+        dependenciaid=Dependencia.objects.get(id=dependencia)
+        # if firma:
+        #     # Define el nuevo nombre de archivo como la cédula con la extensión de la foto
+        #     extension = os.path.splitext(firma.name)[1]
+        #     nuevo_nombre_archivo = f"{identificacion}{extension}"
 
-            # Configura el sistema de almacenamiento de medios
-            fs = FileSystemStorage(location=os.path.join(
-                settings.MEDIA_ROOT, 'firmasempleados'))
+        #     # Configura el sistema de almacenamiento de medios
+        #     fs = FileSystemStorage(location=os.path.join(
+        #         settings.MEDIA_ROOT, 'firmasempleados'))
 
-            # Guarda la foto en la carpeta 'imgempleados'
-            filename = fs.save(nuevo_nombre_archivo, firma)
+        #     # Guarda la foto en la carpeta 'imgempleados'
+        #     filename = fs.save(nuevo_nombre_archivo, firma)
 
-            # Obtén la URL de la foto para almacenar en la base de datos
-            foto_url = os.path.join('firmasempleados', nuevo_nombre_archivo)
-        else:
-            foto_url = None
+        #     # Obtén la URL de la foto para almacenar en la base de datos
+        #     foto_url = os.path.join('firmasempleados', nuevo_nombre_archivo)
+        # else:
+        #     foto_url = None
         persona = Persona.objects.create(
                 identificacion=identificacion,
                 nombres=nombres,
@@ -269,9 +348,9 @@ def crearpersona(request):
                 ciudad_nacimiento=ciudad_nacimiento,
                 numero_celular=numero_celular,
                 id_rango = rangoid,
-                dependencia=dependencia,
-                firma=foto_url,
-                contrasenia_firma=hashed_password
+                dependencia=dependenciaid,
+                # firma=foto_url,
+                # contrasenia_firma=hashed_password
             )
         persona.save()
         group_id = request.POST.get('rol')
@@ -292,18 +371,31 @@ def crearpersona(request):
     return render(request, "formpersona/crearpersona.html",{'personas': personas,
                                                                     'usuarios':usuarios,
                                                                     'rangos':rangos,
-                                                                    'groups':groups
+                                                                    'groups':groups,
+                                                                    'dependencias':dependencias,
+                                                                    'es_admin':es_admin,
+                                                                    'es_encargado':es_encargado,
+                                                                    'es_aux' : es_aux,
+                                                                    'es_ger':es_ger,
+                                                                    'es_perpol':es_perpol,
                                                                  #'imagen_empleado': imagen_empleado
                                                                  })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def editarpersona(request, identificacion):
     try:
         personas = Persona.objects.all()
-        usuarios = User.objects.filter(is_active=False)
+        usuarios = User.objects.filter(is_active=True)
         #usuarios = User.objects.all()
         rangos=Rango.objects.all()
         groups = Group.objects.all()
+        dependencias=Dependencia.objects.all()
         my_persona = Persona.objects.get(identificacion=identificacion)
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
     except Persona.DoesNotExist:
         # Manejar el caso si el rol no existe
         # Redirige a la página de listado de roles
@@ -322,6 +414,7 @@ def editarpersona(request, identificacion):
         dependencia = request.POST.get('dependencia')
         my_user = User.objects.get(id=codigoempleado)
         rangoid = Rango.objects.get(id=id_rango)
+        dependenciaid=Dependencia.objects.get(id=dependencia)
         try:
             # Actualiza los campos de la instancia existente
             my_persona.identificacion=identificacion
@@ -334,7 +427,7 @@ def editarpersona(request, identificacion):
             my_persona.ciudad_nacimiento=ciudad_nacimiento
             my_persona.numero_celular=numero_celular
             my_persona.id_rango=rangoid
-            my_persona.dependencia=dependencia
+            my_persona.dependencia=dependenciaid
             my_persona.save()
             # Redirige a la página de listado de roles
             return redirect('formulario_persona')
@@ -344,7 +437,8 @@ def editarpersona(request, identificacion):
             return render(request, "formpersona/editarpersona.html", {'personas': personas,
                                                                     'usuarios':usuarios,
                                                                     'rangos':rangos,
-                                                                    'groups':groups, 
+                                                                    'groups':groups,
+                                                                    'dependencias':dependencias, 
             "error_message": error_message, 
             #'imagen_empleado': imagen_empleado
             })
@@ -352,8 +446,15 @@ def editarpersona(request, identificacion):
                                                                     'usuarios':usuarios,
                                                                     'rangos':rangos,
                                                                     'groups':groups,
-                                                                    'my_persona':my_persona })
+                                                                    'dependencias':dependencias,
+                                                                    'my_persona':my_persona,
+                                                                    'es_admin':es_admin,
+                                                                    'es_encargado':es_encargado,
+                                                                    'es_aux' : es_aux,
+                                                                    'es_ger':es_ger,
+                                                                    'es_perpol':es_perpol, })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u), login_url='index')
 def eliminarpersona(request, identificacion):
     persona = get_object_or_404(Persona, identificacion=identificacion)
      # Guarda la ruta de la imagen antes de eliminar el objeto
@@ -367,12 +468,28 @@ def eliminarpersona(request, identificacion):
     
 ############### Vehiculo    
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def formulario_tipovehiculo(request):
     tipovehiculos=Tipovehiculo.objects.all()
-    return render(request,"formtipovehiculo/formulario_tipovehiculo.html",{'tipovehiculos':tipovehiculos
-                                                                  })
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request,"formtipovehiculo/formulario_tipovehiculo.html",{'tipovehiculos':tipovehiculos,
+                                                                  'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol})
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def creartipovehiculo(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         tipovehiculo = request.POST.get('tipovehiculo')
         descripcion = request.POST.get('descripcion')
@@ -387,10 +504,22 @@ def creartipovehiculo(request):
             error_message = "Error al crear la persona."
             return render(request, "formtipovehiculo/creartipovehiculo.html", {'error_message': error_message})
 
-    return render(request,'formtipovehiculo/creartipovehiculo.html' )
+    return render(request,'formtipovehiculo/creartipovehiculo.html',{
+                                                       'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol,
+    } )
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def editartipovehiculo(request,id):
     try:
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
         my_tipovehiculo = Tipovehiculo.objects.get(id=id)
     except Tipovehiculo.DoesNotExist:
         # Manejar el caso si el rol no existe
@@ -413,9 +542,14 @@ def editartipovehiculo(request,id):
             "error_message": error_message, 
             #'imagen_empleado': imagen_empleado
             })
-    return render(request,'formtipovehiculo/editartipovehiculo.html',{'my_tipovehiculo':my_tipovehiculo,
+    return render(request,'formtipovehiculo/editartipovehiculo.html',{'my_tipovehiculo':my_tipovehiculo,'es_admin':es_admin,
+                                                       'es_encargado':es_encargado,
+                                                       'es_aux' : es_aux,
+                                                       'es_ger':es_ger,
+                                                       'es_perpol':es_perpol,
                                                                       } )
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def eliminartipovehiculo(request,id):
     tipovehiculoid = Tipovehiculo.objects.get(id=id)
     tipovehiculoid.delete()
@@ -423,13 +557,30 @@ def eliminartipovehiculo(request,id):
     return redirect('formulario_tipovehiculo')
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def formulario_vehiculo(request):
     vehiculos=Vehiculo.objects.all()
-    return render(request,"formvehiculo/formulario_vehiculo.html",{'vehiculos':vehiculos
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request,"formvehiculo/formulario_vehiculo.html",{'vehiculos':vehiculos,
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol, 
                                                                   })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def crearvehiculo(request):
     tipovehiculos=Tipovehiculo.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         placa= request.POST.get('placa')
         chasis= request.POST.get('chasis')
@@ -461,10 +612,21 @@ def crearvehiculo(request):
         return redirect('formulario_vehiculo')
         
 
-    return render(request,'formvehiculo/crearvehiculo.html', {'tipovehiculos':tipovehiculos})
+    return render(request,'formvehiculo/crearvehiculo.html', {'tipovehiculos':tipovehiculos,
+                                                              'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol})
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def editarvehiculo(request,placa):
     try:
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
         my_vehiculo = Vehiculo.objects.get(placa=placa)
         tipovehiculos=Tipovehiculo.objects.all()
     except Vehiculo.DoesNotExist:
@@ -510,8 +672,14 @@ def editarvehiculo(request,placa):
             #'imagen_empleado': imagen_empleado
             })
     return render(request,'formvehiculo/editarvehiculo.html',{'my_vehiculo':my_vehiculo,
-                                                              'tipovehiculos':tipovehiculos} )
+                                                              'tipovehiculos':tipovehiculos,
+                                                              'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,} )
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def eliminarvehiculo(request,placa):
     vehiculoid = Vehiculo.objects.get(placa=placa)
     vehiculoid.delete()
@@ -522,11 +690,26 @@ def eliminarvehiculo(request,placa):
 @login_required(login_url="login")
 def formulariotipomantenimiento(request):
     tipomantenimientos=Tipomantenimiento.objects.all()
-    return render(request,"formtipomantenimiento/formulariotipomantenimiento.html",{'tipomantenimientos':tipomantenimientos
-                                                                  })
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request,"formtipomantenimiento/formulariotipomantenimiento.html",{'tipomantenimientos':tipomantenimientos,
+                                                                  'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,})
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def creartipomantenimiento(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         tipo = request.POST.get('tipo')
         descripcion = request.POST.get('descripcion')
@@ -541,11 +724,21 @@ def creartipomantenimiento(request):
             error_message = "Error al crear el tipo."
             return render(request, "formtipomantenimiento/creartipomantenimiento.html", {'error_message': error_message})
 
-    return render(request,'formtipomantenimiento/creartipomantenimiento.html' )
+    return render(request,'formtipomantenimiento/creartipomantenimiento.html' ,{'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,})
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def editartipomantenimiento(request,id):
     try:
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
         my_tipomantenimiento = Tipomantenimiento.objects.get(id=id)
     except Tipomantenimiento.DoesNotExist:
         # Manejar el caso si el rol no existe
@@ -569,8 +762,13 @@ def editartipomantenimiento(request,id):
             #'imagen_empleado': imagen_empleado
             })
     return render(request,'formtipomantenimiento/editartipomantenimiento.html',{'my_tipomantenimiento':my_tipomantenimiento,
-                                                                      } )
+                                                                      'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,} )
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def eliminartipomantenimiento(request,id):
     tipomanid = Tipomantenimiento.objects.get(id=id)
     tipomanid.delete()
@@ -581,17 +779,30 @@ def eliminartipomantenimiento(request,id):
 def formulariomantenimiento(request):
     vehiculos = Vehiculo.objects.all()
     mantenimientos=Mantenimiento.objects.all()
-    es_admin = es_administrador(request.user)
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     return render(request,"formmantenimiento/formulariomantenimiento.html",{'mantenimientos':mantenimientos,
                                                                             'vehiculos':vehiculos,
-                                                                            'es_admin':es_admin
+                                                                            'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
                                                                   })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def crearmantenimiento(request):
     personas=Persona.objects.all()
     tipomantenimientos=Tipomantenimiento.objects.all()
     vehiculos=Vehiculo.objects.all()
-    es_admin = es_administrador(request.user)
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         fecha= request.POST.get('fecha')
         km= request.POST.get('kmvehiculoactual')
@@ -621,12 +832,21 @@ def crearmantenimiento(request):
     return render(request,'formmantenimiento/crearmantenimiento.html', {'personas':personas,
                                                                         'vehiculos':vehiculos,
                                                                         'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
                                                                         'tipomantenimientos':tipomantenimientos})  
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def editarmantenimiento(request,id):
     try:
-        es_admin = es_administrador(request.user)
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
         personas=Persona.objects.all()
         tipomantenimientos=Tipomantenimiento.objects.all()
         vehiculos=Vehiculo.objects.all()
@@ -672,10 +892,15 @@ def editarmantenimiento(request,id):
                                                                         'personas':personas,
                                                                         'vehiculos':vehiculos,
                                                                         'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
                                                                         'tipomantenimientos':tipomantenimientos
                                                                       } )
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def eliminarmantenimiento(request, id):
     # Obtener la instancia del mantenimiento o devolver un error 404 si no existe
     manid = get_object_or_404(Mantenimiento, id=id)
@@ -793,12 +1018,12 @@ def salidamantenimiento(request, id):
         pdf.ln(15)
 
         # Agregar líneas adicionales
-        pdf.cell(90, 10, '................................................', '', 0, 'C')
-        pdf.cell(90, 10, '................................................', '', 0, 'C')
+        pdf.cell(90, 10, boleta.persona.nombres+' '+ boleta.persona.apellidos, '', 0, 'C')
+        pdf.cell(90, 10, '', '', 0, 'C')
 
-        # Colocar la imagen debajo de "Firma Empleado"
-        url_imagen = boleta.persona.firma.path
-        pdf.image(url_imagen, x=x_after_multi_cell+35, y=y_after_multi_cell + 10, w=20)
+        # # Colocar la imagen debajo de "Firma Empleado"
+        # url_imagen = boleta.persona.firma.path
+        # pdf.image(url_imagen, x=x_after_multi_cell+35, y=y_after_multi_cell + 10, w=20)
         # Verifica si firmage es un objeto de archivo de imagen válido
         # Verifica si firmage es un objeto de archivo de imagen válido
         if firmage and firmage.content_type.startswith('image'):
@@ -849,11 +1074,23 @@ def salidamantenimiento(request, id):
     return render(request, 'formmantenimiento/ingresar_codigo_modal.html')
 #Listarsalidas
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def listarsalidas(request):
     salidas=Salidamtto.objects.all()
-    return render(request,"formmantenimiento/salidamantenimiento.html",{'salidas':salidas})
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request,"formmantenimiento/salidamantenimiento.html",{'salidas':salidas,
+                                                                        'es_admin':es_admin,
+                                                                        'es_encargado':es_encargado,
+                                                                        'es_aux' : es_aux,
+                                                                        'es_ger':es_ger,
+                                                                        'es_perpol':es_perpol})
 ######################################################################################################
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 #################################Boleta de Entrada de Mantenimiento####################################
 class PDF2(FPDF):
     def __init__(self, page_size='A4'):
@@ -968,11 +1205,11 @@ def entradamantenimiento(request, id):
         pdf.cell(90, 10, 'Firma Gerente:', '', 0, 'C')
         pdf.ln(15)
         # Agregar líneas adicionales
-        pdf.cell(90, 10, '................................................', '', 0, 'C')
-        pdf.cell(90, 10, '................................................', '', 0, 'C')
+        pdf.cell(90, 10, boletaen.persona.nombres+' '+ boletaen.persona.apellidos, '', 0, 'C')
+        pdf.cell(90, 10, '', '', 0, 'C')
         # Colocar la imagen debajo de "Firma Empleado"
-        url_imagen = boletaen.persona.firma.path
-        pdf.image(url_imagen, x=x_after_multi_cell+35, y=y_after_multi_cell + 10, w=20)
+        # url_imagen = boletaen.persona.firma.path
+        # pdf.image(url_imagen, x=x_after_multi_cell+35, y=y_after_multi_cell + 10, w=20)
         # Verifica si firmage es un objeto de archivo de imagen válido
         # Verifica si firmage es un objeto de archivo de imagen válido
         if firmage and firmage.content_type.startswith('image'):
@@ -1012,6 +1249,7 @@ def entradamantenimiento(request, id):
         boletaen.estado=True
         boletaen.save()
         vehiculoid.estado=True
+        vehiculoid.kilometraje=boletaen.km
         vehiculoid.save()
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'filename=EntradaMantenimiento_{boletaen.vehiculo.placa}.pdf'
@@ -1021,95 +1259,49 @@ def entradamantenimiento(request, id):
     return render(request, 'formmantenimiento/ingresar_codigo_modal.html')   
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def listarentradas(request):
     entradas=Entradamtto.objects.all()
-    return render(request,"formmantenimiento/entradamantenimiento.html",{'entradas':entradas})  
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request,"formmantenimiento/entradamantenimiento.html",{'entradas':entradas,
+                                                                         'es_admin':es_admin,
+                                                                        'es_encargado':es_encargado,
+                                                                        'es_aux' : es_aux,
+                                                                        'es_ger':es_ger,
+                                                                        'es_perpol':es_perpol})  
 ######################################################################################################
 
-#Circuito
-@login_required(login_url="login")
-def formulariocircuito(request):
-    #imagen_empleado = obtener_imagen_empleado(request.user)
-    subcircuitos = Subcircuito.objects.all()
-    circuitos = Circuito.objects.all()
-    es_admin = es_administrador(request.user)
-    return render(request, 'formcircuito/formulariocircuito.html', {'circuitos': circuitos,
-                                                                     'subcircuitos':subcircuitos,
-                                                              'es_admin':es_admin
-                                                                 #'imagen_empleado': imagen_empleado
-                                                                 })
-
-@login_required(login_url='login')
-def crearcircuito(request):
-    subcircuitos = Subcircuito.objects.all() 
-    if request.method == 'POST':
-        cod_circuito = request.POST.get('cod_circuito')
-        nombre_circuito = request.POST.get('nombre_circuito')
-        numero_circuito = request.POST.get('numero_circuito')
-        id_subcircuito = request.POST.get('id_subcircuito')
-        try:
-            my_circuito = Circuito.objects.create(
-                cod_circuito = cod_circuito,
-                nombre_circuito=nombre_circuito,
-                numero_circuito=numero_circuito,
-                id_subcircuito_id=id_subcircuito
-            )
-            my_circuito.save()
-            return redirect('formulariocircuito')
-        except Exception as e:
-            error_message = "Error al crear el circuito."
-            return render(request, "formcircuito/crearcircuito.html", {'error_message': error_message, 'subcircuitos':subcircuitos})
-
-    return render(request,'formcircuito/crearcircuito.html', {'subcircuitos':subcircuitos}) 
-
-@login_required(login_url='login')
-def editarcircuito(request, cod_circuito):
-    subcircuitos = Subcircuito.objects.all()
-    try:
-        my_circuito = Circuito.objects.get(cod_circuito=cod_circuito)
-    except Circuito.DoesNotExist:
-        return redirect('formulariocircuito')
-
-    if request.method == 'POST':
-        cod_circuito = request.POST.get('cod_circuito')
-        nombre_circuito = request.POST.get('nombre_circuito')
-        numero_circuito = request.POST.get('numero_circuito')
-        id_subcircuito = request.POST.get('id_subcircuito')
-
-        try:
-            my_circuito.cod_circuito = cod_circuito
-            my_circuito.nombre_circuito = nombre_circuito
-            my_circuito.numero_circuito = numero_circuito
-            my_circuito.id_subcircuito_id = id_subcircuito  # Usa el campo 'id_subcircuito_id' para establecer la relación
-            my_circuito.save()
-            return redirect('formulariocircuito')
-        except Exception as e:
-            error_message = "Error al actualizar el circuito."
-            return render(request, "formcircuito/editarcircuito.html", {'my_circuito': my_circuito,
-                                                                       "error_message": error_message,
-                                                                       'subcircuitos': subcircuitos})
-
-    return render(request, 'formcircuito/editarcircuito.html', {'my_circuito': my_circuito, 'subcircuitos': subcircuitos})
-
-
-@login_required(login_url='login')
-def eliminarcircuito(request, cod_circuito):
-    circuitocod_circuito = Circuito.objects.get(cod_circuito=cod_circuito)
-    circuitocod_circuito.delete()
-    return redirect('formulariocircuito')
 
 #subcircuito
 @login_required(login_url="login")
 def formulariosubcircuito(request):
     #imagen_empleado = obtener_imagen_empleado(request.user)
     subcircuitos = Subcircuito.objects.all()
-    es_admin = es_administrador(request.user)
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     return render(request, 'formsubcircuito/formulariosubcircuito.html', {'subcircuitos': subcircuitos,
-                                                              'es_admin':es_admin
+                                                              'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
                                                                  #'imagen_empleado': imagen_empleado
                                                                  })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def crearsubcircuito(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         cod_subcircuito = request.POST.get('cod_subcircuito')
         nombre_subcircuito = request.POST.get('nombre_subcircuito')
@@ -1126,11 +1318,21 @@ def crearsubcircuito(request):
             error_message = "Error al crear el subcircuito."
             return render(request, "formsubcircuito/crearsubcircuito.html", {'error_message': error_message})
 
-    return render(request,'formsubcircuito/crearsubcircuito.html' )
+    return render(request,'formsubcircuito/crearsubcircuito.html',{'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,})
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def editarsubcircuito(request,cod_subcircuito):
     try:
+        es_admin= es_administrador(request.user)
+        es_encargado=es_encargado_logistica(request.user)
+        es_aux=es_auxiliar(request.user)
+        es_ger=es_gerente(request.user)
+        es_perpol=es_personal_policial(request.user)
         my_subcircuito = Subcircuito.objects.get(cod_subcircuito=cod_subcircuito)
     except Subcircuito.DoesNotExist:
         # Manejar el caso si el rol no existe
@@ -1156,46 +1358,184 @@ def editarsubcircuito(request,cod_subcircuito):
                                                                      #'imagen_empleado': imagen_empleado
                                                                                                         })
     return render(request,'formsubcircuito/editarsubcircuito.html',{'my_subcircuito':my_subcircuito,
-                                                                      } )
+                                                                      'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,} )
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def eliminarsubcircuito(request, cod_subcircuito):
     subcircuitocod_subcircuito = Subcircuito.objects.get(cod_subcircuito=cod_subcircuito)
     subcircuitocod_subcircuito.delete()
     return redirect('formulariosubcircuito')
 
+#Circuito
+@login_required(login_url="login")
+def formulariocircuito(request):
+    #imagen_empleado = obtener_imagen_empleado(request.user)
+    subcircuitos = Subcircuito.objects.all()
+    circuitos = Circuito.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request, 'formcircuito/formulariocircuito.html', {'circuitos': circuitos,
+                                                                     'subcircuitos':subcircuitos,
+                                                              'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
+                                                                 #'imagen_empleado': imagen_empleado
+                                                                 })
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def crearcircuito(request):
+    subcircuitos = Subcircuito.objects.all() 
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    if request.method == 'POST':
+        cod_circuito = request.POST.get('cod_circuito')
+        nombre_circuito = request.POST.get('nombre_circuito')
+        numero_circuito = request.POST.get('numero_circuito')
+        id_subcircuito = request.POST.get('cod_subcircuito')
+        codid=Subcircuito.objects.get(cod_subcircuito=id_subcircuito)
+        my_circuito = Circuito.objects.create(
+                cod_circuito = cod_circuito,
+                nombre_circuito=nombre_circuito,
+                numero_circuito=numero_circuito,
+                id_subcircuito =codid
+            )
+        my_circuito.save()
+        return redirect('formulariocircuito')
+        
+    return render(request,'formcircuito/crearcircuito.html', {'subcircuitos':subcircuitos,
+                                                              'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,}) 
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def editarcircuito(request, cod_circuito):
+    subcircuitos = Subcircuito.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    try:
+        my_circuito = Circuito.objects.get(cod_circuito=cod_circuito)
+    except Circuito.DoesNotExist:
+        return redirect('formulariocircuito')
+
+    if request.method == 'POST':
+        cod_circuito = request.POST.get('cod_circuito')
+        nombre_circuito = request.POST.get('nombre_circuito')
+        numero_circuito = request.POST.get('numero_circuito')
+        id_subcircuito = request.POST.get('cod_subcircuito')
+
+        try:
+            my_circuito.cod_circuito = cod_circuito
+            my_circuito.nombre_circuito = nombre_circuito
+            my_circuito.numero_circuito = numero_circuito
+            my_circuito.id_subcircuito = id_subcircuito  # Usa el campo 'id_subcircuito_id' para establecer la relación
+            my_circuito.save()
+            return redirect('formulariocircuito')
+        except Exception as e:
+            error_message = "Error al actualizar el circuito."
+            return render(request, "formcircuito/editarcircuito.html", {'my_circuito': my_circuito,
+                                                                       "error_message": error_message,
+                                                                       'subcircuitos': subcircuitos})
+
+    return render(request, 'formcircuito/editarcircuito.html', {'my_circuito': my_circuito,
+                                                                 'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
+                                                                'subcircuitos': subcircuitos})
+
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def eliminarcircuito(request, cod_circuito):
+    circuitocod_circuito = Circuito.objects.get(cod_circuito=cod_circuito)
+    circuitocod_circuito.delete()
+    return redirect('formulariocircuito')
 
 #distrito
 @login_required(login_url="login")
 def formulariodistrito(request):
     #imagen_empleado = obtener_imagen_empleado(request.user)
+    circuitos = Circuito.objects.all()
     distritos = Distrito.objects.all()
-    es_admin = es_administrador(request.user)
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     return render(request, 'formdistrito/formulariodistrito.html', {'distritos': distritos,
-                                                              'es_admin':es_admin
+                                                                    'circuitos': circuitos,
+                                                              'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
                                                                  #'imagen_empleado': imagen_empleado
                                                                  })
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def creardistrito(request):
+    circuitos = Circuito.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     if request.method == 'POST':
         cod_distrito = request.POST.get('cod_distrito')
         nombre_distrito = request.POST.get('nombre_distrito')
         numero_distrito = request.POST.get('numero_distrito')
+        id_circuito = request.POST.get('id_circuito')  # Asegúrate de que 'id_circuito' coincida con el nombre del campo en el formulario
+        codid = Circuito.objects.get(cod_circuito=id_circuito)
         try:
             my_distrito = Distrito.objects.create(
-                cod_distrito = cod_distrito,
+                cod_distrito=cod_distrito,
                 nombre_distrito=nombre_distrito,
-                numero_distrito=numero_distrito
+                numero_distrito=numero_distrito,
+                id_circuito=codid
             )
             my_distrito.save()
             return redirect('formulariodistrito')
         except Exception as e:
             error_message = "Error al crear el distrito."
-            return render(request, "formdistrito/creardistrito.html", {'error_message': error_message})
+            return render(request, "formdistrito/creardistrito.html", {'error_message': error_message, 'circuitos': circuitos})
 
-    return render(request,'formdistrito/creardistrito.html' )
+    return render(request, 'formdistrito/creardistrito.html', {'circuitos': circuitos,
+                                                               'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,})
+
 
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def editardistrito(request,cod_distrito):
+    circuitos = Circuito.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
     try:
         my_distrito = Distrito.objects.get(cod_distrito=cod_distrito)
     except Distrito.DoesNotExist:
@@ -1206,11 +1546,13 @@ def editardistrito(request,cod_distrito):
         cod_distrito = request.POST.get('cod_distrito')
         nombre_distrito = request.POST.get('nombre_distrito')
         numero_distrito = request.POST.get('numero_distrito')
+        id_circuito = request.POST.get('id_circuito')
         try:
             # Actualiza los campos de la instancia existente
             my_distrito.cod_distrito = cod_distrito
             my_distrito.nombre_distrito = nombre_distrito
             my_distrito.numero_distrito = numero_distrito
+            my_distrito.id_circuito = id_circuito 
             my_distrito.save()
             # Redirige a la página de listado de roles
             return redirect('formulariodistrito')
@@ -1218,14 +1560,691 @@ def editardistrito(request,cod_distrito):
             # Handle any other exception that may occur while creating the new object
             error_message = "Error al actulizar el Rol."
             return render(request, "formdistrito/editardistrito.html", {'my_distrito': my_distrito, 
+                                                                        'circuitos':circuitos,
                                                                         "error_message": error_message, 
                                                                      #'imagen_empleado': imagen_empleado
                                                                                                         })
-    return render(request,'formdistrito/editardistrito.html',{'my_distrito':my_distrito,
-                                                                      } )
+    return render(request,'formdistrito/editardistrito.html',{'my_distrito':my_distrito, 
+                                                              'circuitos':circuitos,
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,} )
 @login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def eliminardistrito(request, cod_distrito):
     distritocod_distrito = Distrito.objects.get(cod_distrito=cod_distrito)
     distritocod_distrito.delete()
     return redirect('formulariodistrito')
 
+
+#dependencia
+@login_required(login_url="login")
+def formulariodependencia(request):
+    distritos = Distrito.objects.all()
+    dependencias = Dependencia.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request, 'formdependencia/formulariodependencia.html', {
+        'dependencias': dependencias,
+        'distritos': distritos,
+        'es_admin':es_admin,
+        'es_encargado':es_encargado,
+        'es_aux' : es_aux,
+        'es_ger':es_ger,
+        'es_perpol':es_perpol,
+    })
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def creardependencia(request):
+    distritos = Distrito.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    if request.method == 'POST':
+        parroquia = request.POST.get('parroquia')
+        provincia = request.POST.get('provincia')
+        id_distrito = request.POST.get('id_distrito')
+        codid = Distrito.objects.get(cod_distrito=id_distrito)
+        try:
+            my_dependencia = Dependencia.objects.create(
+                parroquia=parroquia,
+                provincia=provincia,
+                id_distrito=codid
+            )
+            my_dependencia.save()
+            return redirect('formulariodependencia')
+        except Exception as e:
+            error_message = "Error al crear el dependencia."
+            return render(request, "formdependencia/creardependencia.html", {'error_message': error_message, 'distritos': distritos})
+
+    return render(request, 'formdependencia/creardependencia.html', {'distritos': distritos,
+                                                                     'es_admin':es_admin,
+                                                                    'es_encargado':es_encargado,
+                                                                    'es_aux' : es_aux,
+                                                                    'es_ger':es_ger,
+                                                                    'es_perpol':es_perpol,})
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def editardependencia(request,id):
+    distritos = Distrito.objects.all()
+    dependencias = Dependencia.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    try:
+        my_dependencia = Dependencia.objects.get(id=id)
+    except Dependencia.DoesNotExist:
+        # Manejar el caso si el rol no existe
+        # Redirige a la página de listado de roles
+        return redirect('formulariodependencia')
+    if request.method == 'POST':
+        parroquia = request.POST.get('parroquia')
+        provincia = request.POST.get('provincia')
+        id_distrito = request.POST.get('id_distrito')
+        try:
+            # Actualiza los campos de la instancia existente
+            my_dependencia.parroquia = parroquia
+            my_dependencia.provincia = provincia
+            my_dependencia.id_distrito = id_distrito 
+            my_dependencia.save()
+            # Redirige a la página de listado de roles
+            return redirect('formulariodependencia')
+        except Exception as e:
+            # Handle any other exception that may occur while creating the new object
+            error_message = "Error al actulizar el Rol."
+            return render(request, "formdependencia/editardependencia.html", {'my_dependencia': my_dependencia, 
+                                                                        'distritos':distritos,
+                                                                        'dependencias':dependencias,
+                                                                        "error_message": error_message, 
+                                                                     #'imagen_empleado': imagen_empleado
+                                                                                                        })
+    return render(request,'formdependencia/editardependencia.html',{'my_dependencia':my_dependencia, 
+                                                              'distritos':distritos,'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
+                                                                      } )
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def eliminardependencia(request, id):
+    dependenciaidentificacion = Dependencia.objects.get(id=id)
+    dependenciaidentificacion.delete()
+    return redirect('formulariodependencia')
+
+#ordenes de trabajo 
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def formularioordendetrabajo(request):
+    ordenesdetrabajos=OrdendeTrabajo.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request, 'formordendetrabajo/formularioordendetrabajo.html',{'ordenesdetrabajos':ordenesdetrabajos,
+                                                                               'es_admin':es_admin,
+                                                                                'es_encargado':es_encargado,
+                                                                                'es_aux' : es_aux,
+                                                                                'es_ger':es_ger,
+                                                                                'es_perpol':es_perpol,})
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def crearordentrabajo(request):
+    personas=Persona.objects.all()
+    tipomantenimientos=Tipomantenimiento.objects.all()
+    vehiculos=Vehiculo.objects.all()
+    dependencias=Dependencia.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    if request.method == 'POST':
+        fecha = request.POST.get('fecha')
+        vehiculo = request.POST.get('vehiculo')
+        responsable = request.POST.get('responsable')
+        agente1 = request.POST.get('agente1')
+        agente2 = request.POST.get('agente2')
+        agente3 = request.POST.get('agente3')
+        ruta = request.POST.get('ruta')
+        dependencia = request.POST.get('dependencia')
+        km = request.POST.get('km')
+        observaciones = request.POST.get('observaciones')
+        vehiculo=Vehiculo.objects.get(placa=vehiculo)
+        try:
+            responsable = Persona.objects.get(identificacion=responsable)
+        except Persona.DoesNotExist:
+            responsable = None
+
+        try:
+            agente1 = Persona.objects.get(identificacion=agente1)
+        except Persona.DoesNotExist:
+            agente1 = None
+
+        try:
+            agente2 = Persona.objects.get(identificacion=agente2)
+        except Persona.DoesNotExist:
+            agente2 = None
+
+        try:
+            agente3 = Persona.objects.get(identificacion=agente3)
+        except Persona.DoesNotExist:
+            agente3 = None
+
+        dependencia=Dependencia.objects.get(id=dependencia)
+        try:
+            my_orden_trabajo = OrdendeTrabajo.objects.create(
+                fecha=fecha,
+                vehiculo=vehiculo,
+                responsable=responsable,
+                agente1=agente1,
+                agente2=agente2,
+                agente3=agente3,
+                ruta=ruta,
+                dependencia=dependencia,
+                km=km,
+                observaciones=observaciones,
+                estado=False
+            )
+            my_orden_trabajo.save()
+            return redirect('formularioordendetrabajo')
+        except Exception as e:
+            error_message = "Error al crear la orden de trabajo."
+            return render(request, "formordendetrabajo/crearordentrabajo.html", {'error_message': error_message})
+
+    return render(request, 'formordendetrabajo/crearordentrabajo.html',{
+        'personas':personas,
+        'tipomantenimientos':tipomantenimientos,
+        'vehiculos':vehiculos,
+        'es_admin':es_admin,
+        'es_encargado':es_encargado,
+        'es_aux' : es_aux,
+        'es_ger':es_ger,
+        'es_perpol':es_perpol,
+        'dependencias':dependencias
+    })
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def editarordentrabajo(request,id):
+    personas=Persona.objects.all()
+    tipomantenimientos=Tipomantenimiento.objects.all()
+    vehiculos=Vehiculo.objects.all()
+    dependencias=Dependencia.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    my_orden_trabajo=OrdendeTrabajo.objects.get(id=id)
+    if request.method == 'POST':
+        fecha = request.POST.get('fecha')
+        vehiculo = request.POST.get('vehiculo')
+        responsable = request.POST.get('responsable')
+        agente1 = request.POST.get('agente1')
+        agente2 = request.POST.get('agente2')
+        agente3 = request.POST.get('agente3')
+        ruta = request.POST.get('ruta')
+        dependencia = request.POST.get('dependencia')
+        km = request.POST.get('km')
+        observaciones = request.POST.get('observaciones')
+       
+        try:
+             
+            my_orden_trabajo.fecha=fecha
+            my_orden_trabajo.vehiculo=vehiculo
+            my_orden_trabajo.responsable=responsable
+            my_orden_trabajo.agente1=agente1
+            my_orden_trabajo.agente2=agente2
+            my_orden_trabajo.agente3=agente3
+            my_orden_trabajo.ruta=ruta
+            my_orden_trabajo.dependencia=dependencia
+            my_orden_trabajo.km=km
+            my_orden_trabajo.observaciones=observaciones
+            my_orden_trabajo.estado=False
+            
+            my_orden_trabajo.save()
+            return redirect('formularioordendetrabajo')
+        except Exception as e:
+            error_message = "Error al crear la orden de trabajo."
+            return render(request, "formordendetrabajo/editarordentrabajo.html", {'error_message': error_message})
+
+    return render(request, 'formordendetrabajo/editarordentrabajo.html',{
+        'personas':personas,
+        'tipomantenimientos':tipomantenimientos,
+        'vehiculos':vehiculos,
+        'es_admin':es_admin,
+        'es_encargado':es_encargado,
+        'es_aux' : es_aux,
+        'es_ger':es_ger,
+        'es_perpol':es_perpol,
+        'dependencias':dependencias,
+        'my_orden_trabajo':my_orden_trabajo,
+    })
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def eliminarordentrabajo(request, id):
+    try:
+        # Obtiene la orden de trabajo
+        orden_trabajo = OrdendeTrabajo.objects.get(id=id)
+
+        # Obtiene y elimina el documento de salida relacionado (si existe)
+        try:
+            doc_salida = SalidaOrden.objects.get(salida=orden_trabajo)
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(doc_salida.docsalidaorden)))
+            doc_salida.delete()
+        except SalidaOrden.DoesNotExist:
+            pass
+
+        # Obtiene y elimina el documento de entrada relacionado (si existe)
+        try:
+            doc_entrada = EntradaOrden.objects.get(entrada=orden_trabajo)
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(doc_entrada.docentradaorden)))
+            doc_entrada.delete()
+        except EntradaOrden.DoesNotExist:
+            pass
+
+        # Elimina la orden de trabajo
+        orden_trabajo.delete()
+
+        return redirect('formularioordendetrabajo')
+
+    except OrdendeTrabajo.DoesNotExist:
+        # Maneja la excepción si no se encuentra la orden de trabajo
+        return redirect('formularioordendetrabajo')  # O ajusta según tus necesidades
+
+class PDF3(FPDF):
+    def __init__(self, page_size='A4'):
+        super().__init__(orientation='P', unit='mm', format=page_size)
+        self.page_size = page_size  # Establecer el formato a 12 cm x 10 cm
+
+    def add_full_page_image(self, img_path):
+        # Establecer las coordenadas del punto de inicio para la imagen
+        x = 0
+        y = 0
+        # Obtener el ancho y alto de la página actual
+        page_width = self.w
+        page_height = self.h
+        # Agregar la imagen a toda la página
+        self.image(img_path, x, y, page_width, page_height)
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.cell(0, 10, 'Página ' + str(self.page_no()), 0, 0, 'C')
+def ordendesalida(request, id):
+    boleta = OrdendeTrabajo.objects.get(id=id)
+    
+    if request.method == 'POST':
+        codigo = request.POST.get('codigo', '')
+        firmage=request.FILES.get('firmage')
+        pdf = PDF()
+        pdf.set_left_margin(15)
+        pdf.set_right_margin(10)
+        pdf.add_page()
+        
+        # Agrega la imagen a toda la página
+        # pdf.add_full_page_image('media/imgmodelosfichas/dienav.jpg')
+        pdf.set_font("Times", size=9, style='B')
+        pdf.ln(0)
+        pdf.cell(30, 10, '', 'LTR' )
+        pdf.cell(107, 10, 'NOMBRE DEL DOCUMENTO: FORMATO PARA ORDEN DE TRABAJO','LTR', 0, 'C')
+        pdf.cell(43, 10, 'Código: '+ codigo, 1)
+        pdf.ln()
+        pdf.cell(30, 10, '', 'LR' )
+        pdf.cell(107, 10, 'ACTA ENTREGA DE VEHÍCULO','LRB', 0, 'C')
+        pdf.cell(43, 10, 'Salida: '+str(boleta.id), 1)
+        pdf.ln()
+        pdf.cell(30, 10, '', 'LRB' )
+        pdf.cell(107, 10, 'Referencia al punto de la norma ISO 9001:2015   6.3, 8.1, 8.1.3', 1, 0, 'C')
+        numero_total_de_paginas = pdf.page_no()
+        pdf.cell(43, 10, 'Página '+str(numero_total_de_paginas)+' de '+str(numero_total_de_paginas), 1)
+        pdf.ln(15)
+        pdf.set_font("Times", size=10, style='B')
+        # Título de la boleta
+        pdf.cell(180, 10, "ACTA DE SALIDA Y ENTREGA DE VEHÍCULO", '', 1, 'C')
+        pdf.set_font("Times", size=10, style='B')
+        pdf.ln(10)
+        #tipo_mantenimiento = boleta.tipodemantenimiento.tipo
+        pdf.cell(67, 10, 'Direccion:'+ boleta.dependencia.parroquia,'LTB', 0, 'C')
+        pdf.cell(10, 10, '','TRB', 0, 'C')
+        pdf.cell(103, 10, '', '', 0, 'C')
+        pdf.ln()
+        #pdf.cell(67, 10, 'Preventivo' if tipo_mantenimiento == 'Preventivo' else 'Preventivo', 'LR', 0, 'C')
+        #pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Preventivo' else '', 'LTRB', 0, 'C')
+        pdf.cell(103, 10, '', '', 0, 'C')
+        pdf.ln()
+        #pdf.cell(67, 10, 'Correctivo' if tipo_mantenimiento == 'Correctivo' else 'Correctivo', 'LTRB', 0, 'C')
+        #pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Correctivo' else '', 1, 0, 'C')
+        pdf.cell(60, 10, '', '', 0, 'C')
+        pdf.cell(43, 10, 'Nº de Salida '+ str(boleta.id) + ' con vehiculo: '+ boleta.vehiculo.placa,'', 0, 'C')
+        pdf.ln(20)
+        # ... (Otras secciones de tu código)
+        pdf.cell(67, 10, 'Sub-circuito: '+boleta.dependencia.id_distrito.id_circuito.id_subcircuito.cod_subcircuito,'LTB', 0, 'L')
+        pdf.cell(10, 10, 'Circuito: '+boleta.dependencia.id_distrito.id_circuito.cod_circuito,'TB', 0, 'C')
+        pdf.cell(103, 10, 'Distrito: '+boleta.dependencia.id_distrito.cod_distrito, 'RTB', 0, 'C')
+        pdf.ln()
+        pdf.cell(180, 10, "Kilometraje de Recorrido: "+str(boleta.km)+' km', 1, 1, 'L')
+        pdf.cell(180, 10, "Ruta: "+str(boleta.ruta), 1, 1, 'L')
+        pdf.cell(180, 10, "Asignado a: " + boleta.responsable.nombres+' '+boleta.responsable.apellidos, 1, 1, 'L')
+        pdf.ln(10)
+        import locale
+        locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
+        pdf.cell(180, 10, "Fecha de Salida: " + datetime.strftime(boleta.fecha, "%d de %B del %Y"), 1, 1, 'L')
+        # Datos adicionales
+        #pdf.cell(45, 5, 'Fecha:', 1)
+        #pdf.cell(45, 5, boleta.fecha.strftime("%d/%m/%Y"), 1)
+        # Tamaño máximo de la celda
+        # Agregar el texto "Trabajo a Realizar"
+        pdf.multi_cell(180, 10, "Elementos Entregados: " + boleta.observaciones, 1, 1, 'L')
+        pdf.ln(10)
+
+        # Obtener la posición actual después del MultiCell
+        x_after_multi_cell = pdf.get_x()
+        y_after_multi_cell = pdf.get_y()
+
+        # Agregar el texto "Firma Empleado"
+        pdf.cell(90, 10, 'Firma Empleado:', '', 0, 'C')
+
+        # Agregar el texto "Firma Gerente"
+        pdf.cell(90, 10, 'Firma Gerente:', '', 0, 'C')
+        pdf.ln(15)
+
+        # Agregar líneas adicionales
+        pdf.cell(90, 10, boleta.responsable.nombres+' '+ boleta.responsable.apellidos, '', 0, 'C')
+        pdf.cell(90, 10, '', '', 0, 'C')
+
+        # # Colocar la imagen debajo de "Firma Empleado"
+        # url_imagen = boleta.persona.firma.path
+        # pdf.image(url_imagen, x=x_after_multi_cell+35, y=y_after_multi_cell + 10, w=20)
+        # Verifica si firmage es un objeto de archivo de imagen válido
+        # Verifica si firmage es un objeto de archivo de imagen válido
+        if firmage and firmage.content_type.startswith('image'):
+            # Lee los datos de la imagen
+            imagen_data = BytesIO(firmage.read())
+
+            # Rebobina los datos para que estén al principio
+            imagen_data.seek(0)
+
+            # Guarda la imagen temporalmente
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_image:
+                temp_image.write(imagen_data.read())
+                temp_image_path = temp_image.name
+
+            # Agrega la imagen al PDF usando la ruta del archivo temporal
+            pdf.image(temp_image_path, x=x_after_multi_cell + 125, y=y_after_multi_cell + 10, w=20, h=10)
+                        
+
+        # ... (Otras secciones de tu código)
+        # Posición X para la imagen (misma columna que Fecha de Inscripción)
+        x = pdf.w - 194
+        # Posición Y para la imagen (misma línea que Fecha de Inscripción)
+        y = pdf.h - 285
+        w = 28  # Ancho de la celda (misma que la celda "Foto")
+        h = 26  # Altura de la celda
+        image_path = os.path.join(settings.STATIC_ROOT, 'lib/img/logo/logo.jpg')
+        pdf.image(image_path, x, y, w, h)
+        #pdf.add_page()  # Agrega una nueva página
+        # # Guardar el PDF en la carpeta docsalidamancar/
+        pdf_output = pdf.output(dest='S').encode('latin1')
+        pdf_file = ContentFile(pdf_output)
+        file_name = f'SalidaOrden_{boleta.vehiculo.placa}.pdf'
+        pdf_path = default_storage.save(f'docsalidaorden/{file_name}', pdf_file)
+
+        # # Crear un objeto Salidamtto y asociar el PDF
+        salidamtto = SalidaOrden.objects.create(
+            docsalidaorden=pdf_path,
+            salida=boleta,
+        )
+        salidamtto.save()
+        boleta.estado=None
+        boleta.save()
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'filename=SalidaOrden_{boleta.vehiculo.placa}.pdf'
+
+        pdf_output = pdf.output(dest='S').encode('latin1')
+        response.write(pdf_output)
+
+        return response
+    return render(request, 'formordendetrabajo/ingresar_codigo_modal2.html')
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def salidaorden(request):
+    salidaordenes=SalidaOrden.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    return render(request,'formordendetrabajo/salidaorden.html',{'salidaordenes':salidaordenes,
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,})
+class PDF4(FPDF):
+    def __init__(self, page_size='A4'):
+        super().__init__(orientation='P', unit='mm', format=page_size)
+        self.page_size = page_size  # Establecer el formato a 12 cm x 10 cm
+
+    def add_full_page_image(self, img_path):
+        # Establecer las coordenadas del punto de inicio para la imagen
+        x = 0
+        y = 0
+        # Obtener el ancho y alto de la página actual
+        page_width = self.w
+        page_height = self.h
+        # Agregar la imagen a toda la página
+        self.image(img_path, x, y, page_width, page_height)
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.cell(0, 10, 'Página ' + str(self.page_no()), 0, 0, 'C')
+
+def ordendeentrada(request, id):
+    boleta = OrdendeTrabajo.objects.get(id=id)
+    
+    if request.method == 'POST':
+        codigo = request.POST.get('codigo', '')
+        firmage=request.FILES.get('firmage')
+        pdf = PDF()
+        pdf.set_left_margin(15)
+        pdf.set_right_margin(10)
+        pdf.add_page()
+        
+        # Agrega la imagen a toda la página
+        # pdf.add_full_page_image('media/imgmodelosfichas/dienav.jpg')
+        pdf.set_font("Times", size=9, style='B')
+        pdf.ln(0)
+        pdf.cell(30, 10, '', 'LTR' )
+        pdf.cell(107, 10, 'NOMBRE DEL DOCUMENTO: FORMATO PARA ORDEN DE TRABAJO','LTR', 0, 'C')
+        pdf.cell(43, 10, 'Código: '+ codigo, 1)
+        pdf.ln()
+        pdf.cell(30, 10, '', 'LR' )
+        pdf.cell(107, 10, 'ACTA ENTREGA DE VEHÍCULO','LRB', 0, 'C')
+        pdf.cell(43, 10, 'Entrada: '+str(boleta.id), 1)
+        pdf.ln()
+        pdf.cell(30, 10, '', 'LRB' )
+        pdf.cell(107, 10, 'Referencia al punto de la norma ISO 9001:2015   6.3, 8.1, 8.1.3', 1, 0, 'C')
+        numero_total_de_paginas = pdf.page_no()
+        pdf.cell(43, 10, 'Página '+str(numero_total_de_paginas)+' de '+str(numero_total_de_paginas), 1)
+        pdf.ln(15)
+        pdf.set_font("Times", size=10, style='B')
+        # Título de la boleta
+        pdf.cell(180, 10, "ACTA DE ENTRADA Y ENTREGA DE VEHÍCULO", '', 1, 'C')
+        pdf.set_font("Times", size=10, style='B')
+        pdf.ln(10)
+        #tipo_mantenimiento = boleta.tipodemantenimiento.tipo
+        pdf.cell(67, 10, 'Direccion de Retorno:'+ boleta.dependencia.parroquia,'LTB', 0, 'C')
+        pdf.cell(10, 10, '','TRB', 0, 'C')
+        pdf.cell(103, 10, '', '', 0, 'C')
+        pdf.ln()
+        #pdf.cell(67, 10, 'Preventivo' if tipo_mantenimiento == 'Preventivo' else 'Preventivo', 'LR', 0, 'C')
+        #pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Preventivo' else '', 'LTRB', 0, 'C')
+        pdf.cell(103, 10, '', '', 0, 'C')
+        pdf.ln()
+        #pdf.cell(67, 10, 'Correctivo' if tipo_mantenimiento == 'Correctivo' else 'Correctivo', 'LTRB', 0, 'C')
+        #pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Correctivo' else '', 1, 0, 'C')
+        pdf.cell(60, 10, '', '', 0, 'C')
+        pdf.cell(43, 10, 'Nº de Entrada '+ str(boleta.id) + ' con vehiculo: '+ boleta.vehiculo.placa,'', 0, 'C')
+        pdf.ln(20)
+        # ... (Otras secciones de tu código)
+        pdf.cell(67, 10, 'Sub-circuito: '+boleta.dependencia.id_distrito.id_circuito.id_subcircuito.cod_subcircuito,'LTB', 0, 'L')
+        pdf.cell(10, 10, 'Circuito: '+boleta.dependencia.id_distrito.id_circuito.cod_circuito,'TB', 0, 'C')
+        pdf.cell(103, 10, 'Distrito: '+boleta.dependencia.id_distrito.cod_distrito, 'RTB', 0, 'C')
+        pdf.ln()
+        pdf.cell(180, 10, "Kilometraje Recorrido: "+str(boleta.km)+' km', 1, 1, 'L')
+        pdf.cell(180, 10, "Ruta: "+str(boleta.ruta), 1, 1, 'L')
+        pdf.cell(180, 10, "Asignado a: " + boleta.responsable.nombres+' '+boleta.responsable.apellidos, 1, 1, 'L')
+        pdf.ln(10)
+        import locale
+        locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
+        pdf.cell(180, 10, "Fecha de Llegada: " + datetime.strftime(boleta.fecha, "%d de %B del %Y"), 1, 1, 'L')
+        # Datos adicionales
+        #pdf.cell(45, 5, 'Fecha:', 1)
+        #pdf.cell(45, 5, boleta.fecha.strftime("%d/%m/%Y"), 1)
+        # Tamaño máximo de la celda
+        # Agregar el texto "Trabajo a Realizar"
+        pdf.multi_cell(180, 10, "Elementos Devueltos: " + boleta.observaciones, 1, 1, 'L')
+        pdf.ln(10)
+
+        # Obtener la posición actual después del MultiCell
+        x_after_multi_cell = pdf.get_x()
+        y_after_multi_cell = pdf.get_y()
+
+        # Agregar el texto "Firma Empleado"
+        pdf.cell(90, 10, 'Firma Empleado:', '', 0, 'C')
+
+        # Agregar el texto "Firma Gerente"
+        pdf.cell(90, 10, 'Firma Gerente:', '', 0, 'C')
+        pdf.ln(15)
+
+        # Agregar líneas adicionales
+        pdf.cell(90, 10, boleta.responsable.nombres+' '+ boleta.responsable.apellidos, '', 0, 'C')
+        pdf.cell(90, 10, '', '', 0, 'C')
+
+        # # Colocar la imagen debajo de "Firma Empleado"
+        # url_imagen = boleta.persona.firma.path
+        # pdf.image(url_imagen, x=x_after_multi_cell+35, y=y_after_multi_cell + 10, w=20)
+        # Verifica si firmage es un objeto de archivo de imagen válido
+        # Verifica si firmage es un objeto de archivo de imagen válido
+        if firmage and firmage.content_type.startswith('image'):
+            # Lee los datos de la imagen
+            imagen_data = BytesIO(firmage.read())
+
+            # Rebobina los datos para que estén al principio
+            imagen_data.seek(0)
+
+            # Guarda la imagen temporalmente
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as temp_image:
+                temp_image.write(imagen_data.read())
+                temp_image_path = temp_image.name
+
+            # Agrega la imagen al PDF usando la ruta del archivo temporal
+            pdf.image(temp_image_path, x=x_after_multi_cell + 125, y=y_after_multi_cell + 10, w=20, h=10)
+                        
+
+        # ... (Otras secciones de tu código)
+        # Posición X para la imagen (misma columna que Fecha de Inscripción)
+        x = pdf.w - 194
+        # Posición Y para la imagen (misma línea que Fecha de Inscripción)
+        y = pdf.h - 285
+        w = 28  # Ancho de la celda (misma que la celda "Foto")
+        h = 26  # Altura de la celda
+        image_path = os.path.join(settings.STATIC_ROOT, 'lib/img/logo/logo.jpg')
+        pdf.image(image_path, x, y, w, h)
+        #pdf.add_page()  # Agrega una nueva página
+        # # Guardar el PDF en la carpeta docsalidamancar/
+        pdf_output = pdf.output(dest='S').encode('latin1')
+        pdf_file = ContentFile(pdf_output)
+        file_name = f'EntradaOrden_{boleta.vehiculo.placa}.pdf'
+        pdf_path = default_storage.save(f'docentradaorden/{file_name}', pdf_file)
+
+        # # Crear un objeto Salidamtto y asociar el PDF
+        salidamtto = EntradaOrden.objects.create(
+            docentradaorden=pdf_path,
+            entrada=boleta,
+        )
+        salidamtto.save()
+        boleta.estado=True
+        boleta.save()
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = f'filename=EntradaOrden_{boleta.vehiculo.placa}.pdf'
+
+        pdf_output = pdf.output(dest='S').encode('latin1')
+        response.write(pdf_output)
+
+        return response
+    return render(request, 'formordendetrabajo/ingresar_codigo_modal2.html')
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def entradaorden(request):
+    entradasordenes=EntradaOrden.objects.all()
+    return render(request,'formordendetrabajo/entradaorden.html',{'entradasordenes':entradasordenes})
+
+#denuncia
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def formulariodenuncia(request):
+    #imagen_empleado = obtener_imagen_empleado(request.user)
+    circuitos = Circuito.objects.all()
+    denuncias = Denuncia.objects.all()
+    es_admin = es_administrador(request.user)
+    return render(request, 'formdenuncia/formulariodenuncia.html', {'denuncias': denuncias,
+                                                                    'circuitos': circuitos,
+                                                              'es_admin':es_admin
+                                                                 #'imagen_empleado': imagen_empleado
+                                                                 })
+def creardenuncia(request):
+    circuitos = Circuito.objects.all()
+    if request.method == 'POST':
+        try:
+            # Obtén los datos del formulario
+            id_circuito = request.POST.get('id_circuito')
+            id_subcircuito = request.POST.get('id_subcircuito')
+            tipo = request.POST.get('tipo')
+            detalle = request.POST.get('detalle')
+            contacto = request.POST.get('contacto')
+            nombres = request.POST.get('nombres')
+            apellidos = request.POST.get('apellidos')
+
+            # Obten el objeto Circuito correspondiente
+            codid = Circuito.objects.get(cod_circuito=id_circuito)
+            subid =Subcircuito.objects.get(cod_subcircuito= id_subcircuito)
+
+            # Crea la denuncia (la fecha_ingreso se establecerá automáticamente al valor actual)
+            my_denuncia = Denuncia.objects.create(
+                id_circuito=codid,
+                id_subcircuito = subid,
+                tipo=tipo,
+                detalle=detalle,
+                contacto=contacto,
+                nombres=nombres,
+                apellidos=apellidos
+            )
+            my_denuncia.save()
+            return redirect('formulariodenuncia')  # Asegúrate de que esta sea la URL correcta
+        except Exception as e:
+            print(e)  # Imprime la excepción para debug
+            error_message = "Error al crear la denuncia."
+            return render(request, "formdenuncia/creardenuncia.html", {'error_message': error_message, 'circuitos': circuitos})
+
+    # Manejar el acceso normal al formulario (método GET)
+    return render(request, 'formplantilla/pantalladeinicio.html', {'circuitos': circuitos})
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def eliminardenuncia(request, id):
+    denunciacod_denuncia = Denuncia.objects.get(id=id)
+    denunciacod_denuncia.delete()
+    return redirect('formulariodenuncia')

@@ -65,6 +65,28 @@ urlpatterns = [
     path("distrito/creardistrito", views.creardistrito, name='creardistrito'),
     path('distrito/editardistrito/<str:cod_distrito>', views.editardistrito, name="editardistrito"),
     path('distrito/eliminardistrito/<str:cod_distrito>', views.eliminardistrito, name="eliminardistrito"),
-]
+    #dependencia
+    path("dependencia/", views.formulariodependencia, name='formulariodependencia'),
+    path("dependencia/creardependencia", views.creardependencia, name='creardependencia'),
+    path('dependencia/editardependencia/<str:id>/', views.editardependencia, name="editardependencia"),
+    path('dependencia/eliminardependencia/<str:id>/', views.eliminardependencia, name="eliminardependencia"),
+    #orden de trabajo
+    path("ordentrabajo/", views.formularioordendetrabajo, name='formularioordendetrabajo'),
+    path("ordentrabajo/crearordentrabajo", views.crearordentrabajo, name='crearordentrabajo'),
+    path('ordentrabajo/editarordentrabajo/<str:id>/', views.editarordentrabajo, name="editarordentrabajo"),
+    path('ordentrabajo/eliminarordentrabajo/<str:id>/', views.eliminarordentrabajo, name="eliminarordentrabajo"),
+    path("ordentrabajo/ordendesalida/<str:id>", views.ordendesalida, name='ordendesalida'),
+    path("ordentrabajo/ordendeentrada/<str:id>", views.ordendeentrada, name='ordendeentrada'),
+    path("ordentrabajo/salida-orden", views.salidaorden, name='salidaorden'),
+    path("ordentrabajo/entrada-orden", views.entradaorden, name='entradaorden'),
+    #dependencia
+    path("dependencia/", views.formulariodependencia, name='formulariodependencia'),
+    path("dependencia/creardependencia", views.creardependencia, name='creardependencia'),
+    path('dependencia/editardependencia/<str:id>/', views.editardependencia, name="editardependencia"),
+    path('dependencia/eliminardependencia/<str:id>/', views.eliminardependencia, name="eliminardependencia"),
+    #Denuncias
+    path("denuncia/", views.formulariodenuncia, name='formulariodenuncia'),
+    path("denuncia/creardenuncia", views.creardenuncia, name='creardenuncia'),
+]    
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

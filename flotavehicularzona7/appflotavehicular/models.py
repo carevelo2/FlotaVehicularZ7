@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 # Create your models here.
 # Rango
@@ -32,7 +33,7 @@ class Subcircuito(models.Model):
 
 #Modelo de Circuito
 class Circuito(models.Model):
-    cod_circuito = models.CharField(primary_key=True, max_length=20, unique=True)
+    cod_circuito = models.CharField(max_length=20)
     nombre_circuito= models.CharField(max_length=100)
     numero_circuito= models.CharField(max_length=100)
     id_subcircuito = models.ForeignKey(Subcircuito,on_delete=models.CASCADE)
@@ -48,10 +49,11 @@ class Circuito(models.Model):
 
 #Modelo de Distrito
 class Distrito(models.Model):
-    cod_distrito = models.CharField(primary_key=True, max_length=20, unique=True)
+    cod_distrito = models.CharField(max_length=20)
     nombre_distrito = models.CharField(max_length=100)
     numero_distrito = models.CharField(max_length=100)
-    def _str_(self):
+    id_circuito = models.ForeignKey(Circuito,on_delete=models.CASCADE)
+    def __str__(self):
         fila = "cod_distrito {}\nnombre_distrito: {}\n".format(
             self.cod_distrito , self.nombre_distrito)
         return fila
@@ -62,15 +64,12 @@ class Distrito(models.Model):
 
 # Modelo de Dependencia
 class Dependencia(models.Model):
-    identificacion = models.CharField(primary_key=True, max_length=20, unique=True)
     provincia = models.CharField(max_length=50)
     id_distrito = models.ForeignKey(Distrito, on_delete=models.CASCADE)
     parroquia = models.CharField(max_length=50)
-    id_circuito =  models.ForeignKey(Circuito, on_delete=models.CASCADE)
-    id_subcircuito = models.ForeignKey(Subcircuito, on_delete=models.CASCADE)
-    def _str_(self):
-       fila = "identificacion {}\nprovincia: {}\nparroquia: {}\n".format(
-           self.identificacion , self.provincia, self.parroquia)
+    def __str__(self):
+       fila = "nprovincia: {}\nparroquia: {}\n".format(
+           self.provincia, self.parroquia)
        return fila
 
     class Meta:
@@ -85,15 +84,15 @@ class Persona(models.Model):
     apellidos = models.CharField(max_length=50)
     codigoempleado =models.ForeignKey(User, on_delete=models.CASCADE)
     direccion = models.CharField(max_length=150)
-    fecha_nacimiento = models.DateField(default=datetime.now())
+    fecha_nacimiento = models.DateField(default=datetime.now)
     tipo_sangre = models.CharField(max_length=10)
     ciudad_nacimiento = models.CharField(max_length=25)
     numero_celular = models.CharField(max_length=10)
     id_rango = models.ForeignKey(Rango, on_delete=models.CASCADE)
-    dependencia = models.CharField(max_length=150)
-    firma = models.ImageField(upload_to='firmasempleados/',blank=True, null=True)
-    contrasenia_firma = models.CharField(max_length=255,blank=True, null=True)
-    def _str_(self):
+    dependencia = models.ForeignKey(Dependencia, on_delete=models.CASCADE)
+    # firma = models.ImageField(upload_to='firmasempleados/',blank=True, null=True)
+    # contrasenia_firma = models.CharField(max_length=255,blank=True, null=True)
+    def __str__(self):
         fila = "identificacion {}\nNombres: {}\nApellidos: {}\nDirección: {}\n".format(
             self.identificacion , self.nombres, self.apellidos, self.direccion)
         return fila
@@ -131,7 +130,7 @@ class Vehiculo(models.Model):
     motor = models.CharField(max_length=100)
     kilometraje = models.IntegerField()
     cilindraje = models.FloatField()
-    capacidad_carga = models.IntegerField()
+    capacidad_carga = models.FloatField()
     capacidad_pasajeros = models.IntegerField()
     #propietario = models.ManyToManyField(Persona, related_name='vehiculos')
     tipovehiculo =models.ForeignKey(Tipovehiculo, on_delete=models.CASCADE)
@@ -144,7 +143,7 @@ class Vehiculo(models.Model):
 
 #Mantenimiento vehicular
 class Mantenimiento(models.Model):
-    fecha = models.DateField(default=datetime.now())
+    fecha = models.DateField(default=datetime.now)
     km = models.DecimalField(max_digits=15, decimal_places=2)
     observaciones = models.TextField(blank=True,null=True)
     persona = models.ForeignKey(Persona, blank=True, null=True, on_delete=models.CASCADE)
@@ -176,4 +175,60 @@ class Entradamtto(models.Model):
         verbose_name = ("Entrada mantenimiento")
         verbose_name_plural = ("Entrada mantenimientos")
             
-   
+#orden de trabajo DENDENCIA
+class OrdendeTrabajo(models.Model):
+    fecha = models.DateField(default=datetime.now)
+    vehiculo = models.ForeignKey(Vehiculo,on_delete=models.CASCADE) #referencia al modelo Vehiculo
+    responsable = models.ForeignKey(Persona,on_delete=models.CASCADE)
+    agente1 = models.ForeignKey(Persona,on_delete=models.CASCADE,blank=True, null=True,related_name='ordendetrabajo_agente1')
+    agente2 = models.ForeignKey(Persona,on_delete=models.CASCADE,blank=True, null=True,related_name='ordendetrabajo_agente2')
+    agente3 = models.ForeignKey(Persona,on_delete=models.CASCADE,blank=True, null=True,related_name='ordendetrabajo_agente3')
+    ruta = models.CharField(max_length=1000)
+    dependencia=models.ForeignKey(Dependencia,on_delete=models.CASCADE)
+    km = models.DecimalField(max_digits=8, decimal_places=2)
+    observaciones = models.TextField(max_length=500, blank=True)
+    estado=models.BooleanField(blank=True, null=True)
+                            
+                             
+    def __str__(self):
+        return "Orden N° {} - Fecha {}".format(self.id,self.fecha.strftime("%d/%m/%Y"))
+    class Meta:
+        verbose_name = 'Orden de Trabajo'
+        verbose_name_plural = 'Ordenes de Trabajo'
+
+class SalidaOrden(models.Model):
+    docsalidaorden = models.ImageField(upload_to='docsalidaorden/')
+    salida =models.ForeignKey(OrdendeTrabajo, on_delete=models.CASCADE)
+    def __str__(self):
+        return "{}-{}-{}".format(self.docsalidaorden)
+    class Meta:
+        verbose_name = ("Salida Orden")
+        verbose_name_plural = ("Salidas Ordenes")
+class EntradaOrden(models.Model):
+    docentradaorden = models.ImageField(upload_to='docentradaorden/')
+    entrada =models.ForeignKey(OrdendeTrabajo, on_delete=models.CASCADE)
+    def __str__(self):
+        return "{}-{}-{}".format(self.docentradaorden)
+    class Meta:
+        verbose_name = ("Entrada Orden")
+        verbose_name_plural = ("Entradas Ordenes")    
+
+#Modelo de Registrar Denuncia
+class Denuncia(models.Model):
+    fecha_ingreso = models.DateField(default=timezone.now)
+    id_circuito = models.ForeignKey(Circuito,on_delete=models.CASCADE)
+    id_subcircuito = models.ForeignKey(Subcircuito,on_delete=models.CASCADE)
+    tipo = models.CharField(max_length=20)
+    detalle = models.CharField(max_length=100)
+    contacto = models.CharField(max_length=100)
+    nombres = models.CharField(max_length=100)
+    apellidos = models.CharField(max_length=100)
+    
+    def __str__(self):
+        fila = "id {}\nfecha_ingreso: {}\n".format(
+            self.fecha_ingreso , self.nombres)
+        return fila
+
+    class Meta:
+        verbose_name = 'Denuncia'
+        verbose_name_plural = 'Denuncia'
