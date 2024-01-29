@@ -1,8 +1,9 @@
-{% extends 'formplantilla/index_master.html' %} {% block content %}
+{% extends 'formplantilla/index_master.html' %}
+
+{% block content %}
 
 <div class="wrapper">
   
- 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -17,51 +18,114 @@
                 <h3 class="card-title">Crear Tipo Vehiculo</h3>
               </div>
               <div class="card-body">
-                <form action="" method="POST">
+                <form method="POST">
                   {% csrf_token %}
-                    <!-- Date dd/mm/yyyy -->
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-solid fa-car"></i></span>
-                            </div>
-                            <input 
-                            type="text" 
-                            class="form-control has-feedback-left" 
-                            name="tipo"
-                            id="tipo" 
-                            class="form-control" 
-                            placeholder="Tipo de Mantenimiento" 
-                            required="" />
-                        </div>
-                    <!-- /.input group -->
+                  
+                  <!-- Tipo de Mantenimiento -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-car"></i></span>
+                      </div>
+                      <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="tipo"
+                        id="tipo" 
+                        placeholder="Tipo de Mantenimiento" 
+                        required=""
+                      />
                     </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="far fa-file"></i></span>
-                            </div>
-                            <input 
-                            type="text" 
-                            class="form-control has-feedback-left" 
-                            name="descripcion"
-                            id="descripcion" 
-                            class="form-control" 
-                            placeholder="Describe al tipo de vehiculo" 
-                            required="" />
-                        </div>
-                    <!-- /.input group -->
+                  </div>
+
+                  <!-- Descripción -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-file"></i></span>
+                      </div>
+                       <textarea 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="descripcion"
+                        id="descripcion" 
+                        placeholder="Describe al tipo de vehiculo" 
+                        required=""
+                      ></textarea>
                     </div>
+                  </div>
+
+                  <!-- Porcentaje de IVA -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">IVA (%)</span>
+                      </div>
+                      <input 
+                        type="number" 
+                        class="form-control has-feedback-left" 
+                        name="iva_porcentaje"
+                        id="iva_porcentaje" 
+                        placeholder="Porcentaje de IVA" 
+                        min='0'
+                        step="0.01"
+                        required=""
+                        oninput="calcularTotal()"
+                      />
+                    </div>
+                  </div>
+                  <input 
+                    type="hidden" 
+                    name="iva_calculado" 
+                    id="iva_calculado" 
+                  />
+                  <!-- Subtotal -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Subtotal</span>
+                      </div>
+                      <input 
+                        type="number" 
+                        class="form-control has-feedback-left" 
+                        name="subtotal"
+                        id="subtotal" 
+                        placeholder="Subtotal" 
+                        min='0'
+                        step="0.01"
+                        required=""
+                        oninput="calcularTotal()"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Total -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">Total</span>
+                      </div>
+                      <input 
+                        type="text" 
+                        class="form-control has-feedback-left" 
+                        name="total"
+                        id="total" 
+                        placeholder="Total" 
+                        min='0'
+                        step="0.01"
+                        required=""
+                        readonly
+                      />
+                    </div>
+                  </div>
                     
-                    <div class="form-group">
-                        
-                        <div class="input-group">
-                            <button type="submit" class="btn btn-success">Crear Tipo</button>
-                            <a href="{% url 'formulariotipomantenimiento' %}" class="btn btn-secondary">Cancelar</a>
-                        </div>
-                    <!-- /.input group -->
+                  <!-- Botones de acción -->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <button type="submit" class="btn btn-success">Crear Tipo</button>
+                      <a href="{% url 'formulariotipomantenimiento' %}" class="btn btn-secondary">Cancelar</a>
                     </div>
-                    <!-- /.form group -->
+                  </div>
                 </form>
               </div>
               <!-- /.card-body -->
@@ -71,12 +135,28 @@
           </div>
           <!-- /.col (right) -->
         </div>
-       
       </div>
       <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
 
+  <script>
+    function calcularTotal() {
+      var ivaPorcentaje = parseFloat(document.getElementById('iva_porcentaje').value);
+      var subtotal = parseFloat(document.getElementById('subtotal').value);
+      
+      // Calcular el IVA
+      var ivaCalculado = subtotal * (ivaPorcentaje / 100);
+      // Calcular el total sumando el subtotal y el IVA
+      var total = subtotal + (subtotal * ivaPorcentaje / 100);
+  
+      // Actualizar el campo total en el formulario
+      document.getElementById('total').value = total.toFixed(2);
+      document.getElementById('iva_calculado').value = ivaCalculado.toFixed(2);
+    }
+  </script>
+  
+  
 
 {% endblock %}

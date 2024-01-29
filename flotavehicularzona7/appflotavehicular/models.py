@@ -105,6 +105,9 @@ class Persona(models.Model):
 class Tipomantenimiento(models.Model):
     tipo = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=200)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    iva = models.DecimalField(max_digits=10, decimal_places=2)
+    total = models.DecimalField(max_digits=10, decimal_places=2)
     def __str__(self):
         return self.descripcion
     class Meta:
@@ -134,7 +137,9 @@ class Vehiculo(models.Model):
     capacidad_pasajeros = models.IntegerField()
     #propietario = models.ManyToManyField(Persona, related_name='vehiculos')
     tipovehiculo =models.ForeignKey(Tipovehiculo, on_delete=models.CASCADE)
+    dependencia = models.ForeignKey(Dependencia, on_delete=models.CASCADE)
     estado=models.BooleanField(blank=True, null=True)
+
     def __str__(self):
         return "{}-{}-{}".format(self.placa, self.marca, self.color)
     class Meta:
@@ -144,11 +149,13 @@ class Vehiculo(models.Model):
 #Mantenimiento vehicular
 class Mantenimiento(models.Model):
     fecha = models.DateField(default=datetime.now)
+    fechaentrada = models.DateField(default=datetime.now, blank=True,null=True)
     km = models.DecimalField(max_digits=15, decimal_places=2)
     observaciones = models.TextField(blank=True,null=True)
     persona = models.ForeignKey(Persona, blank=True, null=True, on_delete=models.CASCADE)
     vehiculo=models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
     tipodemantenimiento=models.ForeignKey(Tipomantenimiento, on_delete=models.CASCADE)
+    costo= models.DecimalField(max_digits=10, decimal_places=2)
     estado=models.BooleanField()
     def __str__(self):
         return "{}-{}-{}".format(self.fecha, self.km, self.observaciones)
@@ -178,6 +185,7 @@ class Entradamtto(models.Model):
 #orden de trabajo DENDENCIA
 class OrdendeTrabajo(models.Model):
     fecha = models.DateField(default=datetime.now)
+    fechaentrada = models.DateField(default=datetime.now, blank=True,null=True)
     vehiculo = models.ForeignKey(Vehiculo,on_delete=models.CASCADE) #referencia al modelo Vehiculo
     responsable = models.ForeignKey(Persona,on_delete=models.CASCADE)
     agente1 = models.ForeignKey(Persona,on_delete=models.CASCADE,blank=True, null=True,related_name='ordendetrabajo_agente1')

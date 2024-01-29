@@ -38,22 +38,93 @@
                     <!-- /.input group -->
                     </div>
                     <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="far fa-file"></i></span>
-                            </div>
-                            <input 
-                            type="text" 
-                            class="form-control has-feedback-left" 
-                            name="descripcion"
-                            id="descripcion" 
-                            class="form-control" 
-                            placeholder="Describe al tipo de vehiculo" 
-                            value="{{ my_tipomantenimiento.descripcion }}" 
-                            required="" />
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-file"></i></span>
                         </div>
-                    <!-- /.input group -->
+                        <textarea 
+                          class="form-control has-feedback-left" 
+                          name="descripcion"
+                          id="descripcion" 
+                          placeholder="Describe al tipo de vehiculo" 
+                          required=""
+                        >{{ my_tipomantenimiento.descripcion }}</textarea>
+                      </div>
+                      <!-- /.input group -->
                     </div>
+                    <!-- Porcentaje de IVA -->
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">IVA (%)</span>
+                        </div>
+                        <input 
+                          type="number" 
+                          class="form-control has-feedback-left" 
+                          name="iva_porcentaje"
+                          id="iva_porcentaje" 
+                          placeholder="Porcentaje de IVA" 
+                          min="0"
+                          step="0.01"
+                          required=""
+                          oninput="calcularTotal()"
+                          value="{{ my_tipomantenimiento.iva_porcentaje|default:'' }}"
+                        />
+                      </div>
+                    </div>
+
+                    <!-- Campo oculto para el IVA calculado -->
+                    <input 
+                      type="hidden" 
+                      name="iva_calculado" 
+                      id="iva_calculado"
+                      
+                    />
+
+                    <!-- Subtotal -->
+                    <!-- Subtotal -->
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Subtotal</span>
+                        </div>
+                        <input 
+                          type="number" 
+                          class="form-control has-feedback-left" 
+                          name="subtotal"
+                          id="subtotal" 
+                          placeholder="Subtotal" 
+                          min="0"
+                          step="0.01"
+                          required=""
+                          oninput="calcularTotal()"
+                          value="{{ my_tipomantenimiento.subtotal|default:'' }}"
+                        />
+                      </div>
+                    </div>
+
+
+                    <!-- Total -->
+                    <div class="form-group">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">Total</span>
+                        </div>
+                        <input 
+                          type="text" 
+                          class="form-control has-feedback-left" 
+                          name="total"
+                          id="total" 
+                          placeholder="Total" 
+                          min="0"
+                          step="0.01"
+                          required=""
+                          readonly
+                          value="{{ my_tipomantenimiento.total|default:'' }}"
+                        />
+                      </div>
+                    </div>
+
                     
                     <div class="form-group">
                         
@@ -79,6 +150,27 @@
     </section>
     <!-- /.content -->
   </div>
-
+<script>
+  function calcularTotal() {
+    var ivaPorcentaje = parseFloat(document.getElementById('iva_porcentaje').value);
+    var subtotal = parseFloat(document.getElementById('subtotal').value);
+  
+    // Calcular el IVA
+    var ivaCalculado = subtotal * (ivaPorcentaje / 100);
+    
+    // Calcular el total sumando el subtotal y el IVA
+    var total = subtotal + ivaCalculado;
+  
+    // Actualizar el campo total en el formulario
+    document.getElementById('total').value = total.toFixed(2);
+    document.getElementById('iva_calculado').value = ivaCalculado.toFixed(2);
+  
+    // Si estás editando, también actualiza el campo 'iva_calculado' en el formulario
+    var hiddenIvaCalculado = document.getElementById('hidden_iva_calculado');
+    if (hiddenIvaCalculado) {
+      hiddenIvaCalculado.value = ivaCalculado.toFixed(2);
+    }
+  }
+</script>  
 
 {% endblock %}

@@ -40,6 +40,7 @@
                         <th>Capacidad Carga </th>
                         <th>Capacidad Pasajeros </th>
                         <th>Tipo vehiculo </th>
+                        <th>Dependencia vehiculo </th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -58,13 +59,14 @@
                         <td>{{vehiculo.capacidad_carga }}</td>
                         <td>{{vehiculo.capacidad_pasajeros }}</td>
                         <td>{{vehiculo.tipovehiculo }}</td>
+                        <td>{{vehiculo.dependencia }}</td>
                         <td>
                           {% if vehiculo.estado %}
                             <button class="estado-btn activo">Activo</button>
                           {% elif vehiculo.estado is null or vehiculo.estado == "" %}
                             <button class="estado-btn mantenimiento">Mantenimiento</button>
                           {% else %}
-                            <button class="estado-btn inactivo">Estropeado</button>
+                            <button class="estado-btn inactivo">En Servicio</button>
                           {% endif %}
                         </td>
                         

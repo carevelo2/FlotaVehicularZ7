@@ -30,7 +30,8 @@
                   <thead>
                     <tr>
                         <th>Identificador</th>
-                        <th>Fecha</th>
+                        <th>Fecha Envio Dependecia</th>
+                        <th>Fecha Recepcion de Dependecia</th>
                         <th>Vehículo</th>
                         <th>Responsable</th>
                         <th>Agente1</th>
@@ -49,8 +50,9 @@
                     <tr>
                         <td>{{orden.id}}</td>
                         <td>{{orden.fecha}}</td>
+                        <td>{{orden.fechaentrada}}</td>
                         <td>{{orden.vehiculo}}</td>
-                        <td>{{orden.responsable}}</td>
+                        <td>{{orden.responsable.nombres}} {{orden.responsable.apellidos}}</td>
                         <td>{{orden.agente1}}</td>
                         <td>{{orden.agente2}}</td>
                         <td>{{orden.agente3}}</td>
@@ -64,7 +66,7 @@
                             {% elif orden.estado is null or orden.estado == "" %}
                               <button class="estado-btn mantenimiento">Jornada</button>
                             {% else %}
-                              <button class="estado-btn inactivo">Estropeado</button>
+                              <button class="estado-btn inactivo">Pendiente</button>
                             {% endif %}
                           </td>
                         <td>
@@ -93,11 +95,11 @@
                               }
                             </script> 
                             <a name="" id="" class="btn bg-gradient-secondary"
-                                href="{%url 'ordendesalida' orden.id  %}" title="Salida por Orden de Trabajo"
+                                href="{%url 'ordendesalida' orden.id  %}" title="Envio a Dependencia"
                                 role="button"><i class="fa fa-sign-out-alt"></i>
                             </a>
                             <a name="" id="" class="btn bg-gradient-primary"
-                                href="{%url 'ordendeentrada' orden.id %}" title="Entrada por Orden de Trabajo"
+                                href="{%url 'ordendeentrada' orden.id %}" title="Recepción de Dependencia"
                                 role="button"><i class="fa fa-sign-in-alt"></i>
                             </a>
                         </td>

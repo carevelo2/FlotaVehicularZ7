@@ -225,6 +225,56 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
             with font-awesome or any other icon font library -->
+            <li class="nav-item" id="dependencia_menu">
+              <a href="#" class="nav-link" onclick="seleccionarOpcion('dependencia')">
+                  <i class="nav-icon fas fa-solid fa-map"></i>
+                  <p>
+                      Dependencia
+                      <i class="right fas fa-angle-left"></i>
+                  </p>
+              </a>
+              <ul class="nav nav-treeview" id="dependencia_submenu">
+                  
+                  <li class="nav-item" id="formulariosubcircuito">
+                      <a href="{% url 'formulariosubcircuito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariosubcircuito')">
+                          <i class="fas fa-car"></i>
+                          <p>
+                              Registro de Subcircuitos
+                              <span class="right badge badge-danger"></span>
+                          </p>
+                      </a>
+                  </li>
+                  <li class="nav-item" id="formulariocircuito">
+                    <a href="{% url 'formulariocircuito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariocircuito')">
+                        <i class="fas fa-car"></i>
+                        <p>
+                            Registro de Circuitos
+                            <span class="right badge badge-danger"></span>
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item" id="formulariodistrito">
+                  <a href="{% url 'formulariodistrito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariodistrito')">
+                      <i class="fas fa-file"></i>
+                      <p>
+                          Registro de Distritos
+                          <span class="right badge badge-danger"></span>
+                      </p>
+                  </a>
+              </li>
+              <li class="nav-item" id="formulariodependencia">
+                <a href="{% url 'formulariodependencia' %}" class="nav-link" onclick="seleccionarSubopcion('formulariodependencia')">
+                    <i class="fas fa-file"></i>
+                    <p>
+                        Registro de Dependencia
+                        <span class="right badge badge-danger"></span>
+                    </p>
+                </a>
+            </li>
+                  
+                 
+              </ul>
+          </li>
           {% if es_admin or es_ger %} 
           <li class="nav-item" id="usuarios_menu">
             <a href="#" class="nav-link" onclick="seleccionarOpcion('usuarios')">
@@ -288,56 +338,7 @@
 
         
         
-        <li class="nav-item" id="dependencia_menu">
-          <a href="#" class="nav-link" onclick="seleccionarOpcion('dependencia')">
-              <i class="nav-icon fas fa-solid fa-map"></i>
-              <p>
-                  Dependencia
-                  <i class="right fas fa-angle-left"></i>
-              </p>
-          </a>
-          <ul class="nav nav-treeview" id="dependencia_submenu">
-              
-              <li class="nav-item" id="formulariosubcircuito">
-                  <a href="{% url 'formulariosubcircuito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariosubcircuito')">
-                      <i class="fas fa-car"></i>
-                      <p>
-                          Registro de Subcircuitos
-                          <span class="right badge badge-danger"></span>
-                      </p>
-                  </a>
-              </li>
-              <li class="nav-item" id="formulariocircuito">
-                <a href="{% url 'formulariocircuito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariocircuito')">
-                    <i class="fas fa-car"></i>
-                    <p>
-                        Registro de Circuitos
-                        <span class="right badge badge-danger"></span>
-                    </p>
-                </a>
-            </li>
-            <li class="nav-item" id="formulariodistrito">
-              <a href="{% url 'formulariodistrito' %}" class="nav-link" onclick="seleccionarSubopcion('formulariodistrito')">
-                  <i class="fas fa-file"></i>
-                  <p>
-                      Registro de Distritos
-                      <span class="right badge badge-danger"></span>
-                  </p>
-              </a>
-          </li>
-          <li class="nav-item" id="registro_dependencia">
-            <a href="{% url 'formulariodependencia' %}" class="nav-link">
-                <i class="fas fa-file"></i>
-                <p>
-                    Registro de Dependencia
-                    <span class="right badge badge-danger"></span>
-                </p>
-            </a>
-        </li>
-              
-             
-          </ul>
-      </li>
+        
       
       <li class="nav-item" id="mantenimiento_menu">
         <a href="#" class="nav-link" onclick="seleccionarOpcion('mantenimiento')">
@@ -370,7 +371,7 @@
                 <a href="{% url 'listarsalidas' %}" class="nav-link" onclick="seleccionarSubopcion('listarsalidas')">
                     <i class="fas fa-sign-out-alt"></i>
                     <p>
-                        Salidas de Mantenimientos
+                        Envios a Mantenimientos
                         <span class="right badge badge-danger"></span>
                     </p>
                 </a>
@@ -379,7 +380,7 @@
                 <a href="{% url 'listarentradas' %}" class="nav-link" onclick="seleccionarSubopcion('listarentradas')">
                     <i class="fas fa-sign-in-alt"></i>
                     <p>
-                        Entradas de Mantenimientos
+                        Recepción de Mantenimientos
                         <span class="right badge badge-danger"></span>
                     </p>
                 </a>
@@ -408,7 +409,7 @@
               <a href="{% url 'salidaorden' %}" class="nav-link" onclick="seleccionarSubopcion('salidaorden')">
                   <i class="fas fa-solid fa-car-battery"></i>
                   <p>
-                      Órdenes de Trabajo Salidas
+                    Envios a Dependecia
                       <span class="right badge badge-danger"></span>
                   </p>
               </a>
@@ -417,7 +418,7 @@
               <a href="{% url 'entradaorden' %}" class="nav-link" onclick="seleccionarSubopcion('entradaorden')">
                   <i class="fas fa-solid fa-car-battery"></i>
                   <p>
-                      Órdenes de Trabajo Entradas
+                    Recepción de Dependencia
                       <span class="right badge badge-danger"></span>
                   </p>
               </a>

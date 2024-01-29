@@ -30,12 +30,14 @@
                   <thead>
                     <tr>
                         {% comment %} <th>Identificador</th> {% endcomment %}
-                        <th>Fecha Mantenimiento</th>
+                        <th>Fecha Enviosnvio a Mantenimiento</th>
+                        <th>Fecha Recepción de Mantenimiento</th>
                         <th>Kilometraje para Mantenimiento</th>
                         <th>Observaciones</th>
                         <th>Persona Asiganada</th>
                         <th>Vehiculo</th>
                         <th>Tipode Mantenimiento</th>
+                        <th>Costo de Mantenimiento</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -45,11 +47,13 @@
                     <tr>
                         {% comment %} <td>{{mantenimiento.id}}</td> {% endcomment %}
                         <td>{{mantenimiento.fecha}}</td>
+                        <td>{{mantenimiento.fechaentrada}}</td>
                         <td>{{mantenimiento.km}}</td>
-                        <td>{{mantenimiento.observaciones}}</td>
+                        <td>{{mantenimiento.tipodemantenimiento.descripcion}}</td>
                         <td>{{mantenimiento.persona.nombres}} {{mantenimiento.persona.apellidos}}</br></td>
                         <td>{{mantenimiento.vehiculo}}</td>
                         <td>{{mantenimiento.tipodemantenimiento.tipo}}</td>
+                        <td>{{mantenimiento.costo}}</td>
                         <td>
                           {% if mantenimiento.estado %}
                               <span class="estado-btn activo">Reparado</span>
@@ -82,11 +86,11 @@
                               }
                             </script>
                             <a name="" id="" class="btn bg-gradient-secondary"
-                                href="{%url 'salidamantenimiento' mantenimiento.id %}" title="Salida a mantenimiento"
+                                href="{%url 'salidamantenimiento' mantenimiento.id %}" title="Envios a mantenimiento"
                                 role="button"><i class="fa fa-sign-out-alt"></i>
                             </a>
                             <a name="" id="" class="btn bg-gradient-primary"
-                                href="{%url 'entradamantenimiento' mantenimiento.id %}" title="Entrada a mantenimiento"
+                                href="{%url 'entradamantenimiento' mantenimiento.id %}" title="Recepcion del mantenimiento"
                                 role="button"><i class="fa fa-sign-in-alt"></i>
                             </a>
                         </td>

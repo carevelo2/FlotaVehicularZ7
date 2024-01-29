@@ -581,6 +581,7 @@ def crearvehiculo(request):
     es_aux=es_auxiliar(request.user)
     es_ger=es_gerente(request.user)
     es_perpol=es_personal_policial(request.user)
+    dependencias=Dependencia.objects.all()
     if request.method == 'POST':
         placa= request.POST.get('placa')
         chasis= request.POST.get('chasis')
@@ -593,6 +594,9 @@ def crearvehiculo(request):
         capacidad_carga = request.POST.get('capacidad_carga')
         capacidad_pasajeros = request.POST.get('capacidad_pasajeros')
         tipovehiculo = request.POST.get('tipovehiculo')
+        dependencia = request.POST.get('dependencia')
+        dependenciaid=Dependencia.objects.get(id=dependencia)
+        dependencia=dependenciaid,
         tipovehiculoid=Tipovehiculo.objects.get(id=tipovehiculo)
         my_vehiculo = Vehiculo.objects.create(
                 placa=placa,
@@ -606,6 +610,7 @@ def crearvehiculo(request):
                 capacidad_carga=capacidad_carga,
                 capacidad_pasajeros=capacidad_pasajeros,
                 tipovehiculo=tipovehiculoid,
+                dependencia=dependenciaid,
                 estado=True
             )
         my_vehiculo.save()
@@ -617,7 +622,8 @@ def crearvehiculo(request):
                                                                 'es_encargado':es_encargado,
                                                                 'es_aux' : es_aux,
                                                                 'es_ger':es_ger,
-                                                                'es_perpol':es_perpol})
+                                                                'es_perpol':es_perpol,
+                                                                'dependencias':dependencias})
 @login_required(login_url='login')
 @user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def editarvehiculo(request,placa):
@@ -713,10 +719,16 @@ def creartipomantenimiento(request):
     if request.method == 'POST':
         tipo = request.POST.get('tipo')
         descripcion = request.POST.get('descripcion')
+        iva_porcentaje= request.POST.get('iva_calculado')
+        subtotal= request.POST.get('subtotal')
+        total= request.POST.get('total')
         try:
             my_tipomantenimiento = Tipomantenimiento.objects.create(
                 tipo=tipo,
-                descripcion=descripcion
+                descripcion=descripcion,
+                subtotal=subtotal,
+                iva=iva_porcentaje,
+                total=total
             )
             my_tipomantenimiento.save()
             return redirect('formulariotipomantenimiento')
@@ -747,10 +759,16 @@ def editartipomantenimiento(request,id):
     if request.method == 'POST':
         tipo = request.POST.get('tipo')
         descripcion = request.POST.get('descripcion')
+        iva_porcentaje= request.POST.get('iva_calculado')
+        subtotal= request.POST.get('subtotal')
+        total= request.POST.get('total')               
         try:
             # Actualiza los campos de la instancia existente
             my_tipomantenimiento.tipo = tipo
             my_tipomantenimiento.descripcion = descripcion
+            my_tipomantenimiento.subtotal=subtotal
+            my_tipomantenimiento.iva=iva_porcentaje
+            my_tipomantenimiento.total=total   
             my_tipomantenimiento.save()
             # Redirige a la página de listado de roles
             return redirect('formulariotipomantenimiento')
@@ -806,22 +824,28 @@ def crearmantenimiento(request):
     if request.method == 'POST':
         fecha= request.POST.get('fecha')
         km= request.POST.get('kmvehiculoactual')
-        observaciones= request.POST.get('observaciones')
         persona= request.POST.get('persona')
         vehiculo= request.POST.get('vehiculo')
         tipodemantenimiento= request.POST.get('tipodemantenimiento')
         estado = False
         personaid=Persona.objects.get(identificacion=persona)
         tipomantenimientoid=Tipomantenimiento.objects.get(id=tipodemantenimiento)
-        vehiculoid=Vehiculo.objects.get(placa=vehiculo)
-        
+        vehiculoid = Vehiculo.objects.get(placa=vehiculo)
+        idvehiculos=vehiculoid.tipovehiculo.id
+        tipovehiculo = Tipovehiculo.objects.get(id=idvehiculos)
+
+        if tipovehiculo.id == 2:  # Compara el campo id del objeto tipovehiculo con el número 2
+            costoman = tipomantenimientoid.total - 15
+        else:
+            costoman = tipomantenimientoid.total
+
         my_mantenimiento = Mantenimiento.objects.create(
                 fecha=fecha,
                 km=km,
-                observaciones=observaciones,
                 persona=personaid,
                 vehiculo=vehiculoid,
                 tipodemantenimiento=tipomantenimientoid,
+                costo=costoman,
                 estado=estado
             )
         my_mantenimiento.save()
@@ -858,21 +882,26 @@ def editarmantenimiento(request,id):
     if request.method == 'POST':
         fecha= request.POST.get('fecha')
         km= request.POST.get('km')
-        observaciones= request.POST.get('observaciones')
         persona= request.POST.get('persona')
         vehiculo= request.POST.get('vehiculo')
         tipodemantenimiento= request.POST.get('tipodemantenimiento')
-        personaid=Persona.objects.get(identificador=persona)
+        personaid=Persona.objects.get(identificacion=persona)
         tipomantenimientoid=Tipomantenimiento.objects.get(id=tipodemantenimiento)
-        vehiculoid=Vehiculo.objects.get(placa=vehiculo)
+        vehiculoid = Vehiculo.objects.get(placa=vehiculo)
+        tipovehiculo = Tipovehiculo.objects.get(id=2)
+
+        if tipovehiculo.id == 2:  # Compara el campo id del objeto tipovehiculo con el número 2
+            costoman = tipomantenimientoid.total - 15
+        else:
+            costoman = tipomantenimientoid.total
         try:
             # Actualiza los campos de la instancia existente
             my_mantenimiento.fecha = fecha
             my_mantenimiento.km = km
-            my_mantenimiento.observaciones = observaciones
             my_mantenimiento.persona = personaid
             my_mantenimiento.vehiculo = vehiculoid
             my_mantenimiento.tipodemantenimiento = tipomantenimientoid
+            my_mantenimiento.costo=costoman
             
             my_mantenimiento.save()
             # Redirige a la página de listado de roles
@@ -942,7 +971,8 @@ import tempfile
 def salidamantenimiento(request, id):
     boleta = Mantenimiento.objects.get(id=id)
     cantidad_mantenimientos = Mantenimiento.objects.filter(vehiculo__placa=boleta.vehiculo.placa).count()
-    
+    vehiculoid=Vehiculo.objects.get(placa=boleta.vehiculo.placa)
+    tipovehiculo = str(vehiculoid.tipovehiculo.id) 
     if request.method == 'POST':
         codigo = request.POST.get('codigo', '')
         firmage=request.FILES.get('firmage')
@@ -978,12 +1008,16 @@ def salidamantenimiento(request, id):
         pdf.cell(10, 10, '','TRB', 0, 'C')
         pdf.cell(103, 10, '', '', 0, 'C')
         pdf.ln()
-        pdf.cell(67, 10, 'Preventivo' if tipo_mantenimiento == 'Preventivo' else 'Preventivo', 'LR', 0, 'C')
-        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Preventivo' else '', 'LTRB', 0, 'C')
+        pdf.cell(67, 10, 'Mantenimiento 1' if tipo_mantenimiento == 'Mantenimiento 1' else 'Mantenimiento 1', 'LR', 0, 'C')
+        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Mantenimiento 1' else '', 'LTRB', 0, 'C')
         pdf.cell(103, 10, '', '', 0, 'C')
         pdf.ln()
-        pdf.cell(67, 10, 'Correctivo' if tipo_mantenimiento == 'Correctivo' else 'Correctivo', 'LTRB', 0, 'C')
-        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Correctivo' else '', 1, 0, 'C')
+        pdf.cell(67, 10, 'Mantenimiento 2' if tipo_mantenimiento == 'Mantenimiento 2' else 'Mantenimiento 2', 'LTRB', 0, 'C')
+        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Mantenimiento 2' else '', 1, 0, 'C')
+        pdf.cell(60, 10, '', '', 0, 'C')
+        pdf.ln()
+        pdf.cell(67, 10, 'Mantenimiento 3' if tipo_mantenimiento == 'Mantenimiento 3' else 'Mantenimiento 3', 'LTRB', 0, 'C')
+        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Mantenimiento 3' else '', 1, 0, 'C')
         pdf.cell(60, 10, '', '', 0, 'C')
         pdf.cell(43, 10, 'Nº Mantenimiento '+ str(boleta.id),'', 0, 'C')
         pdf.ln(20)
@@ -992,8 +1026,16 @@ def salidamantenimiento(request, id):
         pdf.cell(10, 10, 'Interno','TB', 0, 'C')
         pdf.cell(103, 10, 'Externo', 'RTB', 0, 'C')
         pdf.ln()
+        pdf.cell(180, 10, "Placa de Vehiculo: " + str(vehiculoid.placa), 1, 1, 'L')
         pdf.cell(180, 10, "Kilometraje de Reparación: "+str(boleta.km), 1, 1, 'L')
         pdf.cell(180, 10, "Asignado a: " + boleta.persona.nombres+' '+boleta.persona.apellidos, 1, 1, 'L')
+        pdf.ln(10)
+        pdf.cell(67, 10, 'Costo Mantenimiento: '+str(boleta.tipodemantenimiento.subtotal),'LTB', 0, 'L')
+        pdf.cell(10, 10, 'Iva: '+str(boleta.tipodemantenimiento.iva),'TB', 0, 'C')
+        if tipovehiculo == '1' or tipovehiculo == '3':
+            pdf.cell(103, 10, 'Total Mantenimiento: '+str(boleta.tipodemantenimiento.total), 'RTB', 0, 'C')
+        else:
+            pdf.cell(103, 10, 'Total Mantenimiento: '+ str(boleta.tipodemantenimiento.total)+' - 15 =' +str(boleta.costo), 'RTB', 0, 'C')
         pdf.ln(10)
         import locale
         locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
@@ -1003,7 +1045,7 @@ def salidamantenimiento(request, id):
         #pdf.cell(45, 5, boleta.fecha.strftime("%d/%m/%Y"), 1)
         # Tamaño máximo de la celda
         # Agregar el texto "Trabajo a Realizar"
-        pdf.multi_cell(180, 10, "Trabajo a Realizar: " + boleta.observaciones, 1, 1, 'L')
+        pdf.multi_cell(180, 10, "Trabajo a Realizar: " + boleta.tipodemantenimiento.descripcion, 1, 1, 'L')
         pdf.ln(10)
 
         # Obtener la posición actual después del MultiCell
@@ -1118,9 +1160,11 @@ def entradamantenimiento(request, id):
     boletaen = Mantenimiento.objects.get(id=id)
     cantidad_mantenimientos = Mantenimiento.objects.filter(vehiculo__placa=boletaen.vehiculo.placa).count()
     vehiculoid=Vehiculo.objects.get(placa=boletaen.vehiculo.placa)
+    tipovehiculo = str(vehiculoid.tipovehiculo.id)
     if request.method == 'POST':
         codigo = request.POST.get('codigo', '')
         firmage=request.FILES.get('firmage')
+        fechaentrada=request.POST.get('fechaentrada')
         pdf = PDF()
         pdf.set_left_margin(15)
         pdf.set_right_margin(10)
@@ -1153,12 +1197,16 @@ def entradamantenimiento(request, id):
         pdf.cell(10, 10, '','TRB', 0, 'C')
         pdf.cell(103, 10, '', '', 0, 'C')
         pdf.ln()
-        pdf.cell(67, 10, 'Preventivo' if tipo_mantenimiento == 'Preventivo' else 'Preventivo', 'LR', 0, 'C')
-        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Preventivo' else '', 'LTRB', 0, 'C')
+        pdf.cell(67, 10, 'Mantenimiento 1' if tipo_mantenimiento == 'Mantenimiento 1' else 'Mantenimiento 1', 'LR', 0, 'C')
+        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Mantenimiento 1' else '', 'LTRB', 0, 'C')
         pdf.cell(103, 10, '', '', 0, 'C')
         pdf.ln()
-        pdf.cell(67, 10, 'Correctivo' if tipo_mantenimiento == 'Correctivo' else 'Correctivo', 'LTRB', 0, 'C')
-        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Correctivo' else '', 1, 0, 'C')
+        pdf.cell(67, 10, 'Mantenimiento 2' if tipo_mantenimiento == 'Mantenimiento 2' else 'Mantenimiento 2', 'LTRB', 0, 'C')
+        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Mantenimiento 2' else '', 1, 0, 'C')
+        pdf.cell(60, 10, '', '', 0, 'C')
+        pdf.ln()
+        pdf.cell(67, 10, 'Mantenimiento 3' if tipo_mantenimiento == 'Mantenimiento 3' else 'Mantenimiento 3', 'LTRB', 0, 'C')
+        pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Mantenimiento 3' else '', 1, 0, 'C')
         pdf.cell(60, 10, '', '', 0, 'C')
         pdf.cell(43, 10, 'Nº Mantenimiento '+ str(boletaen.id),'', 0, 'C')
         pdf.ln(20)
@@ -1167,20 +1215,20 @@ def entradamantenimiento(request, id):
         pdf.cell(10, 10, 'Interno','TB', 0, 'C')
         pdf.cell(103, 10, 'Externo', 'RTB', 0, 'C')
         pdf.ln()
+        pdf.cell(180, 10, "Placa de Vehiculo: " + str(vehiculoid.placa), 1, 1, 'L')
         pdf.cell(180, 10, "Kilometraje Nuevo: "+str(boletaen.km), 1, 1, 'L')
         pdf.cell(180, 10, "Asignado a: " + boletaen.persona.nombres+' '+boletaen.persona.apellidos, 1, 1, 'L')
         pdf.ln(10)
-        from fpdf import FPDF
-        from datetime import datetime
-        import locale
-        # Establecer la localización a español
-        locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
-        # Obtener la fecha actual
-        fecha_actual = datetime.now()
-        # Formatear la fecha actual
-        fecha_formateada = fecha_actual.strftime("%d de %B del %Y")
+        pdf.cell(67, 10, 'Costo Mantenimiento: '+str(boletaen.tipodemantenimiento.subtotal),'LTB', 0, 'L')
+        pdf.cell(10, 10, 'Iva: '+str(boletaen.tipodemantenimiento.iva),'TB', 0, 'C')
+        if tipovehiculo == '1' or tipovehiculo == '3':
+            pdf.cell(103, 10, 'Total Mantenimiento: '+str(boletaen.tipodemantenimiento.total), 'RTB', 0, 'C')
+        else:
+            pdf.cell(103, 10, 'Total Mantenimiento: '+ str(boletaen.tipodemantenimiento.total)+' - 15 =' +str(boletaen.costo), 'RTB', 0, 'C')
+        pdf.ln(10)
         
-        pdf.multi_cell(180, 10, "Fecha de Realizacion: " + fecha_formateada, 1, 1, 'L')
+        
+        pdf.multi_cell(180, 10, "Fecha de Realizacion: " + str(fechaentrada), 1, 1, 'L')
 
         # Datos adicionales
         #pdf.cell(45, 5, 'Fecha:', 1)
@@ -1188,7 +1236,7 @@ def entradamantenimiento(request, id):
         # Tamaño máximo de la celda
         # Agregar el texto "Trabajo a Realizar"
         # Supongamos que boletaen.observaciones contiene las observaciones como una cadena
-        observaciones_str = boletaen.observaciones
+        observaciones_str = boletaen.tipodemantenimiento.descripcion
 
         # Convertir la cadena de observaciones a una lista de líneas
         observaciones = observaciones_str.split('\n')
@@ -1247,6 +1295,7 @@ def entradamantenimiento(request, id):
         )
         entradamtto.save()
         boletaen.estado=True
+        boletaen.fechaentrada=fechaentrada
         boletaen.save()
         vehiculoid.estado=True
         vehiculoid.kilometraje=boletaen.km
@@ -1704,7 +1753,7 @@ def formularioordendetrabajo(request):
 def crearordentrabajo(request):
     personas=Persona.objects.all()
     tipomantenimientos=Tipomantenimiento.objects.all()
-    vehiculos=Vehiculo.objects.all()
+    vehiculos=Vehiculo.objects.filter(estado=True)
     dependencias=Dependencia.objects.all()
     es_admin= es_administrador(request.user)
     es_encargado=es_encargado_logistica(request.user)
@@ -2009,6 +2058,9 @@ def ordendesalida(request, id):
         salidamtto.save()
         boleta.estado=None
         boleta.save()
+        vehiculoid=Vehiculo.objects.get(placa=boleta.vehiculo.placa)
+        vehiculoid.estado=False
+        vehiculoid.save()
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'filename=SalidaOrden_{boleta.vehiculo.placa}.pdf'
 
@@ -2057,6 +2109,8 @@ def ordendeentrada(request, id):
     if request.method == 'POST':
         codigo = request.POST.get('codigo', '')
         firmage=request.FILES.get('firmage')
+
+        fechaentrada=request.POST.get('fechaentrada')
         pdf = PDF()
         pdf.set_left_margin(15)
         pdf.set_right_margin(10)
@@ -2107,9 +2161,7 @@ def ordendeentrada(request, id):
         pdf.cell(180, 10, "Ruta: "+str(boleta.ruta), 1, 1, 'L')
         pdf.cell(180, 10, "Asignado a: " + boleta.responsable.nombres+' '+boleta.responsable.apellidos, 1, 1, 'L')
         pdf.ln(10)
-        import locale
-        locale.setlocale(locale.LC_TIME, 'es_ES.utf8')
-        pdf.cell(180, 10, "Fecha de Llegada: " + datetime.strftime(boleta.fecha, "%d de %B del %Y"), 1, 1, 'L')
+        pdf.multi_cell(180, 10, "Fecha de Llegada: " + str(fechaentrada), 1, 1, 'L')
         # Datos adicionales
         #pdf.cell(45, 5, 'Fecha:', 1)
         #pdf.cell(45, 5, boleta.fecha.strftime("%d/%m/%Y"), 1)
@@ -2177,7 +2229,11 @@ def ordendeentrada(request, id):
         )
         salidamtto.save()
         boleta.estado=True
+        boleta.fechaentrada=fechaentrada
         boleta.save()
+        vehiculoid=Vehiculo.objects.get(placa=boleta.vehiculo.placa)
+        vehiculoid.estado=True
+        vehiculoid.save()
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = f'filename=EntradaOrden_{boleta.vehiculo.placa}.pdf'
 
