@@ -239,4 +239,4 @@ class Denuncia(models.Model):
 
     class Meta:
         verbose_name = 'Denuncia'
-        verbose_name_plural = 'Denuncia'
+        verbose_name_plural = 'Denuncias'
