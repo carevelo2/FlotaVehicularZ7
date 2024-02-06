@@ -894,29 +894,18 @@ def editarmantenimiento(request,id):
             costoman = tipomantenimientoid.total - 15
         else:
             costoman = tipomantenimientoid.total
-        try:
-            # Actualiza los campos de la instancia existente
-            my_mantenimiento.fecha = fecha
-            my_mantenimiento.km = km
-            my_mantenimiento.persona = personaid
-            my_mantenimiento.vehiculo = vehiculoid
-            my_mantenimiento.tipodemantenimiento = tipomantenimientoid
-            my_mantenimiento.costo=costoman
-            
-            my_mantenimiento.save()
-            # Redirige a la página de listado de roles
-            return redirect('formulariomantenimiento')
-        except Exception as e:
-            # Handle any other exception that may occur while creating the new object
-            error_message = "Error al actulizar el Rol."
-            return render(request, "formmantenimiento/editarmantenimiento.html", {'my_mantenimiento': my_mantenimiento,
-                                                                                'personas':personas,
-                                                                                'vehiculos':vehiculos,
-                                                                                'es_admin':es_admin,
-                                                                                'tipomantenimientos':tipomantenimientos,
-                                                                                "error_message": error_message, 
-                                                                                #'imagen_empleado': imagen_empleado
-                                                                                })
+             # Actualiza los campos de la instancia existente
+        my_mantenimiento.fecha = fecha
+        my_mantenimiento.km = km
+        my_mantenimiento.persona = personaid
+        my_mantenimiento.vehiculo = vehiculoid
+        my_mantenimiento.tipodemantenimiento = tipomantenimientoid
+        my_mantenimiento.costo=costoman
+        
+        my_mantenimiento.save()
+        # Redirige a la página de listado de roles
+        return redirect('formulariomantenimiento')
+        
     return render(request,'formmantenimiento/editarmantenimiento.html',{'my_mantenimiento':my_mantenimiento,
                                                                         'personas':personas,
                                                                         'vehiculos':vehiculos,
@@ -1490,12 +1479,12 @@ def editarcircuito(request, cod_circuito):
         nombre_circuito = request.POST.get('nombre_circuito')
         numero_circuito = request.POST.get('numero_circuito')
         id_subcircuito = request.POST.get('cod_subcircuito')
-
+        subcircuitoid=Subcircuito.objects.get(cod_subcircuito=id_subcircuito)
         try:
             my_circuito.cod_circuito = cod_circuito
             my_circuito.nombre_circuito = nombre_circuito
             my_circuito.numero_circuito = numero_circuito
-            my_circuito.id_subcircuito = id_subcircuito  # Usa el campo 'id_subcircuito_id' para establecer la relación
+            my_circuito.id_subcircuito = subcircuitoid  # Usa el campo 'id_subcircuito_id' para establecer la relación
             my_circuito.save()
             return redirect('formulariocircuito')
         except Exception as e:
@@ -1596,23 +1585,18 @@ def editardistrito(request,cod_distrito):
         nombre_distrito = request.POST.get('nombre_distrito')
         numero_distrito = request.POST.get('numero_distrito')
         id_circuito = request.POST.get('id_circuito')
-        try:
-            # Actualiza los campos de la instancia existente
-            my_distrito.cod_distrito = cod_distrito
-            my_distrito.nombre_distrito = nombre_distrito
-            my_distrito.numero_distrito = numero_distrito
-            my_distrito.id_circuito = id_circuito 
-            my_distrito.save()
-            # Redirige a la página de listado de roles
-            return redirect('formulariodistrito')
-        except Exception as e:
-            # Handle any other exception that may occur while creating the new object
-            error_message = "Error al actulizar el Rol."
-            return render(request, "formdistrito/editardistrito.html", {'my_distrito': my_distrito, 
-                                                                        'circuitos':circuitos,
-                                                                        "error_message": error_message, 
-                                                                     #'imagen_empleado': imagen_empleado
-                                                                                                        })
+    
+        circuitoid=Circuito.objects.get(id=id_circuito)
+        # Actualiza los campos de la instancia existente
+        my_distrito.cod_distrito = cod_distrito
+        my_distrito.nombre_distrito = nombre_distrito
+        my_distrito.numero_distrito = numero_distrito
+        my_distrito.id_circuito = circuitoid 
+        my_distrito.save()
+        # Redirige a la página de listado de roles
+        return redirect('formulariodistrito')
+        
+        
     return render(request,'formdistrito/editardistrito.html',{'my_distrito':my_distrito, 
                                                               'circuitos':circuitos,
                                                                 'es_admin':es_admin,

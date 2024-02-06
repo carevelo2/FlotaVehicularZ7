@@ -44,10 +44,12 @@
                                 <span class="input-group-text"><i class="fas fa-tachometer-alt"></i></span>
                             </div>
                             <input 
-                                type="text" 
+                                type="number" 
                                 class="form-control has-feedback-left" 
                                 name="km"
-                                id="km" 
+                                id="km"
+                                min='0'
+                                step='0,1'
                                 class="form-control" 
                                 placeholder="Kilometraje" 
                                 value="{{ my_mantenimiento.km }}" 
