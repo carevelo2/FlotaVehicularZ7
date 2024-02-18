@@ -87,6 +87,12 @@ urlpatterns = [
     #Denuncias
     path("denuncia/", views.formulariodenuncia, name='formulariodenuncia'),
     path("denuncia/creardenuncia", views.creardenuncia, name='creardenuncia'),
+    #combustibles
+    path("combustibles/",views.formulariocombustible,name='formulariocombustible'),
+    path("combustibles/crearcombustible",views.crearcombustible,name='crearcombustible'),
+    path("combustibles/editarcombustible/<str:id>/",views.editarcombustible,name='editarcombustible'),
+    path('combustibles/eliminarcombustible/<str:id>/',views.eliminarcombustible,name="eliminarcombustible"),
+    path('combustibles/generarorden/<str:id>/',views.ordencombustible,name="ordencombustible"),
 ]    
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -81,7 +81,9 @@
                           </div>
                           <select name="id_circuito" id="id_circuito" class="form-control" required>
                             {% for circuito in circuitos %}
-                                <option value="{{  circuito.id }}" {% if  circuito.id == my_circuito.id_circuito %}selected{% endif %}>{{ circuito.nombre_circuito }}</option>
+                                <option value="{{  circuito.id }}" {% if  circuito.id == my_circuito.id_circuito %}selected{% endif %}>
+                                  {{ circuito.id_subcircuito.nombre_subcircuito }}
+                                </option>
                             {% endfor %}
                         </select>
                         

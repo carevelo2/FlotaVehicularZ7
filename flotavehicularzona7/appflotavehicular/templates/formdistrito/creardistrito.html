@@ -77,7 +77,7 @@
                           <select name="id_circuito" id="id_circuito" class="form-control" required>
                             {% for circuito in circuitos %}
                                 <option value="{{ circuito.cod_circuito }}">
-                                    {{ circuito.nombre_circuito }}
+                                    {{ circuito.id_subcircuito.nombre_subcircuito }}
                                 </option>
                             {% endfor %}
                         </select>

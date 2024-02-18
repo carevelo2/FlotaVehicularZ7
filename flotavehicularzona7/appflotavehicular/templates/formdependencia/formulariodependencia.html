@@ -76,7 +76,7 @@
                                   
                                   if (confirmacion) {
                                       // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
-                                      window.location.href = "#}";
+                                      window.location.href = "{% url 'eliminardependencia' id=dependencia.id %}";
                                   } else {
                                       // Si el usuario elige 'Cancelar', no hagas nada
                                       // Puedes agregar un mensaje o realizar otras acciones según sea necesario

@@ -1,3 +1,4 @@
+from datetime import date
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
@@ -17,6 +18,7 @@ from fpdf import FPDF
 from PIL import Image
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
+from datetime import datetime
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
@@ -249,7 +251,7 @@ def editarrango(request,id):
             return redirect('formulariorango')
         except Exception as e:
             # Handle any other exception that may occur while creating the new object
-            error_message = "Error al actulizar el Rol."
+            error_message = "Error al actualizar el Rol."
             return render(request, "formrango/editarrango.html", {'my_rango': my_rango, 
             "error_message": error_message, 
             #'imagen_empleado': imagen_empleado
@@ -2288,3 +2290,244 @@ def eliminardenuncia(request, id):
     denunciacod_denuncia = Denuncia.objects.get(id=id)
     denunciacod_denuncia.delete()
     return redirect('formulariodenuncia')
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def formulariocombustible(request):
+    combustibles=Combustible.objects.all()
+    es_admin = es_administrador(request.user)
+    return render(request, 'formcombustibles/formulariocombustible.html', {'combustibles': combustibles,
+                                                                    
+                                                              'es_admin':es_admin
+                                                                 #'imagen_empleado': imagen_empleado
+                                                                 })
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def crearcombustible(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    personas=Persona.objects.all()
+    dependencias=Dependencia.objects.all()
+    vehiculos=Vehiculo.objects.all()
+    #fechaactual=date.today()
+    if request.method == 'POST':
+        cantidad_galones=request.POST.get('cantidad_galones')
+        fecha=request.POST.get('fecha')
+        hora=request.POST.get('hora')
+        km_actual= request.POST.get('km_actual')
+        persona = request.POST.get('persona')
+        vehiculo = request.POST.get('vehiculo')
+        nombre_servpolicial = request.POST.get('nombre_servpolicial')
+        dependencia = request.POST.get('dependencia')
+        nombre_gasolinera= request.POST.get('nombre_gasolinera') 
+        cedula= Persona.objects.get(identificacion=persona)
+        placa=Vehiculo.objects.get(placa=vehiculo)
+        id_dependencia=Dependencia.objects.get(id=dependencia)
+        try:
+              # Crea la orden de combustible
+            my_combustible = Combustible.objects.create(
+                cantidad_galones=cantidad_galones,
+                fecha=fecha,
+                hora=hora,
+                km_actual=km_actual,
+                persona =cedula,
+                vehiculo=placa,
+                nombre_servpolicial=nombre_servpolicial,
+                dependencia=id_dependencia,
+                nombre_gasolinera=nombre_gasolinera,
+            )
+            my_combustible.save()
+            # Redirige a la página de listado de roles
+            return redirect('formulariocombustible')
+        except Exception as e:
+            # Handle any other exception that may occur while creating the new object
+            error_message = "Error al actualizar el Rol."
+    return render(request,'formcombustibles/crearcombustible.html',{'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
+                                                                #'fechaactual':fechaactual,
+                                                                'personas':personas,
+                                                                'dependencias':dependencias,
+                                                                'vehiculos':vehiculos,
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                      } )
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def editarcombustible(request,id):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    personas=Persona.objects.all()
+    dependencias=Dependencia.objects.all()
+    vehiculos=Vehiculo.objects.all()
+    try:
+        my_combustible = Combustible.objects.get(id=id)
+    except Combustible.DoesNotExist:
+        # Manejar el caso si el rol no existe
+        # Redirige a la página de listado de roles
+        return redirect('formulariocombustible')
+    if request.method == 'POST':
+        cantidad_galones=request.POST.get('cantidad_galones')
+        fecha=request.POST.get('fecha')
+        hora=request.POST.get('hora')
+        km_actual= request.POST.get('km_actual')
+        persona = request.POST.get('persona')
+        vehiculo = request.POST.get('vehiculo')
+        nombre_servpolicial = request.POST.get('nombre_servpolicial')
+        dependencia = request.POST.get('dependencia')
+        nombre_gasolinera= request.POST.get('nombre_gasolinera') 
+        cedula= Persona.objects.get(identificacion=persona)
+        placa=Vehiculo.objects.get(placa=vehiculo)
+        id_dependencia=Dependencia.objects.get(id=dependencia)
+        try:
+            # Actualiza los campos de la instancia existente
+            my_combustible.cantidad_galones=cantidad_galones
+            my_combustible.fecha=fecha
+            my_combustible.hora=hora
+            my_combustible.km_actual=km_actual
+            my_combustible.persona =cedula
+            my_combustible.vehiculo=placa
+            my_combustible.nombre_servpolicial=nombre_servpolicial
+            my_combustible.dependencia=id_dependencia
+            my_combustible.nombre_gasolinera=nombre_gasolinera
+            my_combustible.save()
+            # Redirige a la página de listado de roles
+            return redirect('formulariocombustible')
+        except Exception as e:
+            # Handle any other exception that may occur while creating the new object
+            error_message = "Error al actualizar el Rol."
+            return render(request,'formcombustibles/editarcombustible.html',{'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
+                                                                #'fechaactual':fechaactual,
+                                                                'personas':personas,
+                                                                'dependencias':dependencias,
+                                                                'vehiculos':vehiculos,
+                                                                'my_combustible':my_combustible,
+                                                                        "error_message": error_message, 
+                                                                     #'imagen_empleado': imagen_empleado
+                                                                                                        })
+    return render(request,'formcombustibles/editarcombustible.html',{'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,
+                                                                #'fechaactual':fechaactual,
+                                                                'personas':personas,
+                                                                'dependencias':dependencias,
+                                                                'vehiculos':vehiculos,
+                                                                'my_combustible':my_combustible,
+                                                                      } )
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
+def eliminarcombustible(request, id):
+    combustible_id= Combustible.objects.get(id=id)
+    combustible_id.delete()
+    return redirect('formulariocombustible')
+class PDF4(FPDF):
+    def __init__(self, page_size='A4'):
+        super().__init__(orientation='P', unit='mm', format=page_size)
+        self.page_size = page_size  # Establecer el formato a 12 cm x 10 cm
+
+    def add_full_page_image(self, img_path):
+        # Establecer las coordenadas del punto de inicio para la imagen
+        x = 0
+        y = 0
+        # Obtener el ancho y alto de la página actual
+        page_width = self.w
+        page_height = self.h
+        # Agregar la imagen a toda la página
+        self.image(img_path, x, y, page_width, page_height)
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        self.cell(0, 10, 'Página ' + str(self.page_no()), 0, 0, 'C')
+def ordencombustible(request, id):
+    boleta = Combustible.objects.get(id=id)
+    fecha_actual=datetime.now()
+    pdf = PDF()
+    pdf.set_left_margin(15)
+    pdf.set_right_margin(10)
+    pdf.add_page()
+    
+    # Agrega la imagen a toda la página
+    # pdf.add_full_page_image('media/imgmodelosfichas/dienav.jpg')
+    pdf.set_font("Times", size=9, style='B')
+    pdf.ln(0)
+    pdf.cell(30, 10, '', 'LTR' )
+    pdf.cell(107, 10, 'FORMATO PARA ORDEN DE COMBUSTIBLE','LTR', 0, 'C')
+    pdf.cell(43, 10, 'Código: 001 ', 1)
+    pdf.ln()
+    pdf.cell(30, 10, '', 'LR' )
+    pdf.cell(107, 10, 'ACTA REGISTRO DE COMBUSTIBLE','LRB', 0, 'C')
+    pdf.cell(43, 10, 'Entrada: '+str(boleta.id), 1)
+    pdf.ln()
+    pdf.cell(30, 10, '', 'LRB' )
+    pdf.cell(107, 10, 'Referencia al punto de la norma ISO 14001:2015   6.3, 8.1, 8.1.3', 1, 0, 'C')
+    numero_total_de_paginas = pdf.page_no()
+    pdf.cell(43, 10, 'Página '+str(numero_total_de_paginas)+' de '+str(numero_total_de_paginas), 1)
+    pdf.ln(15)
+    pdf.set_font("Times", size=10, style='B')
+    # # Título de la boleta
+    pdf.cell(180, 10, "DETALLE ORDEN DE COMBUSTIBLE", '', 1, 'C')
+    pdf.set_font("Times", size=10, style='B')
+    pdf.ln(10)
+    # #tipo_mantenimiento = boleta.tipodemantenimiento.tipo
+    pdf.cell(67, 10, 'Cantidad de galones: '+ str(boleta.cantidad_galones),'LTRB', 0, 'C')
+    pdf.cell(10, 10, '','', 0, 'C')
+    pdf.cell(103, 10, '', '', 0, 'C')
+    pdf.ln()
+    # #pdf.cell(67, 10, 'Preventivo' if tipo_mantenimiento == 'Preventivo' else 'Preventivo', 'LR', 0, 'C')
+    # #pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Preventivo' else '', 'LTRB', 0, 'C')
+    # pdf.cell(103, 10, '', '', 0, 'C')
+    # pdf.ln()
+    # #pdf.cell(67, 10, 'Correctivo' if tipo_mantenimiento == 'Correctivo' else 'Correctivo', 'LTRB', 0, 'C')
+    # #pdf.cell(10, 10, 'X' if tipo_mantenimiento == 'Correctivo' else '', 1, 0, 'C')
+    # pdf.cell(60, 10, '', '', 0, 'C')
+    # pdf.cell(43, 10, 'Nº de Entrada '+ str(boleta.id) + ' con vehiculo: '+ boleta.vehiculo.placa,'', 0, 'C')
+    # pdf.ln(20)
+    # # ... (Otras secciones de tu código)
+    pdf.cell(67, 10, 'Fecha reporte: '+boleta.fecha.strftime("%d/%m/%Y"),'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'Hora: '+boleta.hora.strftime("%H:%M"),'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'KM Actual: '+boleta.km_actual,'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'Persona: '+boleta.persona.apellidos+ ' ' +boleta.persona.nombres,'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'Vehiculo: '+str(boleta.vehiculo),'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'Conductor '+str(boleta.nombre_servpolicial),'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'Dependencia: '+str(boleta.dependencia.parroquia),'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'Nombre Gasolinera: '+str(boleta.nombre_gasolinera),'LTRB', 0, 'C')
+    pdf.ln()
+    pdf.cell(67, 10, 'Fecha Actual: '+fecha_actual.strftime("%d/%m/%Y"),'LTRB', 0, 'C')
+    boleta.fecha_actual=fecha_actual
+    boleta.save()
+   
+    x = pdf.w - 194
+    # Posición Y para la imagen (misma línea que Fecha de Inscripción)
+    y = pdf.h - 285
+    w = 28  # Ancho de la celda (misma que la celda "Foto")
+    h = 26  # Altura de la celda
+    image_path = os.path.join(settings.STATIC_ROOT, 'lib/img/logo/logo.jpg')
+    pdf.image(image_path, x, y, w, h)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'filename=EntradaOrden_{boleta.vehiculo.placa}.pdf'
+    pdf_output = pdf.output(dest='S').encode('latin1')
+    response.write(pdf_output)
+    return response

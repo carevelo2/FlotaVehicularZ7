@@ -239,4 +239,26 @@ class Denuncia(models.Model):
 
     class Meta:
         verbose_name = 'Denuncia'
-        verbose_name_plural = 'Denuncias'
+        verbose_name_plural = 'Denuncia'
+#modelo registro de combustible
+class Combustible(models.Model):
+    cantidad_galones = models.DecimalField(max_digits=20, decimal_places=2)
+    fecha = models.DateField(default=timezone.now)
+    hora = models.TimeField()
+    km_actual = models.CharField(max_length=20)
+    persona = models.ForeignKey(Persona, on_delete=models.CASCADE)
+    vehiculo = models.ForeignKey(Vehiculo, on_delete=models.CASCADE)
+    nombre_servpolicial = models.CharField(max_length=100)
+    dependencia = models.ForeignKey(Dependencia, on_delete=models.CASCADE)
+    nombre_gasolinera= models.CharField(max_length=100)
+    fecha_actual = models.DateField(default=timezone.now,blank=True,null=True)
+
+    def __str__(self):
+        fila = "cantidad_galones {}\nfecha: {}\n".format(
+            self.cantidad_galones, self.fecha) 
+        return fila
+
+    class Meta:
+        verbose_name = 'Combustible'
+        verbose_name_plural = 'Combustibles'
+

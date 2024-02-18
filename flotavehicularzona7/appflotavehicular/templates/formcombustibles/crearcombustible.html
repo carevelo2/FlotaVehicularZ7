@@ -1,0 +1,182 @@
+{% extends 'formplantilla/index_master.html' %}
+{% block content %}
+
+<div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card card-danger">
+                            <div class="card-header">
+                                <h3 class="card-title">Generar orden</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="" method="POST">
+                                    {% csrf_token %}
+                                    <!-- cantidad_galones -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <input
+                                                type="number"
+                                                class="form-control has-feedback-left"
+                                                name="cantidad_galones"
+                                                id="cantidad_galones"
+                                                min="0"
+                                                placeholder="Ingrese cantidad de galones"
+                                                required="">
+                                        </div>
+                                    </div>
+                                    <!-- Fecha -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <input
+                                                type="date"
+                                                class="form-control has-feedback-left"
+                                                name="fecha"
+                                                id="fecha"
+                                                min="{{fechaactual}}"
+                                                placeholder="Fecha de recarga"
+                                                required="">
+                                        </div>
+                                    </div>
+                                <!-- hora -->
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-file"></i></span>
+                                        </div>
+                                        <input
+                                            type="time"
+                                            class="form-control has-feedback-left"
+                                            name="hora"
+                                            id="hora"
+                                            placeholder="Hora de recarga"
+                                            required="">
+                                    </div>
+                                </div>
+                                <!-- kilometraje actual -->
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-file"></i></span>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            class="form-control has-feedback-left"
+                                            name="km_actual"
+                                            id="km_actual"
+                                            min="0"
+                                            placeholder="Kilometraje actual"
+                                            required="">
+                                    </div>
+                                 </div>
+                                <!-- Persona -->
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-file"></i></span>
+                                        </div>
+                                        <select name="persona" id="persona" class="form-control" required>
+                                            {% for persona in personas %}
+                                                <option value="{{ persona.identificacion }}">
+                                                    {{ persona.nombres }} {{ persona.apellidos }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Vehiculo -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <select name="vehiculo" id="vehiculo" class="form-control" required>
+                                                {% for vehiculo in vehiculos %}
+                                                    <option value="{{ vehiculo.placa }}">
+                                                        {{ vehiculo.placa}}-{{ vehiculo.modelo}}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                <!-- Solicitante -->
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-file"></i></span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            class="form-control has-feedback-left"
+                                            name="nombre_servpolicial"
+                                            id="nombre_servpolicial"
+                                            placeholder="Servidor policial solicitante"
+                                            required="">
+                                    </div>
+                                </div>
+                                 <!-- Selección de Dependencia -->
+                                 <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-file"></i></span>
+                                        </div>
+                                        <select name="dependencia" id="dependencia" class="form-control" required>
+                                            {% for dependencia in dependencias %}
+                                                <option value="{{ dependencia.id }}">
+                                                    {{ dependencia.provincia }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Nombre_gasolinera -->
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i class="far fa-file"></i></span>
+                                        </div>
+                                        <input
+                                            type="text"
+                                            class="form-control has-feedback-left"
+                                            name="nombre_gasolinera"
+                                            id="nombre_gasolinera"
+                                            placeholder="Nombre de la gasolinera"
+                                            required="">
+                                    </div>
+                                </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="submit" class="btn btn-success">Crear oden Combustible</button>
+                                            <a href="{% url 'formulariocombustible' %}" class="btn btn-secondary">Cancelar</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!-- /.col (right) -->
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+
+{% endblock %}

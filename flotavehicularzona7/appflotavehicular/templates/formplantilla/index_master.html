@@ -445,6 +445,28 @@
             </a>
         </li>
         </ul>
+        {% if es_tec1 or es_tec2 or es_admin%} 
+         <li class="nav-item" id="combustibles_menu">
+            <a href="#" class="nav-link " onclick="seleccionarOpcion('combustibles')">
+                <i class="nav-icon fas fa-solid fa-gas-pump"></i>
+                <p>
+                    Combustibles
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview" id="combustibles_submenu" style="display: block;">
+                <li class="nav-item" id="formulario_combustible">
+                    <a href="{%url 'crearcombustible'%}" class="nav-link" onclick="seleccionarSubopcion('formulario_combustible')">
+                        <i class="fas fa-th"></i>
+                        <p>
+                            Registro de Combustible
+                            <span class="right badge badge-danger"></span>
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+        {% endif%} 
       </nav>
       <!-- /.sidebar-menu -->
     </div>
