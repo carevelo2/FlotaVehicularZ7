@@ -57,7 +57,7 @@
                                             </div>
                                             <select name="id_distrito" id="id_distrito" class="form-control" required>
                                                 {% for distrito in distritos %}
-                                                    <option value="{{ distrito.cod_distrito }}">
+                                                    <option value="{{ distrito.id }}">
                                                         {{ distrito.id_circuito.id_subcircuito.nombre_subcircuito }} 
                                                     </option>
                                                 {% endfor %}

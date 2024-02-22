@@ -1545,19 +1545,17 @@ def creardistrito(request):
         nombre_distrito = request.POST.get('nombre_distrito')
         numero_distrito = request.POST.get('numero_distrito')
         id_circuito = request.POST.get('id_circuito')  # Asegúrate de que 'id_circuito' coincida con el nombre del campo en el formulario
-        codid = Circuito.objects.get(cod_circuito=id_circuito)
-        try:
-            my_distrito = Distrito.objects.create(
-                cod_distrito=cod_distrito,
-                nombre_distrito=nombre_distrito,
-                numero_distrito=numero_distrito,
-                id_circuito=codid
-            )
-            my_distrito.save()
-            return redirect('formulariodistrito')
-        except Exception as e:
-            error_message = "Error al crear el distrito."
-            return render(request, "formdistrito/creardistrito.html", {'error_message': error_message, 'circuitos': circuitos})
+        codid = Circuito.objects.get(id=id_circuito) 
+       
+        my_distrito = Distrito.objects.create(
+            cod_distrito=cod_distrito,
+            nombre_distrito=nombre_distrito,
+            numero_distrito=numero_distrito,
+            id_circuito=codid
+        )
+        my_distrito.save()
+        return redirect('formulariodistrito')
+       
 
     return render(request, 'formdistrito/creardistrito.html', {'circuitos': circuitos,
                                                                'es_admin':es_admin,
@@ -1647,7 +1645,7 @@ def creardependencia(request):
         parroquia = request.POST.get('parroquia')
         provincia = request.POST.get('provincia')
         id_distrito = request.POST.get('id_distrito')
-        codid = Distrito.objects.get(cod_distrito=id_distrito)
+        codid = Distrito.objects.get(id=id_distrito)
         try:
             my_dependencia = Dependencia.objects.create(
                 parroquia=parroquia,
@@ -1687,11 +1685,12 @@ def editardependencia(request,id):
         parroquia = request.POST.get('parroquia')
         provincia = request.POST.get('provincia')
         id_distrito = request.POST.get('id_distrito')
+        codid = Distrito.objects.get(id=id_distrito)
         try:
             # Actualiza los campos de la instancia existente
             my_dependencia.parroquia = parroquia
             my_dependencia.provincia = provincia
-            my_dependencia.id_distrito = id_distrito 
+            my_dependencia.id_distrito = codid 
             my_dependencia.save()
             # Redirige a la página de listado de roles
             return redirect('formulariodependencia')

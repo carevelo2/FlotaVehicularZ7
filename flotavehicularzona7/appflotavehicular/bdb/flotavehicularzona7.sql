@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 18-02-2024 a las 03:21:33
+-- Tiempo de generación: 21-02-2024 a las 17:09:37
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -42,7 +42,12 @@ CREATE TABLE `appflotavehicular_circuito` (
 INSERT INTO `appflotavehicular_circuito` (`id`, `cod_circuito`, `nombre_circuito`, `numero_circuito`, `id_subcircuito_id`) VALUES
 (2, '11D01C01', 'VILCABAMBA', '22', '11D01C01S01'),
 (7, '11D01C04', 'TAQUIL', '22', '11D01C04S01'),
-(8, '11D01C04', 'TAQUIL', '22', '11D01C04S02');
+(8, '11D01C04', 'TAQUIL', '22', '11D01C04S02'),
+(9, '11D01C02', 'YANGANA', '22', '11D01C02S01'),
+(10, '11D01C03', 'MALACATOS', '22', '11D01C03S01'),
+(11, '11D02C01', 'EL TAMBO', '9', '11D02C01S01'),
+(12, '11D02C02', 'CATAMAYO NORTE', '9', '11D02C02S01'),
+(13, '11D02C02', 'CATAMAYO NORTE', '9', '11D02C02S02');
 
 -- --------------------------------------------------------
 
@@ -69,7 +74,9 @@ CREATE TABLE `appflotavehicular_combustible` (
 --
 
 INSERT INTO `appflotavehicular_combustible` (`id`, `cantidad_galones`, `fecha`, `hora`, `km_actual`, `nombre_servpolicial`, `nombre_gasolinera`, `dependencia_id`, `persona_id`, `vehiculo_id`, `fecha_actual`) VALUES
-(4, 6.00, '2024-02-15', '16:16:00.000000', '10005', 'Alirio Campo', 'Texaco', 2, '1719880195', 'pcy9980', '2024-02-17');
+(4, 6.00, '2024-02-15', '16:16:00.000000', '10005', 'Alirio Campo', 'Texaco', 2, '1719880195', 'pcy9980', '2024-02-17'),
+(6, 4.00, '2024-02-22', '15:55:00.000000', '15000', 'Alirio Campo', 'La Bonita', 2, '0100967652', 'trp9980', '2024-02-20'),
+(7, 6.00, '2024-02-21', '07:23:00.000000', '7000', 'MArco GArcia', 'La Bonita', 3, '1704998846', 'pvb8639', '2024-02-21');
 
 -- --------------------------------------------------------
 
@@ -114,7 +121,14 @@ CREATE TABLE `appflotavehicular_dependencia` (
 --
 
 INSERT INTO `appflotavehicular_dependencia` (`id`, `provincia`, `parroquia`, `id_distrito_id`) VALUES
-(2, 'LOJA', 'VILCABAMBA (VICTORIA )', 2);
+(2, 'LOJA', 'VILCABAMBA (VICTORIA )', 2),
+(3, 'LOJA', 'CHUQUIRIBAMBA', 7),
+(4, 'LOJA', 'QUINARA', 5),
+(5, 'LOJA', 'MALACATOS (VALLADOLID)', 9),
+(6, 'LOJA', 'TAQUIL (MIGUEL RIOFRIO)', 8),
+(7, 'LOJA', 'EL TAMBO', 6),
+(9, 'LOJA', 'CATAMAYO 1 (LA TOMA)', 10),
+(10, 'LOJA', 'CATAMAYO 2 (LA TOMA)', 11);
 
 -- --------------------------------------------------------
 
@@ -135,7 +149,14 @@ CREATE TABLE `appflotavehicular_distrito` (
 --
 
 INSERT INTO `appflotavehicular_distrito` (`id`, `cod_distrito`, `nombre_distrito`, `numero_distrito`, `id_circuito_id`) VALUES
-(2, '11D01', 'LOJA', '9', 2);
+(2, '11D01', 'LOJA', '9', 2),
+(5, '11D01', 'LOJA', '9', 9),
+(6, '11D02', 'CATAMAYO', '9', 11),
+(7, '11D01', 'LOJA', '9', 7),
+(8, '11D01', 'LOJA', '9', 8),
+(9, '11D01', 'LOJA', '9', 10),
+(10, '11D02', 'CATAMAYO', '9', 12),
+(11, '11D02', 'CATAMAYO', '9', 13);
 
 -- --------------------------------------------------------
 
@@ -149,6 +170,14 @@ CREATE TABLE `appflotavehicular_entradamtto` (
   `mantenimiento_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `appflotavehicular_entradamtto`
+--
+
+INSERT INTO `appflotavehicular_entradamtto` (`id`, `docentrada`, `mantenimiento_id`) VALUES
+(1, 'docentradamancar/EntradaMantenimiento_pcy9980.pdf', 1),
+(2, 'docentradamancar/EntradaMantenimiento_pvb8639.pdf', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -160,6 +189,14 @@ CREATE TABLE `appflotavehicular_entradaorden` (
   `docentradaorden` varchar(100) NOT NULL,
   `entrada_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `appflotavehicular_entradaorden`
+--
+
+INSERT INTO `appflotavehicular_entradaorden` (`id`, `docentradaorden`, `entrada_id`) VALUES
+(1, 'docentradaorden/EntradaOrden_pcy9980.pdf', 1),
+(2, 'docentradaorden/EntradaOrden_pcy9980_CfmS81D.pdf', 1);
 
 -- --------------------------------------------------------
 
@@ -179,6 +216,15 @@ CREATE TABLE `appflotavehicular_mantenimiento` (
   `tipodemantenimiento_id` bigint(20) NOT NULL,
   `vehiculo_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `appflotavehicular_mantenimiento`
+--
+
+INSERT INTO `appflotavehicular_mantenimiento` (`id`, `fecha`, `fechaentrada`, `km`, `observaciones`, `costo`, `estado`, `persona_id`, `tipodemantenimiento_id`, `vehiculo_id`) VALUES
+(1, '2024-02-15', '2024-02-20', 105000.00, NULL, 67.20, 1, '0100967652', 2, 'pcy9980'),
+(2, '2024-02-19', '2024-02-21', 19000.00, NULL, 48.82, 1, '1704998846', 1, 'pvb8639'),
+(3, '2024-02-19', '2024-02-19', 24000.00, NULL, 186.60, 0, '1714818299', 3, 'trp9980');
 
 -- --------------------------------------------------------
 
@@ -201,6 +247,13 @@ CREATE TABLE `appflotavehicular_ordendetrabajo` (
   `responsable_id` varchar(10) NOT NULL,
   `vehiculo_id` varchar(8) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `appflotavehicular_ordendetrabajo`
+--
+
+INSERT INTO `appflotavehicular_ordendetrabajo` (`id`, `fecha`, `fechaentrada`, `ruta`, `km`, `observaciones`, `estado`, `dependencia_id`, `agente1_id`, `agente2_id`, `agente3_id`, `responsable_id`, `vehiculo_id`) VALUES
+(1, '2024-02-19', '2024-02-19', 'malacatos  vilcabamba', 100.00, 'El vehiculo se traslada de malacatos a vilcabamba', 1, 2, '0100967652', '1704997012', '1704997012', '1719880195', 'pcy9980');
 
 -- --------------------------------------------------------
 
@@ -227,6 +280,11 @@ CREATE TABLE `appflotavehicular_persona` (
 --
 
 INSERT INTO `appflotavehicular_persona` (`identificacion`, `nombres`, `apellidos`, `direccion`, `fecha_nacimiento`, `tipo_sangre`, `ciudad_nacimiento`, `numero_celular`, `codigoempleado_id`, `dependencia_id`, `id_rango_id`) VALUES
+('0100967652', 'Estalin Andres', 'Revelo Salazar', 'Miraflores', '1988-09-01', 'O+', 'Tulcan', '0987234564', 7, 2, 5),
+('1704997012', 'Monica Francisca', 'Ronbon Pala', 'las gradas y espejo', '1990-12-03', 'O+', 'Loja', '0980345728', 6, 2, 2),
+('1704998846', 'Juan ', 'Duche Vasquez', '10 de agosto y pichincha', '1980-02-01', 'O+', 'Quito', '0992345677', 4, 2, 1),
+('1714818299', 'Pedro Alberto', 'Acosta Toro', 'Sucre y 9 de Octubre', '1984-08-19', 'A+', 'Loja', '0992341235', 5, 2, 3),
+('1715241424', 'Carlos Alejandro', 'Tenorio Correa', 'Rafael Arellano y Sucre', '1992-09-19', 'O+', 'Ibarra', '0991342458', 8, 2, 1),
 ('1719880195', 'CESAR ', 'REVELO S', 'tulcan', '1984-04-04', 'O+', 'Tulcan', '0992641514', 2, 2, 1);
 
 -- --------------------------------------------------------
@@ -265,6 +323,15 @@ CREATE TABLE `appflotavehicular_salidamtto` (
   `mantenimiento_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `appflotavehicular_salidamtto`
+--
+
+INSERT INTO `appflotavehicular_salidamtto` (`id`, `docsalida`, `mantenimiento_id`) VALUES
+(1, 'docsalidamancar/SalidaMantenimiento_pcy9980.pdf', 1),
+(2, 'docsalidamancar/SalidaMantenimiento_pvb8639.pdf', 2),
+(3, 'docsalidamancar/SalidaMantenimiento_trp9980.pdf', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -276,6 +343,13 @@ CREATE TABLE `appflotavehicular_salidaorden` (
   `docsalidaorden` varchar(100) NOT NULL,
   `salida_id` bigint(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `appflotavehicular_salidaorden`
+--
+
+INSERT INTO `appflotavehicular_salidaorden` (`id`, `docsalidaorden`, `salida_id`) VALUES
+(1, 'docsalidaorden/SalidaOrden_pcy9980.pdf', 1);
 
 -- --------------------------------------------------------
 
@@ -295,8 +369,13 @@ CREATE TABLE `appflotavehicular_subcircuito` (
 
 INSERT INTO `appflotavehicular_subcircuito` (`cod_subcircuito`, `nombre_subcircuito`, `numero_subcircuito`) VALUES
 ('11D01C01S01', 'VILCABAMBA 1', '1'),
+('11D01C02S01', 'YANGANA 1', '1'),
+('11D01C03S01', 'MALACATOS 1', '1'),
 ('11D01C04S01', 'TAQUIL1', '2'),
-('11D01C04S02', 'TAQUIL2', '2');
+('11D01C04S02', 'TAQUIL2', '2'),
+('11D02C01S01', 'EL TAMBO 1', '1'),
+('11D02C02S01', 'CATAMAYO NORTE 1', '2'),
+('11D02C02S02', 'CATAMAYO NORTE 2', '2');
 
 -- --------------------------------------------------------
 
@@ -312,6 +391,15 @@ CREATE TABLE `appflotavehicular_tipomantenimiento` (
   `iva` decimal(10,2) NOT NULL,
   `total` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `appflotavehicular_tipomantenimiento`
+--
+
+INSERT INTO `appflotavehicular_tipomantenimiento` (`id`, `tipo`, `descripcion`, `subtotal`, `iva`, `total`) VALUES
+(1, 'Mantenimiento 1', 'cambio de aceite\r\nrevisión general\r\ncambio de pastillas\r\ncambio de líquido de frenos\r\ncambio filtro de combustible', 43.59, 5.23, 48.82),
+(2, 'Mantenimiento 2', 'Mantenimiento 1 +\r\nCambio filtro de aire \r\ncambio de líquido refrigerante\r\ncambio de luces delanteras y posteriores', 60.00, 7.20, 67.20),
+(3, 'Mantenimiento 3', 'Cambio de batería\r\nAjuste del sistema eléctrico', 180.00, 21.60, 201.60);
 
 -- --------------------------------------------------------
 
@@ -361,7 +449,9 @@ CREATE TABLE `appflotavehicular_vehiculo` (
 --
 
 INSERT INTO `appflotavehicular_vehiculo` (`placa`, `chasis`, `marca`, `modelo`, `color`, `motor`, `kilometraje`, `cilindraje`, `capacidad_carga`, `capacidad_pasajeros`, `estado`, `dependencia_id`, `tipovehiculo_id`) VALUES
-('pcy9980', 'pd6732423', 'Toyota', 'Hilux 4x4', 'Blanco', 'ch9820332', 100000, 2000, 3, 4, 1, 2, 3);
+('pcy9980', 'pd6732423', 'Toyota', 'Hilux 4x4', 'Blanco', 'ch9820332', 105000, 2000, 3, 4, 1, 2, 3),
+('pvb8639', 'ph32890139', 'Nisscan', 'Tiida 2013', 'Plateado', 'ch9820334', 19000, 1600, 5, 4, 1, 2, 1),
+('trp9980', 'ch3821931312', 'Dajhatsu', 'Andromeda', 'Azul', 'chg9384241', 20000, 250, 1, 1, NULL, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -535,8 +625,13 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$600000$AvACdFRizi1qzqOopbwfhg$K4MkbS5jrvYZIITY8Fgz3NXdeCi+MWTIko5ly9pT21A=', '2024-02-18 00:13:30.813998', 1, 'Cesar07', '', '', 'cesar@gmail.com', 1, 1, '2023-12-17 01:59:06.078861'),
-(2, 'pbkdf2_sha256$720000$VKeS8EKezhFlMCMTRZeSX3$t2Yce5zGiXsq05Ftd6BBSkWtPGOlxu/dHWmx87+5LMQ=', '2024-01-13 18:42:29.000000', 0, 'Juan14', '', '', 'juan@gmail.com', 0, 1, '2023-12-23 23:04:39.000000');
+(1, 'pbkdf2_sha256$600000$AvACdFRizi1qzqOopbwfhg$K4MkbS5jrvYZIITY8Fgz3NXdeCi+MWTIko5ly9pT21A=', '2024-02-20 19:46:41.581279', 1, 'Cesar07', '', '', 'cesar@gmail.com', 1, 1, '2023-12-17 01:59:06.078861'),
+(2, 'pbkdf2_sha256$720000$VKeS8EKezhFlMCMTRZeSX3$t2Yce5zGiXsq05Ftd6BBSkWtPGOlxu/dHWmx87+5LMQ=', '2024-01-13 18:42:29.000000', 0, 'Juan14', '', '', 'juan@gmail.com', 0, 1, '2023-12-23 23:04:39.000000'),
+(4, 'pbkdf2_sha256$600000$zNhvms40QLBYic9qKJAWEX$BonXQwzg45QOcExLWLuY43TVjN2kPQyRlCVcOtfJmGA=', '2024-02-20 03:45:03.321226', 0, 'Juan1', '', '', 'juan1@gmail.com', 0, 1, '2024-02-19 22:29:49.811369'),
+(5, 'pbkdf2_sha256$600000$V6rCJVDgDb7eiKI9xl2Zyi$3BCwUlw+ScKYQloJYuf/NXY5pxKHdl30SkYOwhh8Va0=', '2024-02-20 02:04:03.240034', 0, 'Pedro2', '', '', 'pedro2@gmail.com', 0, 1, '2024-02-19 22:31:13.406818'),
+(6, 'pbkdf2_sha256$600000$TmEkE3PPBPchJskDeuVlNV$xozr3dvycpjHlVGM2wjcZJI7XPDop7Ms3n95CokiZ4c=', '2024-02-20 02:04:42.605181', 0, 'Monica3', '', '', 'monica3@gmail.com', 0, 1, '2024-02-19 22:33:10.110631'),
+(7, 'pbkdf2_sha256$600000$ijrb3ty9nSJ2crX12p0vjU$2748CQPuE6xXR39zeP13KZN0z94xd5+3HkVhjtFL7vM=', '2024-02-20 03:42:22.723743', 0, 'estalin4', '', '', 'estalin4@gmail.com', 0, 1, '2024-02-19 22:33:37.194026'),
+(8, 'pbkdf2_sha256$600000$4cNa6NdJSY7VQw4H84hx81$kARihqeoukgxi9NJ8nXTRZRvWEvdXKyS9R6Y3aVPrfw=', '2024-02-20 01:56:28.985130', 0, 'carlos5', '', '', 'carlos5@gmail.com', 0, 1, '2024-02-19 22:34:24.119813');
 
 -- --------------------------------------------------------
 
@@ -556,7 +651,12 @@ CREATE TABLE `auth_user_groups` (
 
 INSERT INTO `auth_user_groups` (`id`, `user_id`, `group_id`) VALUES
 (1, 1, 1),
-(2, 2, 1);
+(2, 2, 1),
+(3, 4, 4),
+(5, 5, 2),
+(4, 6, 6),
+(6, 7, 6),
+(7, 8, 7);
 
 -- --------------------------------------------------------
 
@@ -692,9 +792,9 @@ CREATE TABLE `django_session` (
 --
 
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
-('1pvt3bjb3ocvh758rofqjkuq0i7f2oxv', '.eJxVjEEOwiAURO_C2hCggMSle89A-J-pVA0kpV0Z726bdKHLmfdm3iKmdSlx7ZjjlMVFaHH67SjxE3UH-ZHqvUludZknkrsiD9rlrWW8rof7d1BSL9vajZR9MBS0P2dDg2IMOtDAwWc4jMSADQGAsdoaaEdbMGwUwKSV-HwBAXk46Q:1rbUoE:ruzMMV_ZhElSQMUXUX39EraNNaKu6aYW7EVeLDObzq8', '2024-03-03 00:13:30.821064'),
 ('2wld0h91f2lol4ba2psjlju8t9h1iket', '.eJxVjEEOwiAQRe_C2hApjIBL956hGWYGqRpISrsy3l2bdKHb_977LzXiupRx7TKPE6uzMurwuyWkh9QN8B3rrWlqdZmnpDdF77Tra2N5Xnb376BgL98awBkPkHISNJZOwYMjRzlGG83AYMhitAEC2ECJQmZ3FB6iFxAK3qv3B8-sN5Y:1rTAs3:HvRKLHcBFCg1lnhWm74pGCI9QQYYVyloP8js89AqZBQ', '2024-02-09 01:19:03.299549'),
 ('n7zougj7j508x5140ylfzqna2oa3lsvv', '.eJxVjEEOwiAURO_C2hCggMSle89A-J-pVA0kpV0Z726bdKHLmfdm3iKmdSlx7ZjjlMVFaHH67SjxE3UH-ZHqvUludZknkrsiD9rlrWW8rof7d1BSL9vajZR9MBS0P2dDg2IMOtDAwWc4jMSADQGAsdoaaEdbMGwUwKSV-HwBAXk46Q:1rUVOv:l-pAHuVRXDNXri-3YbJ34GRA1jDwAqLPAI7LEvxypUo', '2024-02-12 17:26:29.088191'),
+('spy28o2hb8rkf7gdhzxgu858cdfguhmd', '.eJxVjEEOwiAURO_C2hCggMSle89A-J-pVA0kpV0Z726bdKHLmfdm3iKmdSlx7ZjjlMVFaHH67SjxE3UH-ZHqvUludZknkrsiD9rlrWW8rof7d1BSL9vajZR9MBS0P2dDg2IMOtDAwWc4jMSADQGAsdoaaEdbMGwUwKSV-HwBAXk46Q:1rcW4f:7TIbeRpZ-fpmGiDJ4rz5rFS4-ELdTdEstxNVX0Nm1Jk', '2024-03-05 19:46:41.586001'),
 ('w9kecyc740p0fduc1mi76jn1smyt3qqy', '.eJxVjEEOwiAURO_C2hCggMSle89A-J-pVA0kpV0Z726bdKHLmfdm3iKmdSlx7ZjjlMVFaHH67SjxE3UH-ZHqvUludZknkrsiD9rlrWW8rof7d1BSL9vajZR9MBS0P2dDg2IMOtDAwWc4jMSADQGAsdoaaEdbMGwUwKSV-HwBAXk46Q:1rUVHB:KcgRbcCIMtJpa04Z3KXmuEdG11y_2ITHHr_XAuoWFtY', '2024-02-12 17:18:29.279556');
 
 --
@@ -910,13 +1010,13 @@ ALTER TABLE `django_session`
 -- AUTO_INCREMENT de la tabla `appflotavehicular_circuito`
 --
 ALTER TABLE `appflotavehicular_circuito`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_combustible`
 --
 ALTER TABLE `appflotavehicular_combustible`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_denuncia`
@@ -928,37 +1028,37 @@ ALTER TABLE `appflotavehicular_denuncia`
 -- AUTO_INCREMENT de la tabla `appflotavehicular_dependencia`
 --
 ALTER TABLE `appflotavehicular_dependencia`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_distrito`
 --
 ALTER TABLE `appflotavehicular_distrito`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_entradamtto`
 --
 ALTER TABLE `appflotavehicular_entradamtto`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_entradaorden`
 --
 ALTER TABLE `appflotavehicular_entradaorden`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_mantenimiento`
 --
 ALTER TABLE `appflotavehicular_mantenimiento`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_ordendetrabajo`
 --
 ALTER TABLE `appflotavehicular_ordendetrabajo`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_rango`
@@ -970,19 +1070,19 @@ ALTER TABLE `appflotavehicular_rango`
 -- AUTO_INCREMENT de la tabla `appflotavehicular_salidamtto`
 --
 ALTER TABLE `appflotavehicular_salidamtto`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_salidaorden`
 --
 ALTER TABLE `appflotavehicular_salidaorden`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_tipomantenimiento`
 --
 ALTER TABLE `appflotavehicular_tipomantenimiento`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `appflotavehicular_tipovehiculo`
@@ -1012,13 +1112,13 @@ ALTER TABLE `auth_permission`
 -- AUTO_INCREMENT de la tabla `auth_user`
 --
 ALTER TABLE `auth_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user_groups`
 --
 ALTER TABLE `auth_user_groups`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `auth_user_user_permissions`
