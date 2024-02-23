@@ -1,0 +1,124 @@
+{% extends 'formplantilla/index_master.html' %} 
+{% block content %}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Registro </h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{% url 'crearArmaperpol' %}">
+                  <span class="badge bg-danger">Arma Personal Policial</span>
+                  <i class="fas fa-edit"></i> Crear 
+                </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Identificacion Personal Policial</th>	
+                        <th>Nombres y Apellidos Personal Policial</th>
+                        <th>Rango Personal Policial</th>	
+                        <th>Nombre Distrito al que pertenece el Personal</th>
+                        <th>Tipo de arma asignada</th>
+                        <th>Nombre + Descripción de arma asignada</th>
+                        <th>Fecha de registro de arma</th>
+                        <th>Hora de Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for armaperpol in armaperpoles %}
+                    <tr>
+                        <td>{{ armaperpol.id }}</td>
+                        <td>{{ armaperpol.policia.identificacion }}</td>
+                        <td>{{ armaperpol.policia.nombres }} {{ armaperpol.policia.apellidos }}</td>
+                        <td>{{ armaperpol.policia.id_rango.rangopersona }}</td>
+                        <td>{{ armaperpol.policia.dependencia.id_distrito.nombre_distrito }}</td>
+                        <td>{{ armaperpol.pertrecho.tipoarma }}</td>
+                        <td>{{ armaperpol.pertrecho.nombre }} {{ armaperpol.pertrecho.descripcion }}</td>
+                        <td>{{ armaperpol.fecharegistro }}</td>
+                        <td>{{ armaperpol.horaregistro }}</td>
+                        
+                        <td>
+                            <a name="" id="" class="btn btn-warning"
+                                href="{% url 'editarArmaperpol' armaperpol.id %}" title="Editar"
+                                role="button"><i class="fa fa-edit"></i></a>
+                            
+                            <a name="" id="" class="btn btn-danger"
+                                title="Eliminar"
+                                role="button"
+                                onclick="confirmarEliminacion('{{ armaperpol.id }}')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            <script>
+                              function confirmarEliminacion(id) {
+                                  var confirmacion = confirm('¿Está seguro de que desea eliminar este rango?');
+                                  
+                                  if (confirmacion) {
+                                      // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                      window.location.href = "{% url 'eliminarArmaperpol' id=armaperpol.id  %}";
+                                  } else {
+                                      // Si el usuario elige 'Cancelar', no hagas nada
+                                      // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                                  }
+                              }
+                            </script>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  <style>
+    /* Estilos para el botón azul (aprobado) */
+    .boton-azul {
+        background-color: green;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+
+    /* Estilos para el botón rojo (reprobado) */
+    .boton-rojo {
+        background-color: red;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 50%; /* Hace que el botón sea redondo */
+    }
+  </style>
+
+{% endblock %}

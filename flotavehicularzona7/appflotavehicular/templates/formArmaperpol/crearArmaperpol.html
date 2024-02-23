@@ -1,0 +1,97 @@
+{% extends 'formplantilla/index_master.html' %} 
+{% block content %}
+
+<div class="wrapper">
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Crear Arma Personal Policial </h3>
+              </div>
+              <div class="card-body">
+                <form method="POST">
+                  {% csrf_token %}
+                    
+                  
+                  <!-- Persona -->
+                  <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        </div>
+                        <select 
+                        name="policia" 
+                        id="policia" 
+                        class="form-control" 
+                        required="">
+                        <option>Selecione el policia a cargo</option>
+                        {% for persona in personas %}
+                            <option value="{{ persona.identificacion }}">{{ persona.nombres }} {{ persona.apellidos }}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="fas fa-user"></i></span>
+                      </div>
+                      <select 
+                      name="pertrecho" 
+                      id="pertrecho" 
+                      class="form-control" 
+                      required="">
+                      <option>Selecione el pertrecho</option>
+                      {% for pertrecho in pertrechos %}
+                          <option value="{{ pertrecho.id }}">{{ pertrecho.nombre }} {{ pertrecho.descripcion}}</option>
+                      {% endfor %}
+                  </select>
+                  </div>
+              </div>
+
+                <div class="form-group">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                      </div>
+                      <input type="date" class="form-control" name="fecharegistro" id="fecharegistro" required />
+                  </div>
+              </div>   
+              <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="far fa-clock"></i></span>
+                    </div>
+                    <input type="time" class="form-control" name="horaregistro" id="horaregistro" required />
+                </div>
+            </div>    
+                  
+                  
+                  <div class="form-group">
+                    <div class="input-group">
+                      <button type="submit" class="btn btn-success">Crear Arma Personal Policial</button>
+                      <a href="{% url 'formularioArmaperpol' %}" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col (right) -->
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+</div>
+
+{% endblock %}

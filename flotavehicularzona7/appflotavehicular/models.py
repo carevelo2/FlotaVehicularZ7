@@ -261,4 +261,29 @@ class Combustible(models.Model):
     class Meta:
         verbose_name = 'Combustible'
         verbose_name_plural = 'Combustibles'
+class Pertrechos(models.Model):
+    dependencia=models.ForeignKey(Dependencia,on_delete=models.CASCADE)
+    tipoarma=models.CharField(max_length=50)
+    nombre=models.CharField(max_length=100)
+    descripcion = models.CharField(max_length=200)
+    codigo = models.CharField(max_length=10,unique=True)
+    def __str__(self):
+        fila = "cantidad_galones {}\nfecha: {}\n".format(
+            self.dependencia, self.tipoarma) 
+        return fila
+    class Meta:
+        verbose_name = 'Pertrechos'
+        verbose_name_plural = 'Pertrechos'
+class Armaperpol(models.Model):
+    policia= models.ForeignKey(Persona, blank=True, null=True, on_delete=models.CASCADE)
+    pertrecho = models.ForeignKey(Pertrechos, on_delete=models.CASCADE) 
+    fecharegistro=models.DateField(default=timezone.now)
+    horaregistro=models.TimeField()  
+    def __str__(self):
+       return "{}, {}".format(self.policia, self.pertrecho)  
+    
+    class Meta:
+        verbose_name="Asignación de arma a policía"
+        verbose_name_plural="Asignaciones de armas a policías"
+
 

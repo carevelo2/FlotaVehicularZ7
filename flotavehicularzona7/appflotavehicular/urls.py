@@ -93,6 +93,17 @@ urlpatterns = [
     path("combustibles/editarcombustible/<str:id>/",views.editarcombustible,name='editarcombustible'),
     path('combustibles/eliminarcombustible/<str:id>/',views.eliminarcombustible,name="eliminarcombustible"),
     path('combustibles/generarorden/<str:id>/',views.ordencombustible,name="ordencombustible"),
+    #pertrechos
+    path("pertrechos/", views.formulariopertechos, name='formulariopertechos'),
+    path("pertrechos/crearpertrechos", views.crearpertechos, name='crearpertechos'),
+    path('pertrechos/editarpertrechos/<str:id>/', views.editarpertechos, name="editarpertechos"),
+    path('pertrechos/eliminarpertrechos/<str:id>/', views.eliminarpertechos, name="eliminarpertechos"),
+    #Armaperpol
+    path("armaperpol/", views.formularioArmaperpol, name='formularioArmaperpol'),
+    path("armaperpol/crearArmaperpol", views.crearArmaperpol, name='crearArmaperpol'),
+    path('armaperpol/editarArmaperpol/<str:id>/', views.editarArmaperpol, name="editarArmaperpol"),
+    path('armaperpol/eliminarArmaperpol/<str:id>/', views.eliminarArmaperpol, name="eliminarArmaperpol"),
+    
 ]    
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

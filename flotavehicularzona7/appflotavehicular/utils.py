@@ -53,6 +53,12 @@ def es_tecnico2(user):
         return es_tecnico2 in user.groups.all()
     except Group.DoesNotExist:
         return False 
+def es_tecnico3(user):
+    try:
+        es_tecnico3 = Group.objects.get(name='Tecnico 3')
+        return es_tecnico3 in user.groups.all()
+    except Group.DoesNotExist:
+        return False 
 def obtener_numero_usuarios():
     return User.objects.count()
 

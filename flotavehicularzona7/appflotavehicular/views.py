@@ -27,12 +27,18 @@ def index(request):
     es_aux=es_auxiliar(request.user)
     es_ger=es_gerente(request.user)
     es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    es_tec3=es_tecnico3(request.user)
     numero_usuarios = obtener_numero_usuarios()
     return render(request, "formplantilla/index.html",{'es_admin':es_admin,
                                                        'es_encargado':es_encargado,
                                                        'es_aux' : es_aux,
                                                        'es_ger':es_ger,
                                                        'es_perpol':es_perpol,
+                                                       'es_tec1':es_tec1,
+                                                       'es_tec2':es_tec2,
+                                                       'es_tec3':es_tec3,
                                                        'numero_usuarios':numero_usuarios})
 #Pantalla Inicio
 def index2(request):
@@ -435,7 +441,7 @@ def editarpersona(request, identificacion):
             return redirect('formulario_persona')
         except Exception as e:
             # Handle any other exception that may occur while creating the new object
-            error_message = "Error al actulizar el Rol."
+            error_message = "Error al actualizar el Rol."
             return render(request, "formpersona/editarpersona.html", {'personas': personas,
                                                                     'usuarios':usuarios,
                                                                     'rangos':rangos,
@@ -1727,12 +1733,16 @@ def formularioordendetrabajo(request):
     es_aux=es_auxiliar(request.user)
     es_ger=es_gerente(request.user)
     es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
     return render(request, 'formordendetrabajo/formularioordendetrabajo.html',{'ordenesdetrabajos':ordenesdetrabajos,
                                                                                'es_admin':es_admin,
                                                                                 'es_encargado':es_encargado,
                                                                                 'es_aux' : es_aux,
                                                                                 'es_ger':es_ger,
-                                                                                'es_perpol':es_perpol,})
+                                                                                'es_perpol':es_perpol,
+                                                                                'es_tec1':es_tec1,
+                                                                                'es_tec2':es_tec2,})
 @login_required(login_url='login')
 @user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u), login_url='index')
 def crearordentrabajo(request):
@@ -2530,3 +2540,297 @@ def ordencombustible(request, id):
     pdf_output = pdf.output(dest='S').encode('latin1')
     response.write(pdf_output)
     return response
+
+
+#########################################################Pertrechos###############################################
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u) or es_tecnico3(u), login_url='index')
+def formulariopertechos(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    es_tec3=es_tecnico3(request.user)
+    pertrechos=Pertrechos.objects.all()
+    return render(request, 'formpertechos/formulariopertechos.html', {
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                'es_tec3':es_tec3,
+                                                                'pertrechos':pertrechos,
+                                                                 })
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_tecnico3(u), login_url='formulariopertechos')
+def crearpertechos(request):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    es_tec3=es_tecnico3(request.user)
+    dependencias=Dependencia.objects.all()
+    if request.method == 'POST':
+        dependencia=request.POST.get('id_dependencia')
+        tipoarma=request.POST.get('tipoarma')
+        nombre=request.POST.get('nombre')
+        descripcion=request.POST.get('descripcion')
+        codigo=request.POST.get('codigo')
+        #obtenemos la dependencia
+        dependenciaid=Dependencia.objects.get(id=dependencia)
+        try:
+              # Crea la orden de combustible
+            my_pertechos= Pertrechos.objects.create(
+                dependencia=dependenciaid,
+                tipoarma=tipoarma,
+                nombre=nombre,
+                descripcion=descripcion,
+                codigo =codigo
+            )
+            my_pertechos.save()
+            # Redirige a la página de listado de roles
+            return redirect('formulariopertechos')
+        except Exception as e:
+            # Handle any other exception that may occur while creating the new object
+            error_message = f"Error al crear {e}."
+            return render(request, 'formpertechos/crearpertechos.html', {
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                'es_tec3':es_tec3,
+                                                                'dependencias':dependencias,
+                                                                'error_message':error_message
+                                                                 })
+    return render(request, 'formpertechos/crearpertechos.html', {
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                'es_tec3':es_tec3,
+                                                                'dependencias':dependencias,
+                                                                 })
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_tecnico3(u), login_url='formulariopertechos')
+def editarpertechos(request,id):
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    es_tec3=es_tecnico3(request.user)
+    dependencias=Dependencia.objects.all()
+    try:
+        mypertecho= Pertrechos.objects.get(id=id)
+    except Pertrechos.DoesNotExist:
+        # Manejar el caso si el rol no existe
+        # Redirige a la página de listado de roles
+        return redirect('formulariopertechos')
+    if request.method == 'POST':
+        dependencia=request.POST.get('id_dependencia')
+        tipoarma=request.POST.get('tipoarma')
+        nombre=request.POST.get('nombre')
+        descripcion=request.POST.get('descripcion')
+        codigo=request.POST.get('codigo')
+        #obtenemos la dependencia
+        dependenciaid=Dependencia.objects.get(id=dependencia)
+        try:
+              # Crea la orden de combustible
+           
+            mypertecho.dependencia=dependenciaid
+            mypertecho.tipoarma=tipoarma
+            mypertecho.nombre=nombre
+            mypertecho.descripcion=descripcion
+            mypertecho.codigo =codigo
+            
+            mypertecho.save()
+            # Redirige a la página de listado de roles
+            return redirect('formulariopertechos')
+        except Exception as e:
+            # Handle any other exception that may occur while creating the new object
+            error_message = f"Error al crear {e}."
+            return render(request, 'formpertechos/editarpertechos.html', {
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                'es_tec3':es_tec3,
+                                                                'mypertecho':mypertecho,
+                                                                'dependencias':dependencias,
+                                                                'error_message':error_message
+                                                                 })
+    return render(request, 'formpertechos/editarpertechos.html', {
+                                                                'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                'es_tec3':es_tec3,
+                                                                'mypertecho':mypertecho,
+                                                                'dependencias':dependencias
+                                                                 })
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_tecnico3(u), login_url='formulariopertechos')
+def eliminarpertechos(request,id):
+    pertechos= Pertrechos.objects.get(id=id)
+    pertechos.delete()
+    return redirect('formulariopertechos')
+
+#########################################################Asiganacion de armas ####################################
+#Armaperpol
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_administrador(u) or es_gerente(u)or es_tecnico1(u) or es_tecnico2(u) or es_tecnico3(u), login_url='index')
+def formularioArmaperpol(request):
+    #imagen_empleado = obtener_imagen_empleado(request.user)
+    armaperpoles = Armaperpol.objects.all()
+    personas = Persona.objects.all()
+    pertrechos = Pertrechos.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    es_tec3=es_tecnico3(request.user)
+    return render(request, 'formArmaperpol/formularioArmaperpol.html', {'personas': personas,
+                                                                    'armaperpoles': armaperpoles,
+                                                                    'pertrechos': pertrechos,
+                                                              'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                'es_tec3':es_tec3,
+                                                                 #'imagen_empleado': imagen_empleado
+                                                                 })
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_tecnico3(u), login_url='formularioArmaperpol')
+def crearArmaperpol(request):
+    personas = Persona.objects.all()
+    pertrechos = Pertrechos.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    es_tec3=es_tecnico3(request.user)
+    if request.method == 'POST':
+        try:
+            policia = request.POST.get('policia')
+            pertrecho = request.POST.get('pertrecho')
+            fecharegistro = request.POST.get('fecharegistro')
+            horaregistro = request.POST.get('horaregistro')
+
+            policiaid = Persona.objects.get(identificacion=policia)
+            pertrechoid = Pertrechos.objects.get(id=pertrecho)
+
+            my_armaperpol = Armaperpol.objects.create(
+                policia=policiaid,
+                pertrecho=pertrechoid,
+                fecharegistro=fecharegistro,
+                horaregistro=horaregistro,
+            )
+            my_armaperpol.save()
+            return redirect('formularioArmaperpol')  # Asegúrate de que esta sea la URL correcta
+        except Exception as e:
+            print(e)  # Imprime la excepción para debug
+            error_message = "Error al crear."
+            return render(request, "formArmaperpol/crearArmaperpol.html", {'error_message': error_message, 'personas': personas, 'pertrechos': pertrechos})
+    else:
+        # Manejo de solicitudes que no son POST
+        return render(request, "formArmaperpol/crearArmaperpol.html", {'personas': personas, 
+                                                                       'pertrechos': pertrechos,
+                                                                        'es_admin':es_admin,
+                                                                        'es_encargado':es_encargado,
+                                                                        'es_aux' : es_aux,
+                                                                        'es_ger':es_ger,
+                                                                        'es_perpol':es_perpol,          
+                                                                        'es_tec1':es_tec1,
+                                                                        'es_tec2':es_tec2,
+                                                                        'es_tec3':es_tec3,})
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_tecnico3(u), login_url='formularioArmaperpol')
+def editarArmaperpol(request, id):
+    personas = Persona.objects.all()
+    pertrechos = Pertrechos.objects.all()
+    es_admin= es_administrador(request.user)
+    es_encargado=es_encargado_logistica(request.user)
+    es_aux=es_auxiliar(request.user)
+    es_ger=es_gerente(request.user)
+    es_perpol=es_personal_policial(request.user)
+    es_tec1=es_tecnico1(request.user)
+    es_tec2=es_tecnico2(request.user)
+    es_tec3=es_tecnico3(request.user)
+    try:
+        my_armaperpol = Armaperpol.objects.get(id=id)
+    except Armaperpol.DoesNotExist:
+        return redirect('formularioArmaperpol')
+
+    if request.method == 'POST':
+        policia = request.POST.get('policia')
+        pertrecho = request.POST.get('pertrecho')
+        fecharegistro = request.POST.get('fecharegistro')
+        horaregistro = request.POST.get('horaregistro')
+
+        policiaid = Persona.objects.get(identificacion=policia)
+        pertrechoid = Pertrechos.objects.get(id=pertrecho)
+
+        try:
+            my_armaperpol.policia = policiaid
+            my_armaperpol.pertrecho = pertrechoid
+            my_armaperpol.fecharegistro = fecharegistro
+            my_armaperpol.horaregistro = horaregistro
+            my_armaperpol.save()
+            return redirect('formularioArmaperpol')
+        except Exception as e:
+            error_message = "Error al actualizar la información."
+            return render(request, "formArmaperpol/editarArmaperpol.html", {'my_armaperpol': my_armaperpol,
+                                                                           "error_message": error_message,
+                                                                           'personas ': personas,
+                                                                            'pertrechos': pertrechos, })
+
+    return render(request, 'formArmaperpol/editarArmaperpol.html', {'my_armaperpol': my_armaperpol,
+                                                                     'personas': personas,
+                                                                     'pertrechos': pertrechos,'es_admin':es_admin,
+                                                                'es_encargado':es_encargado,
+                                                                'es_aux' : es_aux,
+                                                                'es_ger':es_ger,
+                                                                'es_perpol':es_perpol,          
+                                                                'es_tec1':es_tec1,
+                                                                'es_tec2':es_tec2,
+                                                                'es_tec3':es_tec3,
+                                                                     })
+
+@login_required(login_url='login')
+@user_passes_test(lambda u: es_tecnico3(u), login_url='formularioArmaperpol')
+def eliminarArmaperpol(request, id):
+    denunciacod_armaperpol = Armaperpol.objects.get(id=id)
+    denunciacod_armaperpol.delete()
+    return redirect('formularioArmaperpol')

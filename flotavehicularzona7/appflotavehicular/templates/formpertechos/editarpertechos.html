@@ -1,0 +1,123 @@
+{% extends 'formplantilla/index_master.html' %}
+{% block content %}
+
+<div class="wrapper">
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="card card-danger">
+                            <div class="card-header">
+                                <h3 class="card-title">Editar pertrecho</h3>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <!-- Selección de dependencia -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <select name="id_dependencia" id="id_dependencia" class="form-control" required>
+                                                <option>Seleccione la Dependencia:</option>
+                                                {% for distrito in dependencias %}
+                                                    <option value="{{ distrito.id }}" {% if distrito.id == mypertecho.dependencia.id %}selected{% endif %}>
+                                                        {{ distrito.provincia }} - {{ distrito.id_distrito.id_circuito.id_subcircuito.nombre_subcircuito}}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!-- Tipo de Arma -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                class="form-control has-feedback-left"
+                                                name="tipoarma"
+                                                id="tipoarma"
+                                                placeholder="Tipo de Arma"
+                                                value="{{ mypertecho.tipoarma }}"
+                                                required="">
+                                        </div>
+                                    </div>
+                                    <!-- Nombre -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                class="form-control has-feedback-left"
+                                                name="nombre"
+                                                id="nombre"
+                                                placeholder="Nombre"
+                                                value="{{ mypertecho.nombre }}"
+                                                required="">
+                                        </div>
+                                    </div>
+                                    <!-- Descripción -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <textarea
+                                                class="form-control has-feedback-left"
+                                                name="descripcion"
+                                                id="descripcion"
+                                                placeholder="Descripción"
+                                                required="">{{ mypertecho.descripcion }}</textarea>
+                                        </div>
+                                    </div>
+                                    <!-- Código -->
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="far fa-file"></i></span>
+                                            </div>
+                                            <input
+                                                type="text"
+                                                class="form-control has-feedback-left"
+                                                name="codigo"
+                                                id="codigo"
+                                                placeholder="Código"
+                                                value="{{ mypertecho.codigo }}"
+                                                required="">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                                            <a href="{% url 'formulariopertechos' %}" class="btn btn-secondary">Cancelar</a>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!-- /.col (right) -->
+                </div>
+
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends 'formplantilla/index_master.html' %} {% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>PERTRECHOS / ARMAMENTO REGISTRADO</h1>
+          </div>
+        </div>
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+  
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <a class="btn btn-app bg-info" href="{%url 'crearpertechos'%}">
+                  <span class="badge bg-danger">Arma</span>
+                  <i class="fas fa-edit"></i> Registrar 
+                  </a>
+              </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Dependencia Rastrillo</th>
+                        <th>Tipo de arma</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Código</th>
+                        <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%for arma in pertrechos%}
+                    <tr>
+                        <td>{{arma.id}}</td>
+                        <td>{{arma.dependencia.provincia}}</td>
+                        <td>{{arma.tipoarma}}</td>
+                        <td>{{arma.nombre}}</td>
+                        <td>{{arma.descripcion}}</td>
+                        <td>{{arma.codigo}}</td>
+                        
+                        <td>
+                            <a name="" id="" class="btn btn-warning"
+                                href="{%url 'editarpertechos' arma.id %}" title="Editar"
+                                role="button"><i class="fa fa-edit"></i></a>
+                            
+                            <a name="" id="" class="btn btn-danger"
+                                title="Eliminar"
+                                role="button"
+                                onclick="confirmarEliminacion({{arma.id}})">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            <script>
+                              function confirmarEliminacion(id) {
+                                  var confirmacion = confirm('¿Está seguro de que desea eliminar esta arma?'+id);
+                                  
+                                  if (confirmacion) {
+                                      // Redirecciona a la vista de eliminación si el usuario elige 'Aceptar'
+                                      window.location.href = "{% url 'eliminarpertechos' id=arma.id %}";
+                                  } else {
+                                      // Si el usuario elige 'Cancelar', no hagas nada
+                                      // Puedes agregar un mensaje o realizar otras acciones según sea necesario
+                                  }
+                              }
+                            </script>
+                           
+                        </td>
+                    </tr>
+                    {%endfor%}
+
+                </tbody>
+                  
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+  
+
+{% endblock %}

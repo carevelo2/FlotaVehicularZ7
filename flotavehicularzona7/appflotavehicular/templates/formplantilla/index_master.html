@@ -306,6 +306,32 @@
             </ul>
         </li>
           {% endif %} 
+          {% if es_tec3 or es_admin%}
+          <li class="nav-item" id="armas_menu">
+              <a href="#" class="nav-link" onclick="seleccionarOpcion('armas')">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                      Armamento
+                      <i class="right fas fa-angle-left"></i>
+                  </p>
+              </a>
+              <ul class="nav nav-treeview" id="armas_submenu">
+                  <li class="nav-item" id="formulariopertechos">
+                      <a href="{% url 'formulariopertechos' %}" class="nav-link" onclick="seleccionarSubopcion('formulariopertechos')">
+                          <i class="nav-icon fas fa-table"></i>
+                          <p>Registro de Armas</p>
+                      </a>
+                  </li>
+                  <li class="nav-item" id="formularioArmaperpol">
+                      <a href="{% url 'formularioArmaperpol' %}" class="nav-link" onclick="seleccionarSubopcion('formularioArmaperpol')">
+                          <i class="nav-icon fas fa-award"></i>
+                          <p>Asignacion de armas</p>
+                      </a>
+                  </li>
+              </ul>
+          </li>
+      {% endif %}
+
           <li class="nav-item" id="vehiculos_menu">
             <a href="#" class="nav-link " onclick="seleccionarOpcion('vehiculos')">
                 <i class="nav-icon fas fa-solid fa-car"></i>
@@ -445,7 +471,7 @@
             </a>
         </li>
         </ul>
-        {% if es_tec1 or es_tec2 or es_admin %} 
+        {% comment %} {% if es_tec1 or es_tec2 or es_admin %} 
          <li class="nav-item" id="combustibles_menu">
             <a href="#" class="nav-link " onclick="seleccionarOpcion('combustibles')">
                 <i class="nav-icon fas fa-solid fa-gas-pump"></i>
@@ -466,7 +492,7 @@
                 </li>
             </ul>
         </li>
-        {% endif%} 
+        {% endif%}  {% endcomment %}
       </nav>
       <!-- /.sidebar-menu -->
     </div>

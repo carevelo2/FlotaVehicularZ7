@@ -94,6 +94,7 @@
                                   }
                               }
                             </script> 
+                            {% if es_tec1 or es_tec2 %} 
                             <a name="" id="" class="btn bg-gradient-secondary"
                                 href="{%url 'ordendesalida' orden.id  %}" title="Envio a Dependencia"
                                 role="button"><i class="fa fa-sign-out-alt"></i>
@@ -102,6 +103,7 @@
                                 href="{%url 'ordendeentrada' orden.id %}" title="Recepción de Dependencia"
                                 role="button"><i class="fa fa-sign-in-alt"></i>
                             </a>
+                            {%endif%}
                         </td>
                     </tr>
                     {%endfor%}
